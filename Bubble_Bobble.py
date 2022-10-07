@@ -6,6 +6,7 @@ title_banner = load_image('insert_coin.png')
 map1 = load_image('stage1 Fairy_land map.png')
 map2 = load_image('stage2 dessert_land map.png')
 map3 = load_image('stage3 toy_land map.png')
+character = load_image('main sprite.png')
 
 
 def handle_event():
@@ -14,10 +15,10 @@ def handle_event():
 
     events = get_events()
     for event in events:
-        if event.type == SDL_KEYDOWN:
-            start_title = False
-            if event.key == SDLK_ESCAPE:
-                running = False
+        if event.type == SDL_QUIT:
+            running = False
+        elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            running = False
     pass
 
 
@@ -45,13 +46,13 @@ def draw_second_map():
 
 def draw_third_map():
     clear_canvas()
-    map3.clip_draw(0, stage * 610, 800, 600, 400, 300)
+    map3.clip_draw(100, stage * 610, 800, 600, 400, 300)
     update_canvas()
 
 
 def draw_character():
     clear_canvas()
-
+    character.clip_draw(0, 300, 80, 80, 100, 100)
 
 #변수
 running = True
@@ -79,5 +80,6 @@ while running:
         if second_step:
             draw_second_map()
 
+        draw_character()
 
 close_canvas()
