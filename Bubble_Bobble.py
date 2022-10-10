@@ -6,7 +6,7 @@ title_banner = load_image('insert_coin.png')
 map1 = load_image('stage1 Fairy_land map.png')
 map2 = load_image('stage2 dessert_land map.png')
 map3 = load_image('stage3 toy_land map.png')
-character = load_image('character.png')
+character = load_image('character2.png')
 
 
 class Monster:
@@ -63,20 +63,30 @@ def draw_title():
 
 
 def draw_first_map():
+    global character_x
+    global character_y
+    global dirx, diry
+    global gravity
+
     clear_canvas()
     map1.clip_draw(0, stage * 610, 800, 600, 400, 300)
+    if stage == 5:
+        if 60 <= character_x <= 200 or 360 <= character_x <= 470 or 610 <= character_x <= 730 and character_y < 120:
+            gravity = 0
+        else:
+            gravity = 3
+
+
 
 
 def draw_second_map():
     clear_canvas()
     map2.clip_draw(0, stage * 610, 800, 600, 400, 300)
-    update_canvas()
 
 
 def draw_third_map():
     clear_canvas()
     map3.clip_draw(100, stage * 610, 800, 600, 400, 300)
-    update_canvas()
 
 
 def draw_character():
@@ -87,14 +97,14 @@ def draw_character():
 
     character_x += dirx
     character_y -= gravity
-    character.clip_draw(0, 180, 30, 30, character_x, character_y)
+    character.clip_draw(0, 550, 60, 60, character_x, character_y)
     if character_y < 10:
         character_y = 600
 
-    if character_x < 0:
-        character_x = 800
-    elif character_x > 800:
-        character_x = 0
+    if character_x < 65:
+        character_x += 1
+    elif character_x > 730:
+        character_x -= 1
 
 
 #변수
@@ -106,10 +116,10 @@ first_step = True
 second_step = False
 stage = 5
 frame = 0
-character_x = 50
-character_y = 50
+character_x = 720
+character_y = 70
 dirx, diry = 0, 0;
-gravity = 3
+gravity = 0
 
 
 #메인문
