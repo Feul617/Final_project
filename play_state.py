@@ -19,12 +19,14 @@ class Character:
         self.x, self.y = 515, 280
         self.dir_x, self.dir_y = 0, 0
         self.gravity = 0
-        self.frame = 3
+        self.frame = 0
         self.life = 3
         self.image = pico2d.load_image('./character/character3.png')
 
+        self.move_on = False
+
     def draw(self):
-        self.image.clip_draw(self.frame * 40, 410, 60, 40, self.x, self.y)
+        self.image.clip_draw(self.frame * 60, 410, 60, 40, self.x, self.y)
 
     def get_bb(self):
         return self.x - 20, self.y, self.x + 20, self.y + 60
@@ -37,7 +39,7 @@ class Monster:
         self.image = None
 
     def draw(self):
-        self.image.clip_draw(self.frame * 50, 550, 70, 70, self.x, self.y)
+        self.image.clip_draw(self.frame * 50, 550, 60, 40, self.x, self.y)
 
 
 def enter():
@@ -78,6 +80,7 @@ def handle_events():
             game_framework.quit()
 
         elif event.type == pico2d.SDL_KEYDOWN:
+            character.move_on = True
             match event.key:
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
@@ -94,6 +97,7 @@ def handle_events():
                     character.gravity = 1
 
         elif event.type == pico2d.SDL_KEYUP:
+            character.move_on = False
             match event.key:
                 #캐릭터 조종
                 case pico2d.SDLK_RIGHT:
@@ -116,9 +120,16 @@ def update():
     print(character.get_bb())
     print('\n')
 
+    #움직이는 에니메이션
+    if character.move_on:
+        character.frame += 1
+        character.frame %= 4
+
+    # y축 맵 이탈 금지
     if character.y < 0:
         character.y = 600
 
+    #1스테이지 발판 충돌 체크
     if stage1.step == 5:
         if map_collide():
             character.gravity = 0
@@ -128,7 +139,6 @@ def update():
 
 def map_collide():
     global stage1, character
-    # left_a, bottom_a, right_a, top_a = a.get_bb()
 
     if character.get_bb()[2] > 750:
         character.x -= 1
