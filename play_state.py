@@ -16,18 +16,18 @@ class Map:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 50, 50
+        self.x, self.y = 515, 280
         self.dir_x, self.dir_y = 0, 0
         self.gravity = 0
         self.frame = 3
         self.life = 3
-        self.image = pico2d.load_image('./character/character2.png')
+        self.image = pico2d.load_image('./character/character3.png')
 
     def draw(self):
-        self.image.clip_draw(self.frame * 50, 550, 70, 70, self.x, self.y)
+        self.image.clip_draw(self.frame * 40, 410, 60, 40, self.x, self.y)
 
     def get_bb(self):
-        return self.x - 50, self.y - 50, self.x + 50, self.y + 50
+        return self.x - 20, self.y, self.x + 20, self.y + 60
 
 class Monster:
     def __init__(self):
@@ -47,10 +47,19 @@ def enter():
 
     stage1 = Map()
     stage1.image = pico2d.load_image('./map/stage1 Fairy_land map.png')
-    stage1.block.append([60, 30, 200, 50])
-    stage1.block.append([360, 30, 470, 50])
-    stage1.block.append([610, 30, 730, 50])
-
+    #                    좌, 아래, 우, 위
+    stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
+    stage1.block.append([330, 60, 470, 60]) # 1층 중앙
+    stage1.block.append([610, 60, 730, 60]) # 1층 오른쪽
+    stage1.block.append([185, 165, 370, 165])  # 2층 왼쪽
+    stage1.block.append([455, 165, 635, 165])  # 2층 오른쪽
+    stage1.block.append([120, 270, 330, 270])  # 3층 왼쪽
+    stage1.block.append([515, 270, 705, 270])  # 3층 오른쪽
+    stage1.block.append([210, 375, 370, 375])  # 4층 왼쪽
+    stage1.block.append([450, 375, 620, 375])  # 4층 오른쪽
+    stage1.block.append([210, 480, 370, 480])  # 5층 왼쪽
+    # stage1.block.append([190, 480, 200, 600])  # 5층 왼쪽 벽
+    stage1.block.append([450, 480, 620, 480])  # 5층 오른쪽
     stage2 = Map()
 
 
@@ -78,7 +87,11 @@ def handle_events():
                 case pico2d.SDLK_LEFT:
                     character.dir_x -= 1
                 case pico2d.SDLK_SPACE:
-                    character.y += 50
+                    character.gravity = 0
+                    for i in range(60):
+                        if character.y <= 550:
+                            character.y += 2
+                    character.gravity = 1
 
         elif event.type == pico2d.SDL_KEYUP:
             match event.key:
@@ -100,24 +113,32 @@ def update():
     character.x += character.dir_x
     character.y -= character.gravity
 
+    print(character.get_bb())
+    print('\n')
+
     if character.y < 0:
         character.y = 600
 
     if stage1.step == 5:
-        if collide():
+        if map_collide():
             character.gravity = 0
-        elif not collide():
+        elif not map_collide():
             character.gravity = 1
     pass
 
-def collide():
+def map_collide():
     global stage1, character
     # left_a, bottom_a, right_a, top_a = a.get_bb()
+
+    if character.get_bb()[2] > 750:
+        character.x -= 1
+    elif character.get_bb()[0] < 55:
+        character.x += 1
 
 
     for i in stage1.block:
         if character.get_bb()[2] > i[0] and character.get_bb()[0] < i[2] \
-                and character.get_bb()[1] <= i[1] and character.get_bb()[3] >= i[3]:
+                and i[3] <= character.get_bb()[1] <= i[1]:
             return True
 
     return False
