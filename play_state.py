@@ -16,7 +16,7 @@ class Map:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 515, 280
+        self.x, self.y = 100, 70
         self.dir_x, self.dir_y = 0, 0
         self.gravity = 0
         self.frame = 0
@@ -41,13 +41,9 @@ class Monster:
     def draw(self):
         self.image.clip_draw(self.frame * 50, 550, 60, 40, self.x, self.y)
 
+def make_stool():
+    global stage1
 
-def enter():
-    global character, stage1, stage2, stage3
-
-    character = Character()
-
-    stage1 = Map()
     stage1.image = pico2d.load_image('./map/stage1 Fairy_land map.png')
     #                    좌, 아래, 우, 위
     stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
@@ -62,10 +58,16 @@ def enter():
     stage1.block.append([210, 480, 370, 480])  # 5층 왼쪽
     # stage1.block.append([190, 480, 200, 600])  # 5층 왼쪽 벽
     stage1.block.append([450, 480, 620, 480])  # 5층 오른쪽
+
+def enter():
+    global character, stage1, stage2, stage3
+
+    character = Character()
+    stage1 = Map()
     stage2 = Map()
-
-
     stage3 = Map()
+
+    make_stool()
     pass
 
 def exit():

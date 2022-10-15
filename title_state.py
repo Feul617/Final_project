@@ -3,9 +3,12 @@ import game_framework
 import play_state
 
 def enter():
-    global image, banner
+    global image, banner, banner_on, banner_time, count
     image = load_image('./map/title.png')
     banner = load_image('./map/insert_coin.png')
+    banner_on = True
+    banner_time = 0.8
+    count = 0
     pass
 
 
@@ -15,7 +18,8 @@ def exit():
     pass
 
 def handle_events():
-    global running
+    global banner_time, count
+
     events = get_events()
 
     for event in events:
@@ -24,8 +28,8 @@ def handle_events():
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
         elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
-            running = False
-            game_framework.change_state(play_state)
+            banner_time = 0.1
+
     pass
 
 
@@ -37,14 +41,14 @@ def draw():
         banner.draw(400, 30)
     update_canvas()
 
-banner_on = True
-running = True
-
 def update():
-    global banner_on
+    global banner_on, count
 
-    delay(0.8)
+    delay(banner_time)
     banner_on = not banner_on
+    count += 1
+    if count >= 20:
+        game_framework.change_state(play_state)
 
 def pause():
     pass
