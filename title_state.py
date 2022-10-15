@@ -4,7 +4,7 @@ import play_state
 
 def enter():
     global image, banner
-    image = load_image('title.png')
+    image = load_image('./map/title.png')
     banner = load_image('./map/insert_coin.png')
     pass
 
@@ -23,7 +23,7 @@ def handle_events():
             game_framework.quit()
         elif event.type == SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
-        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_KP_ENTER):
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_SPACE):
             running = False
             game_framework.change_state(play_state)
     pass
@@ -32,15 +32,32 @@ def handle_events():
 def draw():
     global banner_on
     clear_canvas()
-    image.draw(400,300)
+    image.draw(400, 300)
     if banner_on:
-        banner.draw(400,30)
+        banner.draw(400, 30)
     update_canvas()
-
 
 banner_on = True
 running = True
 
-while running:
+def update():
+    global banner_on
+
     delay(0.8)
     banner_on = not banner_on
+
+def pause():
+    pass
+
+def resume():
+    pass
+
+def test_self():
+    import sys
+    this_module = sys.modules['__main__']
+    open_canvas()
+    game_framework.run(this_module)
+    close_canvas()
+
+if __name__ == '__main__': #만약 단독 실행 상태이면
+    test_self()
