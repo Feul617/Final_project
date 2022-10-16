@@ -3,6 +3,8 @@ import game_framework
 import title_state
 
 class Map:
+    score = 0
+    #font = pico2d.load_font('./map/STENCIL.ttf', 40)
     def __init__(self):
         self.step = 1
         self.image = None
@@ -11,7 +13,6 @@ class Map:
 
     def draw(self):
         self.image.clip_draw(0, (6 - self.step) * 610, 800, 600, 400, 300)
-
 
     pass
 
@@ -53,6 +54,10 @@ class Monster:
 
     def draw(self):
         self.image.clip_composite_draw(self.frame * 50, self.type, 50, 50, 0, self.flip, self.x, self.y, 50, 50)
+
+    def get_bb(self):
+        return self.x - 20, self.y, self.x + 20, self.y + 60
+
 def make_stool():
     global stage1, stage2
 
@@ -94,8 +99,14 @@ def monseter_set():
         zen[2].x, zen[2].y = 530, 270
         zen[3].x, zen[3].y = 280, 270
 
-
-
+def monster_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+    pass
 
 def enter():
     global character, stage1, stage2, stage3, zen, mighta, start_jump
@@ -173,11 +184,13 @@ def draw():
         for i in range(4):
             zen[i].draw()
 
+    stage1.font.draw(400, 570, 'SCORE : ' % stage1.score, (255, 255, 0))
+
     pico2d.update_canvas()
     pass
 
 def update():
-    global character, start_jump
+    global character, start_jump, zen
     character.x += character.dir_x
     character.y -= character.gravity
 
@@ -192,6 +205,8 @@ def update():
     if start_jump < 70:
         character.y += 3
         start_jump += 1
+
+    #monster_collide(character, zen)
 
     #1스테이지 발판 충돌 체크
     if map_collide():
