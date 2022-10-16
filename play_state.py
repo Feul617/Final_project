@@ -26,10 +26,6 @@ class Character:
         self.flip = ' '
         self.image = pico2d.load_image('./character/character3.png')
 
-        self.attack_x, self.attack_y = 0, 0
-        self.attack_frame = 0
-        self.attack = pico2d.load_image('./character/attack.png')
-
         self.move_on = False
 
     def draw(self):
@@ -38,10 +34,19 @@ class Character:
         else:
             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
 
-        self.attack.clip_draw(self.attack_frame * 50, 100, 30, 30, self.attack_x, self.attack_y)
-
     def get_bb(self):
         return self.x - 20, self.y, self.x + 20, self.y + 60
+
+class Attack():
+    attack = pico2d.load_image('./character/attack.png')
+    def __init__(self):
+        self.attack_x, self.attack_y = 0, 0
+        self.attack_frame = 0
+        self.count = []
+        self.time = 0
+
+    def draw(self):
+        self.attack.clip_draw(self.attack_frame * 50, 100, 30, 30, self.attack_x, self.attack_y)
 
 class Monster:
     def __init__(self):
@@ -72,9 +77,9 @@ def make_stool():
         stage1.block.append([515, 270, 705, 270])  # 3층 오른쪽
         stage1.block.append([210, 375, 370, 375])  # 4층 왼쪽
         stage1.block.append([450, 375, 620, 375])  # 4층 오른쪽
-        stage1.block.append([210, 480, 370, 480])  # 5층 왼쪽
+        stage1.block.append([230, 480, 370, 480])  # 5층 왼쪽
         # stage1.block.append([190, 480, 200, 600])  # 5층 왼쪽 벽
-        stage1.block.append([450, 480, 620, 480])  # 5층 오른쪽
+        stage1.block.append([450, 480, 580, 480])  # 5층 오른쪽
 
     elif stage1.step == 2:
         stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
@@ -109,10 +114,12 @@ def monster_collide(a, b):
     pass
 
 def enter():
-    global character, stage1, stage2, stage3, zen, mighta, start_jump
+    global character, stage1, stage2, stage3, zen, mighta, start_jump, attack
 
     character = Character()
     start_jump = 60
+
+    attack = Attack()
 
     stage1 = Map()
     stage1.image = pico2d.load_image('./map/stage1 Fairy_land map.png')
@@ -160,8 +167,7 @@ def handle_events():
                     if character.gravity == 0:
                         start_jump = 0
                 case pico2d.SDLK_a:
-                    character.attack_x = character.x + 10
-                    character.attack_y = character.y + 20
+                    attack.count.append()
 
                     pass
 
@@ -184,7 +190,7 @@ def draw():
         for i in range(4):
             zen[i].draw()
 
-    stage1.font.draw(400, 570, 'SCORE : ' % stage1.score, (255, 255, 0))
+    #stage1.font.draw(400, 570, 'SCORE : ' % stage1.score, (255, 255, 0))
 
     pico2d.update_canvas()
     pass
@@ -235,10 +241,10 @@ def map_collide():
 
     # 1-1 스테이지 벽
     if stage1.step == 1:
-        if character.get_bb()[0] <= 210 and character.get_bb()[1] >= 480:
+        if (209 <= character.get_bb()[0] <= 210 or 560 <= character.get_bb()[0] <= 615) and  character.get_bb()[1] >= 460:
             character.x += 1
 
-        elif character.get_bb()[0] >= 550 and character.get_bb()[1] >= 480:
+        elif (550 <= character.get_bb()[0] <= 555 or 150 <= character.get_bb()[0] <= 208) and character.get_bb()[1] >= 460:
             character.x -= 1
 
     # 1-2 스테이지 벽
