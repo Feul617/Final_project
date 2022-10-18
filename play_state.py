@@ -6,13 +6,17 @@ class Map:
     score = 0
     #font = pico2d.load_font('./map/STENCIL.ttf', 40)
     def __init__(self):
-        self.step = 1
+        self.step = 4
         self.image = None
         self.block = []
         self.monster_count = 0;
+        self.map_pass = 0
+        self.move_start = False
+        self.frame = (6 - self.step) * 61
 
     def draw(self):
-        self.image.clip_draw(0, (6 - self.step) * 610, 800, 600, 400, 300)
+        #self.image.clip_draw(0, (6 - self.step) * 610, 800, 600, 400, 300)
+        self.image.clip_draw(0, self.frame * 10, 800, 600, 400, 300)
 
     pass
 
@@ -38,7 +42,7 @@ class Character:
         return self.x - 20, self.y, self.x + 20, self.y + 60
 
 class Attack():
-    attack = pico2d.load_image('./character/attack.png')
+    #attack = pico2d.load_image('./character/attack.png')
     def __init__(self):
         self.attack_x, self.attack_y = 0, 0
         self.attack_frame = 0
@@ -66,6 +70,8 @@ class Monster:
 def make_stool():
     global stage1, stage2
 
+    stage1.block.clear()
+
     if stage1.step == 1:
         #                    좌, 아래, 우, 위
         stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
@@ -85,7 +91,7 @@ def make_stool():
         stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
         stage1.block.append([340, 60, 470, 60])  # 1층 중앙
         stage1.block.append([610, 60, 730, 60])  # 1층 오른쪽
-        stage1.block.append([125, 165, 270, 165])  # 2층 왼쪽
+        stage1.block.append([115, 165, 270, 165])  # 2층 왼쪽
         stage1.block.append([370, 165, 430, 165])  # 2층 중앙
         stage1.block.append([530, 165, 670, 165])  # 2층 오른쪽
         stage1.block.append([160, 270, 350, 270])  # 3층 왼쪽
@@ -94,6 +100,38 @@ def make_stool():
         stage1.block.append([440, 375, 630, 375])  # 4층 오른쪽
         stage1.block.append([120, 480, 350, 480])  # 5층 왼쪽
         stage1.block.append([440, 480, 670, 480])  # 5층 오른쪽
+
+    elif stage1.step == 3:
+        stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
+        stage1.block.append([340, 60, 470, 60])  # 1층 중앙
+        stage1.block.append([600, 60, 730, 60])  # 1층 오른쪽
+        stage1.block.append([120, 165, 350, 165])  # 2층 왼쪽
+        stage1.block.append([460, 165, 680, 165])  # 2층 오른쪽
+        stage1.block.append([160, 270, 770, 270])  # 3층
+        stage1.block.append([0, 375, 630, 375])  # 4층
+        stage1.block.append([160, 480, 770, 480])  # 5층
+
+    elif stage1.step == 4:
+        stage1.block.append([60, 60, 200, 60])  # 1층 왼쪽
+        stage1.block.append([340, 60, 470, 60])  # 1층 중앙
+        stage1.block.append([600, 60, 730, 60])  # 1층 오른쪽
+        stage1.block.append([140, 165, 320, 165])  # 2층 왼쪽
+        stage1.block.append([490, 165, 670, 165])  # 2층 오른쪽
+        stage1.block.append([0, 270, 240, 270])  # 3층 왼쪽
+        stage1.block.append([570, 270, 770, 270])  # 3층 오른쪽
+        stage1.block.append([0, 375, 190, 375])  # 4층 왼쪽
+        stage1.block.append([630, 375, 770, 375])  # 4층 오른쪽
+
+        stage1.block.append([330, 355, 360, 355])  # 3.5층 오른쪽
+        stage1.block.append([450, 355, 470, 355])  # 3.5층 왼쪽
+
+        stage1.block.append([300, 420, 330, 420])  # 4.5층 왼쪽
+        stage1.block.append([470, 420, 530, 420])  # 4.5층 오른쪽
+
+        stage1.block.append([0, 480, 130, 480])  # 5층 왼쪽
+        stage1.block.append([200, 480, 280, 480])  # 5층 중앙 왼쪽
+        stage1.block.append([530, 480, 610, 480])  # 5층 중앙 오른쪽
+        stage1.block.append([680, 480, 770, 480])  # 5층 오른쪽
 
 def monseter_set():
     if stage1.step == 1:
@@ -144,7 +182,7 @@ def exit():
     pass
 
 def handle_events():
-    global start_jump
+    global start_jump, stage1
 
     events = pico2d.get_events()
     for event in events:
@@ -168,8 +206,12 @@ def handle_events():
                         start_jump = 0
                 case pico2d.SDLK_a:
                     attack.count.append()
+                #임시 맵 조정 코드
+                case pico2d.SDLK_0:
+                    stage1.move_start = True
+                    stage1.step += 1
+                    make_stool()
 
-                    pass
 
         elif event.type == pico2d.SDL_KEYUP:
             character.move_on = False
@@ -219,6 +261,18 @@ def update():
         character.gravity = 0
     elif not map_collide():
         character.gravity = 1
+
+
+
+    if stage1.move_start:
+        if stage1.map_pass % 10 == 0:
+            stage1.frame -= 1
+        stage1.map_pass += 1
+
+    if stage1.map_pass >= 610:
+        stage1.move_start = False
+        stage1.map_pass = 0
+
     pass
 
 
@@ -253,6 +307,20 @@ def map_collide():
             character.x += 1
 
         elif (610 <= character.get_bb()[0] <= 615 or 80 <= character.get_bb()[0] <= 115) and 250 <= character.get_bb()[1] <= 475:
+            character.x -= 1
+
+    # 1 - 4스테이지 벽
+    if stage1.step == 4:
+        if (280 <= character.get_bb()[0] <= 290 or 500 <= character.get_bb()[0] <= 540) and 420 <= character.get_bb()[1] <= 479:
+            character.x += 1
+
+        elif (475 <= character.get_bb()[0] <= 485 or 240 <= character.get_bb()[0] <= 279) and 420 <= character.get_bb()[1] <= 479:
+            character.x -= 1
+
+        if (330 <= character.get_bb()[0] <= 340 or 470 <= character.get_bb()[0] <= 480) and 335 <= character.get_bb()[1] <= 415:
+            character.x += 1
+
+        elif (420 <= character.get_bb()[0] <= 425 or 260 <= character.get_bb()[0] <= 270) and 345 <= character.get_bb()[1] <= 415:
             character.x -= 1
 
 
