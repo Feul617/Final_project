@@ -2,11 +2,25 @@ import pico2d
 import game_framework
 import title_state
 
+class Scaffolding:
+    def __init__(self):
+        self.left_image = None
+        self.middle_image = None
+        self.right_image = None
+
+        self.x, self.y = 0, 0
+
+    def draw(self):
+        self.right_image.clip_draw(0, 0, 18, 32, self.x, self.y)
+
+    def get_bb(self):
+        return
+
 class Map:
     score = 0
     #font = pico2d.load_font('./map/STENCIL.ttf', 40)
     def __init__(self):
-        self.step = 4
+        self.step = 1
         self.image = None
         self.block = []
         self.monster_count = 0;
@@ -22,13 +36,16 @@ class Map:
 
 class Character:
     def __init__(self):
-        self.x, self.y = 100, 70
+        self.x, self.y = 100, 60
         self.dir_x, self.dir_y = 0, 0
         self.gravity = 0
         self.frame = 0
         self.life = 3
         self.flip = ' '
         self.image = pico2d.load_image('./character/character3.png')
+
+        self.now_x = 0
+        self.now_y = 0
 
         self.move_on = False
 
@@ -133,7 +150,7 @@ def make_stool():
         stage1.block.append([530, 480, 610, 480])  # 5층 중앙 오른쪽
         stage1.block.append([680, 480, 770, 480])  # 5층 오른쪽
 
-def monseter_set():
+def monster_set():
     if stage1.step == 1:
         for i in range(4):
             zen[i].type = 810
@@ -149,6 +166,15 @@ def monster_collide(a, b):
     if right_a < left_b: return False
     if top_a < bottom_b: return False
     if bottom_a > top_b: return False
+    pass
+
+def character_animation():
+    global character
+
+    if character.move_on:
+        character.frame += 1
+        character.frame %= 4
+
     pass
 
 def enter():
@@ -172,7 +198,7 @@ def enter():
 
     mighta = Monster()
 
-    monseter_set()
+    monster_set()
     make_stool()
     pass
 
@@ -208,6 +234,13 @@ def handle_events():
                     attack.count.append()
                 #임시 맵 조정 코드
                 case pico2d.SDLK_0:
+                    character.gravity = 0
+                    character.now_x = character.x - 100
+                    character.now_y = character.y - 60
+
+                    character.now_x /= 61
+                    character.now_y /= 61
+
                     stage1.move_start = True
                     stage1.step += 1
                     make_stool()
@@ -242,12 +275,7 @@ def update():
     character.x += character.dir_x
     character.y -= character.gravity
 
-    print(character.get_bb())
-
-    #움직이는 에니메이션
-    if character.move_on:
-        character.frame += 1
-        character.frame %= 4
+    character_animation()
 
     #캐릭터 점프
     if start_jump < 70:
@@ -257,22 +285,26 @@ def update():
     #monster_collide(character, zen)
 
     #1스테이지 발판 충돌 체크
-    if map_collide():
-        character.gravity = 0
-    elif not map_collide():
-        character.gravity = 1
+    if not stage1.move_start:
+        if map_collide():
+            character.gravity = 0
+        elif not map_collide():
+            character.gravity = 1
 
 
 
     if stage1.move_start:
         if stage1.map_pass % 10 == 0:
             stage1.frame -= 1
+            character.x -= character.now_x
+            character.y -= character.now_y
         stage1.map_pass += 1
 
     if stage1.map_pass >= 610:
         stage1.move_start = False
         stage1.map_pass = 0
-
+        character.y = 65
+        character.gravity = 1
     pass
 
 
