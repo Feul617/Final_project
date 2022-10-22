@@ -3,15 +3,10 @@ import game_framework
 import title_state
 
 class Scaffolding:
-    def __init__(self):
-        self.left_image = None
-        self.middle_image = None
-        self.right_image = None
+    def __init__(self, image):
+        self.image = pico2d.load_image(image)
 
         self.x, self.y = 0, 0
-
-    def draw(self):
-        self.right_image.clip_draw(0, 0, 18, 32, self.x, self.y)
 
     def get_bb(self):
         return

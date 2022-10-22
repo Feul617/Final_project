@@ -1,0 +1,26 @@
+from pico2d import *
+from Scripts.FrameWork.Transform import *
+
+class Object:
+
+    def __init__(self):
+        self.image = None
+        self.image_Type = None
+
+        self.transform = Trasform()
+        pass
+
+    def __del__(self):
+        pass
+
+    def Draw(self):
+        pos = self.transform.position
+        scale = self.transform.scale
+        self.image.clip_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3],
+                            pos.x, pos.y,
+                             scale.x * self.image_Type[2], scale.y * self.image_Type[3])
+
+        print(pos.x)
+        print(scale.x * self.image_Type[2])
+        pass
+    pass
