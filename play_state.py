@@ -1,15 +1,7 @@
 import pico2d
 import game_framework
 import title_state
-
-class Scaffolding:
-    def __init__(self, image):
-        self.image = pico2d.load_image(image)
-
-        self.x, self.y = 0, 0
-
-    def get_bb(self):
-        return
+from Scripts.Object.Tile.Tile import *
 
 class Map:
     score = 0
@@ -48,7 +40,7 @@ class Character:
         if character.dir_x == -1:
             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
         else:
-            self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
+            self.image.clip_    composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
 
     def get_bb(self):
         return self.x - 20, self.y, self.x + 20, self.y + 60

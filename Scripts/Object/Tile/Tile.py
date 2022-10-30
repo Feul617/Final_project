@@ -1,6 +1,7 @@
 from Scripts.FrameWork.Object import *
 
 
+
 class Tile(Object):
 
     def __init__(self):
@@ -10,6 +11,11 @@ class Tile(Object):
     def __del__(self):
         pass
 
+    def collide(self, index):
+        if index == 1:
+            return self.transform.position.x - 18, self.transform.position.y + 32, self.transform.position.x + 18, self.transform.position.y + 32
+        elif index == 0 or index == 2:
+            return self.transform.position.x - 9, self.transform.position.y + 32, self.transform.position.x + 9, self.transform.position.y + 32
     pass
 
 def TileType(index):
