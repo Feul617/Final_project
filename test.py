@@ -1,29 +1,26 @@
-from Scripts.Object.Tile.Tile import *
-from Scripts.Object.Character import  *
+from Scripts.Object.Object_AFX import *
 
 open_canvas()
 
 tile_01 = None
 tile_02 = None
-character = None
 
 RenderList = None
 
 def e():
     global RenderList
-    global tile_01, tile_02, character
+    global stage1_1, tile_02
 
     RenderList = []
 
-    tile_01 = TileType(0)
-    tile_02 = TileType(1)
-    tile_01.transform.position.x = 400
-    tile_01.transform.position.y = 50
+    stage1_1 = MainStage()
+    stage1_1.Tile_init()
 
-    character = Character()
+    #character = Character()
 
-
-    RenderList += [tile_01, tile_02]
+    RenderList.append(stage1_1.background)
+    for tile in stage1_1.tiles:
+        RenderList += tile.tiles
 
     pass
 
