@@ -1,4 +1,3 @@
-from pico2d import *
 from Scripts.FrameWork.Transform import *
 
 class Object:
@@ -7,7 +6,7 @@ class Object:
         self.image = None
         self.image_Type = None # frame
 
-        self.transform = Trasform()
+        self.transform = Transform()
         pass
 
     def __del__(self):

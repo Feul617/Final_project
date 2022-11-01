@@ -13,4 +13,5 @@ class Vector2:
         result.x = self.x + other.x
         result.y = self.y + other.y
         return result
+
     pass

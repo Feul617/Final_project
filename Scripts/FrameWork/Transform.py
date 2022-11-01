@@ -1,6 +1,6 @@
-from Scripts.FrameWork.Vector2 import *
+from Scripts.FrameWork.Vector2 import Vector2
 
-class Trasform:
+class Transform:
 
     def __init__(self):
         self.position = Vector2()

@@ -1,4 +1,4 @@
-from Scripts.FrameWork.Object import *
+from Scripts.FrameWork.FrameWork_AFX import *
 
 class Character(Object):
     def __init__(self):
@@ -34,31 +34,40 @@ class Character(Object):
         return self.transform.position.x + 20
 
 
-
-
-class Character:
+class Attack():
+    #attack = pico2d.load_image('./character/attack.png')
     def __init__(self):
-        self.x, self.y = 100, 60
-        self.dir_x, self.dir_y = 0, 0
-        self.gravity = 0
-        self.frame = 0
-        self.life = 3
-        self.flip = ' '
-        self.image = pico2d.load_image('./character/character3.png')
-
-        self.now_x = 0
-        self.now_y = 0
-
-        self.move_on = False
+        self.attack_x, self.attack_y = 0, 0
+        self.attack_frame = 0
+        self.count = []
+        self.time = 0
 
     def draw(self):
-        if character.dir_x == -1:
-            self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
-        else:
-            self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
+        self.attack.clip_draw(self.attack_frame * 50, 100, 30, 30, self.attack_x, self.attack_y)
 
-    def get_bb(self):
-        return self.x - 20, self.y, self.x + 20, self.y + 60
+# class Character:
+#     def __init__(self):
+#         self.x, self.y = 100, 60
+#         self.dir_x, self.dir_y = 0, 0
+#         self.gravity = 0
+#         self.frame = 0
+#         self.life = 3
+#         self.flip = ' '
+#         self.image = pico2d.load_image('./character/character3.png')
+#
+#         self.now_x = 0
+#         self.now_y = 0
+#
+#         self.move_on = False
+#
+#     def draw(self):
+#         if character.dir_x == -1:
+#             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
+#         else:
+#             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
+#
+#     def get_bb(self):
+#         return self.x - 20, self.y, self.x + 20, self.y + 60
 
 
 
