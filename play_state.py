@@ -2,36 +2,24 @@ import game_framework
 import title_state
 from Scripts.Object.Object_AFX import *
 
-class Monster:
-    def __init__(self):
-        self.x, self.y = 470, 375
-        self.dir_x, self.dir_y = 0, 0
-        self.frame = 0
-        self.flip = ' '
-        self.image = pico2d.load_image('./character/monster2.png')
-        self.type = 0
-
-    def draw(self):
-        self.image.clip_composite_draw(self.frame * 50, self.type, 50, 50, 0, self.flip, self.x, self.y, 50, 50)
-
-    def get_bb(self):
-        return self.x - 20, self.y, self.x + 20, self.y + 60
-
-def monster_set():
-    pass
-
 def enter():
     global RenderList
-    global stage1_1
+    global character, stage1_1
+    global monster1
 
     RenderList = []
 
     stage1_1 = MainStage()
     stage1_1.Tile_init()
 
+    character = Character()
+
+    monster1 = Monster()
+
     RenderList.append(stage1_1.background)
     for tile in stage1_1.tiles:
         RenderList += tile.tiles
+
 
     pass
 
@@ -50,49 +38,26 @@ def handle_events():
             match event.key:
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
-                #캐릭터 조종
-                case pico2d.SDLK_RIGHT:
-                    character.dir_x += 1
-                    character.flip = 'h'
-                case pico2d.SDLK_LEFT:
-                    character.flip = ' '
-                    character.dir_x -= 1
-                case pico2d.SDLK_SPACE:
-                    if character.gravity == 0:
-                        start_jump = 0
-                #임시 맵 조정 코드
-                case pico2d.SDLK_0:
-                    character.gravity = 0
-                    character.now_x = character.x - 100
-                    character.now_y = character.y - 60
-
-                    character.now_x /= 61
-                    character.now_y /= 61
-
-                    stage1.move_start = True
-                    stage1.step += 1
-
-
-        elif event.type == pico2d.SDL_KEYUP:
-            character.move_on = False
-            match event.key:
-                #캐릭터 조종
-                case pico2d.SDLK_RIGHT:
-                    character.dir_x -= 1
-                case pico2d.SDLK_LEFT:
-                    character.dir_x += 1
 
 def draw():
     pico2d.clear_canvas()
-    global RenderList
+    global RenderList, character
 
     for obj in RenderList:
         obj.Draw()
+
+    character.Draw()
 
     pico2d.update_canvas()
     pass
 
 def update():
+    global event, character
+
+    event = get_events()
+
+    character.update()
+
     # global character, start_jump, zen
     # character.x += character.dir_x
     # character.y -= character.gravity

@@ -4,7 +4,9 @@ from Scripts.Object.Tile.Tile import Tile
 from Scripts.Object.Tile.Tile import TileType
 from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import MainStage
-#from Scripts.Object.Character import Character
+from Scripts.Object.Character import Character
+from Scripts.Object.Character import Attack
+from Scripts.Object.Monster import Monster
 
 
 #def make_stool():
