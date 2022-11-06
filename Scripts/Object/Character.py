@@ -3,31 +3,43 @@ from Scripts.FrameWork.FrameWork_AFX import *
 class Character(Object):
     def __init__(self):
         super(Character, self).__init__()
+        self.transform.position = Vector2(400, 300)
         self.dir_x = 0
-        self.gravity = 0
-        self.life = 0
+        self.gravity = 1
+        self.state = 0
         self.image = load_image('./character/character3.png')
+
+        self.image_Type = [0, 400, 40, 60]
+
+        self.life = 0
+
 
         self.now_x = 0
         self.now_y = 0
 
-    def handle_events(self, event):
+    def handle_events(self, events):
         for event in events:
             if event.type == SDL_KEYDOWN:
                 match event.key:
-                    case SDLK_RIGHT:
+                    case pico2d.SDLK_RIGHT:
+                        print('오른쪽')
                         self.dir_x += 1
-                    case SDLK_LEFT:
+                    case pico2d.SDLK_LEFT:
+                        print('오른쪽 땜')
                         self.dir_x -= 1
 
             elif event.type == SDL_KEYUP:
                 match event.key:
-                    case SDLK_RIGHT:
-                        self.dir_x -= 1
-                    case SDLK_LEFT:
+                    case pico2d.SDLK_RIGHT:
                         self.dir_x += 1
+                    case pico2d.SDLK_LEFT:
+                        self.dir_x -= 1
 
-
+    def update(self):
+        self.transform.position.x += self.dir_x
+        self.transform.position.y -= self.gravity
+        if self.transform.position.y < 0:
+            self.transform.position.y = 680
 
 
     def collide(self):
