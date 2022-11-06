@@ -15,6 +15,7 @@ def enter():
     character = Character()
 
     monster1 = Monster()
+    monster1
 
     RenderList.append(stage1_1.background)
     for tile in stage1_1.tiles:
@@ -27,9 +28,10 @@ def exit():
     pass
 
 def handle_events():
-    global start_jump, stage1
+    global stage1, character
 
     events = pico2d.get_events()
+    character.handle_events(events)
     for event in events:
         if event.type == pico2d.SDL_QUIT:
             game_framework.quit()
@@ -38,60 +40,25 @@ def handle_events():
             match event.key:
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
-
 def draw():
     pico2d.clear_canvas()
     global RenderList, character
+    global monster1
 
     for obj in RenderList:
         obj.Draw()
 
     character.Draw()
+    monster1.Draw()
+
 
     pico2d.update_canvas()
     pass
 
 def update():
-    global event, character
-
-    event = get_events()
+    global character
 
     character.update()
-
-    # global character, start_jump, zen
-    # character.x += character.dir_x
-    # character.y -= character.gravity
-    #
-    # character_animation()
-    #
-    # #캐릭터 점프
-    # if start_jump < 70:
-    #     character.y += 3
-    #     start_jump += 1
-    #
-    # #monster_collide(character, zen)
-    #
-    # #1스테이지 발판 충돌 체크
-    # if not stage1.move_start:
-    #     if map_collide():
-    #         character.gravity = 0
-    #     elif not map_collide():
-    #         character.gravity = 1
-    #
-    #
-    #
-    # if stage1.move_start:
-    #     if stage1.map_pass % 10 == 0:
-    #         stage1.frame -= 1
-    #         character.x -= character.now_x
-    #         character.y -= character.now_y
-    #     stage1.map_pass += 1
-    #
-    # if stage1.map_pass >= 610:
-    #     stage1.move_start = False
-    #     stage1.map_pass = 0
-    #     character.y = 65
-    #     character.gravity = 1
     pass
 
 

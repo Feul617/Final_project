@@ -25,15 +25,20 @@ class Character(Object):
                         print('오른쪽')
                         self.dir_x += 1
                     case pico2d.SDLK_LEFT:
-                        print('오른쪽 땜')
+                        print('왼쪽')
                         self.dir_x -= 1
+                    case pico2d.SDLK_SPACE:
+                        if self.gravity == 0:
+                            for i in range(7):
+                                self.transform.position.y += 10
 
             elif event.type == SDL_KEYUP:
                 match event.key:
                     case pico2d.SDLK_RIGHT:
-                        self.dir_x += 1
-                    case pico2d.SDLK_LEFT:
+                        print('오른쪽 땜')
                         self.dir_x -= 1
+                    case pico2d.SDLK_LEFT:
+                        self.dir_x += 1
 
     def update(self):
         self.transform.position.x += self.dir_x
