@@ -7,6 +7,7 @@ from Scripts.Stage.MainStage import MainStage
 from Scripts.Object.Character import Character
 from Scripts.Object.Character import Attack
 from Scripts.Object.Monster import Monster
+from Scripts.Object.Monster import Monster_Type
 
 
 #def make_stool():

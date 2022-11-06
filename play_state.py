@@ -15,7 +15,7 @@ def enter():
     character = Character()
 
     monster1 = Monster()
-    monster1
+    monster1 = Monster_Type(0)
 
     RenderList.append(stage1_1.background)
     for tile in stage1_1.tiles:

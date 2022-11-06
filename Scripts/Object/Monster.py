@@ -17,7 +17,4 @@ def Monster_Type(index):
     elif index == 1:
         monster.image_type = [0, 450, 52, 52]
 
-
-class Make_Monster(Object):
-    def __init__(self):
-        super(Make_Monster, self).__init__()
+    return monster
