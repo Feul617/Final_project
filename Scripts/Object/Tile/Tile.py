@@ -27,11 +27,14 @@ def TileType(index):
     elif index == 2:
         tile.image = load_image('map/Tile/stage1-1 right_tile.png')
         tile.image_Type = [0, 0, 18, 32]
+    elif index == 3:
+        tile.image = load_image('map/Tile/stage1-1 wall.png')
+        tile.image_Type = [0, 0, 29, 30]
 
     return tile
 
-class MakeTile_X(Object):
 
+class MakeTile_X(Object):
     def __init__(self, lenth):
         super(MakeTile_X, self).__init__()
         # 객체 초기화
