@@ -60,14 +60,14 @@ class RUN:
 
     def draw(self):
         if self.dir == -1:
-            self.image.clip_draw(int(self.frame)*100, 0, 100, 100, self.x, self.y)
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
         elif self.dir == 1:
-            self.image.clip_draw(int(self.frame)*100, 100, 100, 100, self.x, self.y)
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
 
 
 class HURRY_UP:
     def enter(self, event):
-        self.dir = 2
+        pass
 
     def exit(self, event):
         pass
@@ -77,11 +77,10 @@ class HURRY_UP:
 
     def draw(self):
         if self.face_dir == -1:
-            self.image.clip_composite_draw(int(self.frame) * 100, 200, 100, 100,
-                                          -3.141592 / 2, '', self.x + 25, self.y - 25, 100, 100)
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
+
         else:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 100, 100,
-                                          3.141592 / 2, '', self.x - 25, self.y - 25, 100, 100)
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
 
 
 #3. 상태 변환 구현
@@ -105,6 +104,8 @@ class Character(Object):
         self.dir, self.face_dir = 0, 1
         self.image = load_image('./character/character3.png')
 
+        self.now_x, self.now_y = 0, 0
+
         self.event_que = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
@@ -125,6 +126,7 @@ class Character(Object):
 
     def draw(self):
         self.cur_state.draw(self)
+        draw_rectangle(*self.get_bb())
 
     def add_event(self, event):
         self.event_que.insert(0, event)
@@ -137,4 +139,7 @@ class Character(Object):
     def attack(self):
         bubble = Bubble(self.x, self.y, self.dir * 2)
         add_object(bubble, 1)
+
+    def get_bb(self):
+        return self.x - 30, self.y - 20, self.x + 30, self.y + 20
 
