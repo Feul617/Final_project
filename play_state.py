@@ -1,3 +1,4 @@
+import Scripts.FrameWork.game_world
 import game_framework
 import title_state
 from Scripts.Object.Object_AFX import *
@@ -20,6 +21,8 @@ def enter():
     RenderList.append(stage1_1.background)
     for tile in stage1_1.tiles:
         RenderList += tile.tiles
+
+    add_collision_group(character)
 
 
     pass

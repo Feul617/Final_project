@@ -9,7 +9,7 @@ class Tile(Object):
     def __del__(self):
         pass
 
-    def collide(self, index):
+    def get_bb(self, index):
         if index == 1:
             return self.transform.position.x - 18, self.transform.position.y + 32, self.transform.position.x + 18, self.transform.position.y + 32
         elif index == 0 or index == 2:

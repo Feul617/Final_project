@@ -13,7 +13,6 @@ class Character(Object):
 
         self.life = 0
 
-
         self.now_x = 0
         self.now_y = 0
 
