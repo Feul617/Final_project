@@ -4,24 +4,16 @@ import title_state
 from Scripts.Object.Object_AFX import *
 
 def enter():
-    global RenderList
-    global character, stage1_1
+    global character
+    global stage1_1
     global monster1
-
-    RenderList = []
 
     stage1_1 = MainStage()
     stage1_1.Tile_init()
 
     character = Character()
 
-    monster1 = Monster()
-    monster1 = Monster_Type(0)
-
-    RenderList.append(stage1_1.background)
-    for tile in stage1_1.tiles:
-        RenderList += tile.tiles
-
+    add_objects(stage1_1)
     add_collision_group(character)
 
 
