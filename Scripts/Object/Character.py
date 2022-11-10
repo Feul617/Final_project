@@ -1,89 +1,140 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 
-class Character(Object):
-    def __init__(self):
-        super(Character, self).__init__()
-        self.transform.position = Vector2(400, 300)
-        self.dir_x = 0
-        self.gravity = 1
-        self.state = 0
-        self.image = load_image('./character/character3.png')
+#1 : 이벤트 정의
+RD, LD, RU, LU, TIMER, SPACE = range(6)
+event_name = ['RD', 'LD', 'RU', 'LU', 'TIMER', 'SPACE']
 
-        self.image_Type = [0, 400, 40, 60]
+key_event_table = {
+    (SDL_KEYDOWN, SDLK_SPACE): SPACE,
+    (SDL_KEYDOWN, SDLK_RIGHT): RD,
+    (SDL_KEYDOWN, SDLK_LEFT): LD,
+    (SDL_KEYUP, SDLK_RIGHT): RU,
+    (SDL_KEYUP, SDLK_LEFT): LU
+}
 
-        self.life = 0
+TIME_PER_ACTION = 0.5
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAME_PER_ACTION = 8
 
-        self.now_x = 0
-        self.now_y = 0
+#2 : 상태의 정의
+class IDLE:
+    @staticmethod
+    def enter(self,event):
+        self.dir = 0
 
-    def handle_events(self, events):
-        for event in events:
-            if event.type == SDL_KEYDOWN:
-                match event.key:
-                    case pico2d.SDLK_RIGHT:
-                        print('오른쪽')
-                        self.dir_x += 1
-                    case pico2d.SDLK_LEFT:
-                        print('왼쪽')
-                        self.dir_x -= 1
-                    case pico2d.SDLK_SPACE:
-                        if self.gravity == 0:
-                            for i in range(7):
-                                self.transform.position.y += 10
+    @staticmethod
+    def exit(self, event):
 
-            elif event.type == SDL_KEYUP:
-                match event.key:
-                    case pico2d.SDLK_RIGHT:
-                        print('오른쪽 땜')
-                        self.dir_x -= 1
-                    case pico2d.SDLK_LEFT:
-                        self.dir_x += 1
+    @staticmethod
+    def do(self):
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
-    def update(self):
-        self.transform.position.x += self.dir_x
-        self.transform.position.y -= self.gravity
-        if self.transform.position.y < 0:
-            self.transform.position.y = 680
+    @staticmethod
+    def draw(self):
+        if self.face_dir == 1:
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
+        else:
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
 
 
-    def collide(self):
-        return self.transform.position.x + 20
+class RUN:
+    def enter(self, event):
+        print('ENTER RUN')
+        if event == RD:
+            self.dir += 1
+        elif event == LD:
+            self.dir -= 1
+        elif event == RU:
+            self.dir -= 1
+        elif event == LU:
+            self.dir += 1
 
+    def exit(self, event):
+        self.face_dir = self.dir
 
-class Attack():
-    #attack = pico2d.load_image('./character/attack.png')
-    def __init__(self):
-        self.attack_x, self.attack_y = 0, 0
-        self.attack_frame = 0
-        self.count = []
-        self.time = 0
+    def do(self):
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+
+        self.x = clamp(0, self.x, 800)
 
     def draw(self):
-        self.attack.clip_draw(self.attack_frame * 50, 100, 30, 30, self.attack_x, self.attack_y)
-
-# class Character:
-#     def __init__(self):
-#         self.x, self.y = 100, 60
-#         self.dir_x, self.dir_y = 0, 0
-#         self.gravity = 0
-#         self.frame = 0
-#         self.life = 3
-#         self.flip = ' '
-#         self.image = pico2d.load_image('./character/character3.png')
-#
-#         self.now_x = 0
-#         self.now_y = 0
-#
-#         self.move_on = False
-#
-#     def draw(self):
-#         if character.dir_x == -1:
-#             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
-#         else:
-#             self.image.clip_composite_draw(self.frame * 60, 410, 60, 40, 0, self.flip, self.x, self.y, 60, 40)
-#
-#     def get_bb(self):
-#         return self.x - 20, self.y, self.x + 20, self.y + 60
+        if self.dir == -1:
+            self.image.clip_draw(int(self.frame)*100, 0, 100, 100, self.x, self.y)
+        elif self.dir == 1:
+            self.image.clip_draw(int(self.frame)*100, 100, 100, 100, self.x, self.y)
 
 
+class HURRY_UP:
+    def enter(self, event):
+        self.dir = 2
+
+    def exit(self, event):
+        pass
+
+    def do(self):
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+
+    def draw(self):
+        if self.face_dir == -1:
+            self.image.clip_composite_draw(int(self.frame) * 100, 200, 100, 100,
+                                          -3.141592 / 2, '', self.x + 25, self.y - 25, 100, 100)
+        else:
+            self.image.clip_composite_draw(int(self.frame) * 100, 300, 100, 100,
+                                          3.141592 / 2, '', self.x - 25, self.y - 25, 100, 100)
+
+
+#3. 상태 변환 구현
+
+next_state = {
+    IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, TIMER: SLEEP, SPACE: IDLE},
+    RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN},
+    HURRY_UP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE}
+}
+
+PIXEL_PER_METER = (10.0 / 0.3)
+RUN_SPEED_KMPH = 20.0 # km/h 마라토너의 평속
+RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
+RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
+RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
+
+class Character(Object):
+    def __init__(self):
+        self.x, self.y = 400, 300
+        self.frame = 0
+        self.dir, self.face_dir = 0, 1
+        self.image = load_image('./character/character3.png')
+
+        self.event_que = []
+        self.cur_state = IDLE
+        self.cur_state.enter(self, None)
+
+        self.attack_image = None
+
+    def update(self):
+        self.cur_state.do(self)
+
+        if self.event_que:
+            event = self.event_que.pop()
+            self.cur_state.exit(self, event)
+            try:
+                self.cur_state = next_state[self.cur_state][event]
+            except KeyError:
+                print(f'ERROR: State {self.cur_state.__name__}    Event {event_name[event]}')
+            self.cur_state.enter(self, event)
+
+    def draw(self):
+        self.cur_state.draw(self)
+
+    def add_event(self, event):
+        self.event_que.insert(0, event)
+
+    def handle_event(self, event):
+        if (event.type, event.key) in key_event_table:
+            key_event = key_event_table[(event.type, event.key)]
+            self.add_event(key_event)
+
+    def attack(self):
+        bubble = Bubble(self.x, self.y, self.dir * 2)
+        add_object(bubble, 1)
 
