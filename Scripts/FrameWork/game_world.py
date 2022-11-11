@@ -5,9 +5,19 @@ collision_group = dict()
 
 
 def add_object(o, depth):
+    global objects
+    if len(objects) <= depth:
+        for i in range(depth - len(objects) + 1):
+            objects.append([])
+
     objects[depth].append(o)
 
 def add_objects(ol, depth):
+    global objects
+    if len(objects) <= depth:
+        for i in range(depth - len(objects) + 1):
+            objects.append([])
+
     objects[depth] += ol
 
 def remove_object(o):
