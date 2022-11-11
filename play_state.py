@@ -5,6 +5,30 @@ from Scripts.Object.Object_AFX import *
 
 Renderlist = []
 
+def collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+def map_collide(a, b):
+    left_a, bottom_a, right_a, top_a = a.tile_get_bb()
+    left_b, bottom_b, right_b, top_b = b.get_bb()
+
+    if left_a > right_b: return False
+    if right_a < left_b: return False
+    if top_a < bottom_b: return False
+    if bottom_a > top_b: return False
+
+    return True
+
+
+
 def enter():
     global Renderlist
     global character
@@ -15,11 +39,13 @@ def enter():
     stage1.Tile_init()
 
     character = Character()
+    add_object(stage1.background, 0)
 
-    add_object(character, 1)
-    RenderList.append(stage1.background)
+    add_object(character, 2)
     for tile in stage1.tiles:
-        RenderList += tile.tiles
+        add_objects(tile.tiles, 1)
+
+    add_collision_group(character, stage1.tiles, 'character:tile')
 
     pass
 
@@ -33,13 +59,11 @@ def handle_events():
     for event in events:
         if event.type == pico2d.SDL_QUIT:
             game_framework.quit()
-
-        elif event.type == pico2d.SDL_KEYDOWN:
-            match event.key:
-                case pico2d.SDLK_ESCAPE:
-                    game_framework.quit()
+        elif event.type == pico2d.SDL_KEYDOWN and event.key == SDLK_ESCAPE:
+            game_framework.quit()
         else:
             character.handle_events(event)
+
 def draw():
     pico2d.clear_canvas()
     global Renderlist
@@ -53,67 +77,15 @@ def draw():
     pass
 
 def update():
-    global character
+    for game_object in all_objects():
+        game_object.update()
 
-    character.update()
+    for a, b, group in all_collision_pairs():
+        if map_collide(a, b):
+            print('COLLISION by ', group)
+            a.handle_collision(b, group)
+            b.handle_collision(a, group)
     pass
-
-
-def map_collide():
-    global stage1, stage2, character
-
-    # y축 맵 이탈 금지
-    if character.y > 550:
-        character.y -= 1
-
-    # 구멍 이동
-    if character.y < 0:
-        character.y = 600
-
-    # x축 맵 이탈 금지
-    if character.get_bb()[2] > 750:
-        character.x -= 1
-    elif character.get_bb()[0] < 55:
-        character.x += 1
-
-    # 1-1 스테이지 벽
-    if stage1.step == 1:
-        if (209 <= character.get_bb()[0] <= 210 or 560 <= character.get_bb()[0] <= 615) and  character.get_bb()[1] >= 460:
-            character.x += 1
-
-        elif (550 <= character.get_bb()[0] <= 555 or 150 <= character.get_bb()[0] <= 208) and character.get_bb()[1] >= 460:
-            character.x -= 1
-
-    # 1-2 스테이지 벽
-    if stage1.step == 2:
-        if (155 <= character.get_bb()[0] <= 160 or 680 <= character.get_bb()[0] <= 685) and 250 <= character.get_bb()[1] <= 475:
-            character.x += 1
-
-        elif (610 <= character.get_bb()[0] <= 615 or 80 <= character.get_bb()[0] <= 115) and 250 <= character.get_bb()[1] <= 475:
-            character.x -= 1
-
-    # 1 - 4스테이지 벽
-    if stage1.step == 4:
-        if (280 <= character.get_bb()[0] <= 290 or 500 <= character.get_bb()[0] <= 540) and 420 <= character.get_bb()[1] <= 479:
-            character.x += 1
-
-        elif (475 <= character.get_bb()[0] <= 485 or 240 <= character.get_bb()[0] <= 279) and 420 <= character.get_bb()[1] <= 479:
-            character.x -= 1
-
-        if (330 <= character.get_bb()[0] <= 340 or 470 <= character.get_bb()[0] <= 480) and 335 <= character.get_bb()[1] <= 415:
-            character.x += 1
-
-        elif (420 <= character.get_bb()[0] <= 425 or 260 <= character.get_bb()[0] <= 270) and 345 <= character.get_bb()[1] <= 415:
-            character.x -= 1
-
-
-
-    for i in stage1.block:
-        if character.get_bb()[2] > i[0] and character.get_bb()[0] < i[2] \
-                and i[3] <= character.get_bb()[1] <= i[1]:
-            return True
-
-    return False
 
 def pause():
     pass
