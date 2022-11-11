@@ -8,12 +8,6 @@ class Tile(Object):
 
     def __del__(self):
         pass
-
-    def get_bb(self, index):
-        if index == 1:
-            return self.transform.position.x - 18, self.transform.position.y + 32, self.transform.position.x + 18, self.transform.position.y + 32
-        elif index == 0 or index == 2:
-            return self.transform.position.x - 9, self.transform.position.y + 32, self.transform.position.x + 9, self.transform.position.y + 32
     pass
 
 def TileType(index):
@@ -55,4 +49,15 @@ class MakeTile_X(Object):
 
         for i in range(self.lenth):
             self.tiles[i].transform.position.y = Pos.y
+
+    def get_bb(self):
+        return self.tiles[0].transform.position.x + 9, self.tiles[0].transform.position.y + 11, \
+        self.tiles[0].transform.position.x + ((self.lenth - 2) * 36) + 27, self.tiles[0].transform.position.y + 11
+        pass
+
+    def Draw(self):
+        draw_rectangle(*self.get_bb())
+
+    def handle_collision(self, other, group):
+        pass
     pass
