@@ -115,7 +115,6 @@ def run(start_state):
         stack[-1].update()
         stack[-1].draw()
         frame_time = time.time() - current_time
-        frame_rate = 1 / frame_time
         current_time += frame_time
         # print(f'Frame Time: {frame_time}, Frame rate: {frame_rate}')
     # repeatedly delete the top of the stack
