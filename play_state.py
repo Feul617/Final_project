@@ -3,19 +3,23 @@ import game_framework
 import title_state
 from Scripts.Object.Object_AFX import *
 
+Renderlist = []
+
 def enter():
+    global Renderlist
     global character
-    global stage1_1
+    global stage1
     global monster1
 
-    stage1_1 = MainStage()
-    stage1_1.Tile_init()
+    stage1 = MainStage()
+    stage1.Tile_init()
 
     character = Character()
 
-    add_objects(stage1_1)
-    add_collision_group(character)
-
+    add_object(character, 1)
+    RenderList.append(stage1.background)
+    for tile in stage1.tiles:
+        RenderList += tile.tiles
 
     pass
 
@@ -26,7 +30,6 @@ def handle_events():
     global stage1, character
 
     events = pico2d.get_events()
-    character.handle_events(events)
     for event in events:
         if event.type == pico2d.SDL_QUIT:
             game_framework.quit()
@@ -35,17 +38,16 @@ def handle_events():
             match event.key:
                 case pico2d.SDLK_ESCAPE:
                     game_framework.quit()
+        else:
+            character.handle_events(event)
 def draw():
     pico2d.clear_canvas()
-    global RenderList, character
+    global Renderlist
+    global character
     global monster1
 
-    for obj in RenderList:
-        obj.Draw()
-
-    character.Draw()
-    monster1.Draw()
-
+    for game_object in all_objects():
+        game_object.Draw()
 
     pico2d.update_canvas()
     pass

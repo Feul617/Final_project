@@ -18,7 +18,5 @@ class Object:
         self.image.clip_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], pos.x, pos.y,
                              scale.x * self.image_Type[2], scale.y * self.image_Type[3])
 
-        draw_rectangle(*self.get_bb())
-
         pass
     pass

@@ -24,10 +24,11 @@ class IDLE:
 
     @staticmethod
     def exit(self, event):
+        pass
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * frame_time) % 8
 
     @staticmethod
     def draw(self):
@@ -86,7 +87,7 @@ class HURRY_UP:
 #3. 상태 변환 구현
 
 next_state = {
-    IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, TIMER: SLEEP, SPACE: IDLE},
+    IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, SPACE: IDLE},
     RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN},
     HURRY_UP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE}
 }
@@ -99,18 +100,18 @@ RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
 
 class Character(Object):
     def __init__(self):
-        self.x, self.y = 400, 300
+        super(Character, self).__init__()
+        self.transform.position.x, self.transform.position.y = 400, 300
         self.frame = 0
         self.dir, self.face_dir = 0, 1
         self.image = load_image('./character/character3.png')
+        self.image_Type = [0, 0, 60, 40]
 
         self.now_x, self.now_y = 0, 0
 
         self.event_que = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
-
-        self.attack_image = None
 
     def update(self):
         self.cur_state.do(self)
@@ -131,7 +132,7 @@ class Character(Object):
     def add_event(self, event):
         self.event_que.insert(0, event)
 
-    def handle_event(self, event):
+    def handle_events(self, event):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
