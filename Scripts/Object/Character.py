@@ -28,42 +28,49 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * frame_time) % 8
+        pass
 
     @staticmethod
     def draw(self):
         if self.face_dir == 1:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
+            self.flip = ' '
         else:
             self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
 
 
 class RUN:
     def enter(self, event):
-        print('ENTER RUN')
         if event == RD:
+            print('RD')
             self.dir += 1
         elif event == LD:
+            print('LD')
             self.dir -= 1
         elif event == RU:
+            print('RU')
             self.dir -= 1
         elif event == LU:
             self.dir += 1
+        elif event == SPACE and self.gravity == 0:
+            self.transform.position.y += 70
 
     def exit(self, event):
         self.face_dir = self.dir
 
     def do(self):
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-        self.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        self.face_dir = self.dir
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7.0
+        self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
-        self.x = clamp(0, self.x, 800)
+        self.transform.position.x = clamp(80, self.transform.position.x, 720)
+
+        if self.face_dir == 1:
+            self.flip = 'h'
+        else:
+            self.flip = ' '
 
     def draw(self):
-        if self.dir == -1:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
-        elif self.dir == 1:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
+        pass
 
 
 class HURRY_UP:
@@ -93,7 +100,7 @@ next_state = {
 }
 
 PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 20.0 # km/h 마라토너의 평속
+RUN_SPEED_KMPH = 30.0 # km/h 마라토너의 평속
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
@@ -102,10 +109,11 @@ class Character(Object):
     def __init__(self):
         super(Character, self).__init__()
         self.transform.position.x, self.transform.position.y = 400, 300
+        self.gravity = 1
         self.frame = 0
         self.dir, self.face_dir = 0, 1
         self.image = load_image('./character/character3.png')
-        self.image_Type = [0, 0, 60, 40]
+        self.image_Type = [self.frame * 60, 410, 60, 40]
 
         self.now_x, self.now_y = 0, 0
 
@@ -114,6 +122,12 @@ class Character(Object):
         self.cur_state.enter(self, None)
 
     def update(self):
+        self.transform.position.y -= self.gravity
+        if self.transform.position.y <= -10:
+            self.transform.position.y = 570
+
+        self.gravity = 1
+
         self.cur_state.do(self)
 
         if self.event_que:
@@ -138,9 +152,20 @@ class Character(Object):
             self.add_event(key_event)
 
     def attack(self):
-        bubble = Bubble(self.x, self.y, self.dir * 2)
-        add_object(bubble, 1)
+        # bubble = Bubble(self.x, self.y, self.dir * 2)
+        # add_object(bubble, 1)
+        pass
 
     def get_bb(self):
-        return self.x - 30, self.y - 20, self.x + 30, self.y + 20
+        return self.transform.position.x - 30, self.transform.position.y - 20, \
+               self.transform.position.x + 30, self.transform.position.y + 20
+
+    def tile_get_bb(self):
+        return self.transform.position.x - 30, self.transform.position.y - 20, \
+               self.transform.position.x + 30, self.transform.position.y - 20
+
+    def handle_collision(self, other, group):
+        if group == 'character:tile':
+            self.gravity = 0
+        pass
 
