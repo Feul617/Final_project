@@ -12,6 +12,10 @@ class MainStage:
 
 
     def Tile_init(self):
+        #공용 타일
+        tile = MakeTile_X(6)
+        tile.MakeTile(62, 28)
+        self.tiles.append(tile)
         #1층 왼쪾 타일
         tile = MakeTile_X(7)
         tile.MakeTile(165, 133)
@@ -41,4 +45,5 @@ class MainStage:
         tile = MakeTile_X(6)
         tile.MakeTile(450, 345)
         self.tiles.append(tile)
+
     pass
