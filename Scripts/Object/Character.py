@@ -34,7 +34,7 @@ class IDLE:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < 50:
-                self.transform.position.y += 4 * RUN_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
 
     @staticmethod
@@ -75,7 +75,7 @@ class RUN:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < 50:
-                self.transform.position.y += 4 * RUN_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
     def draw(self):
         pass
@@ -103,7 +103,9 @@ next_state = {
 }
 
 PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 30.0 # km/h 마라토너의 평속
+RUN_SPEED_KMPH = 40.0 # km/h 마라토너의 평속
+FALLING_SPEED = (RUN_SPEED_KMPH - 5) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+JUMP_SPEED_PPS = (RUN_SPEED_KMPH - 10) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
@@ -112,7 +114,7 @@ class Character(Object):
     def __init__(self):
         super(Character, self).__init__()
         self.transform.position.x, self.transform.position.y = 400, 300
-        self.gravity = 1
+        self.gravity = 0
         self.frame = 0
         self.dir, self.face_dir = 0, 1
         self.jump_on = False
@@ -131,7 +133,7 @@ class Character(Object):
         if self.transform.position.y <= -10:
             self.transform.position.y = 570
 
-        self.gravity = 1
+        self.gravity = FALLING_SPEED * game_framework.frame_time
 
         self.cur_state.do(self)
 
@@ -171,7 +173,7 @@ class Character(Object):
 
     def handle_collision(self, other, group):
         if group == 'character:tile':
-            self.transform.position.y += 1
+            self.transform.position.y += self.gravity
             self.jump_on = False
             self.jump_count = 0
         pass
