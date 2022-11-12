@@ -13,6 +13,10 @@ def add_object(o, depth):
     objects[depth].append(o)
 
 def add_objects(ol, depth):
+    """
+
+    :rtype: object
+    """
     global objects
     if len(objects) <= depth:
         for i in range(depth - len(objects) + 1):
