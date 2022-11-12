@@ -23,8 +23,7 @@ class IDLE:
         self.dir = 0
         if event == SPACE and self.jump_on == False:
             self.jump_on = True
-            if self.jump_count <= 7:
-                self.transform.position.y += 10
+            self.transform.position.y += 5
 
     @staticmethod
     def exit(self, event):
@@ -32,6 +31,10 @@ class IDLE:
 
     @staticmethod
     def do(self):
+        if self.jump_on:
+            self.jump_count += 1
+            if self.jump_count < 50:
+                self.transform.position.y += 4 * RUN_SPEED_PPS * game_framework.frame_time
         pass
 
     @staticmethod
@@ -39,9 +42,7 @@ class IDLE:
         if self.face_dir == 1:
             self.flip = ' '
         else:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
-
-
+            self.flip = 'h'
 class RUN:
     def enter(self, event):
         if event == RD:
@@ -54,8 +55,7 @@ class RUN:
             self.dir += 1
         elif event == SPACE and self.jump_on == False:
             self.jump_on = True
-            if self.jump_count <= 7:
-                self.transform.position.y += 10
+            self.transform.position.y += 5
 
     def exit(self, event):
         self.face_dir = self.dir
@@ -72,6 +72,11 @@ class RUN:
         else:
             self.flip = ' '
 
+        if self.jump_on:
+            self.jump_count += 1
+            if self.jump_count < 50:
+                self.transform.position.y += 4 * RUN_SPEED_PPS * game_framework.frame_time
+        pass
     def draw(self):
         pass
 
@@ -126,11 +131,7 @@ class Character(Object):
         if self.transform.position.y <= -10:
             self.transform.position.y = 570
 
-        if self.jump_on:
-            self.jump_count += 1
-            self.gravity = 0
-        else:
-            self.gravity = 1
+        self.gravity = 1
 
         self.cur_state.do(self)
 
@@ -166,11 +167,11 @@ class Character(Object):
 
     def tile_get_bb(self):
         return self.transform.position.x - 30, self.transform.position.y - 20, \
-               self.transform.position.x + 30, self.transform.position.y - 20
+               self.transform.position.x + 30, self.transform.position.y - 19
 
     def handle_collision(self, other, group):
         if group == 'character:tile':
-            self.gravity = 0
+            self.transform.position.y += 1
             self.jump_on = False
             self.jump_count = 0
         pass
