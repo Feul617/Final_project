@@ -1,15 +1,16 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 
 #1 : 이벤트 정의
-RD, LD, RU, LU, TIMER, SPACE = range(6)
-event_name = ['RD', 'LD', 'RU', 'LU', 'TIMER', 'SPACE']
+RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
+event_name = ['RD', 'LD', 'RU', 'LU', 'TIMER', 'UP', 'SPACE']
 
 key_event_table = {
     (SDL_KEYDOWN, SDLK_SPACE): SPACE,
     (SDL_KEYDOWN, SDLK_RIGHT): RD,
     (SDL_KEYDOWN, SDLK_LEFT): LD,
     (SDL_KEYUP, SDLK_RIGHT): RU,
-    (SDL_KEYUP, SDLK_LEFT): LU
+    (SDL_KEYUP, SDLK_LEFT): LU,
+    (SDL_KEYDOWN, SDLK_UP): UP
 }
 
 TIME_PER_ACTION = 0.5
@@ -21,7 +22,7 @@ class IDLE:
     @staticmethod
     def enter(self,event):
         self.dir = 0
-        if event == SPACE and self.jump_on == False:
+        if event == UP and self.jump_on == False:
             self.jump_on = True
             self.transform.position.y += 5
 
@@ -53,7 +54,7 @@ class RUN:
             self.dir -= 1
         elif event == LU:
             self.dir += 1
-        elif event == SPACE and self.jump_on == False:
+        elif event == UP and self.jump_on == False:
             self.jump_on = True
             self.transform.position.y += 5
 
@@ -97,8 +98,8 @@ class HURRY_UP:
 #3. 상태 변환 구현
 
 next_state = {
-    IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, SPACE: IDLE},
-    RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN},
+    IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, SPACE: IDLE, UP: IDLE},
+    RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, UP: RUN},
     HURRY_UP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE}
 }
 
