@@ -1,4 +1,5 @@
 from Scripts.FrameWork.FrameWork_AFX import *
+from Scripts.Object.Attack import *
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -28,7 +29,8 @@ class IDLE:
 
     @staticmethod
     def exit(self, event):
-        pass
+        if event == SPACE:
+            self.attack()
 
     @staticmethod
     def do(self):
@@ -60,6 +62,8 @@ class RUN:
 
     def exit(self, event):
         self.face_dir = self.dir
+        if event == SPACE:
+            self.attack()
 
     def do(self):
         self.face_dir = self.dir
@@ -177,5 +181,7 @@ class Character(Object):
             self.transform.position.y += self.gravity
             self.jump_on = False
             self.jump_count = 0
-        pass
 
+    def attack(self):
+        bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
+        add_object(bubble, 2)
