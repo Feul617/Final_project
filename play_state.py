@@ -37,6 +37,13 @@ def Monster_move():
     if zen_chan[1].transform.position.x == 500 or zen_chan[1].transform.position.x == 675:
         zen_chan[1].dir *= -1
 
+    zen_chan[2].transform.position.x = clamp(215, zen_chan[2].transform.position.x, 370)
+    if zen_chan[2].transform.position.x == 215 or zen_chan[2].transform.position.x == 370:
+        zen_chan[2].dir *= -1
+
+    zen_chan[3].transform.position.x = clamp(460, zen_chan[3].transform.position.x, 615)
+    if zen_chan[3].transform.position.x == 460 or zen_chan[3].transform.position.x == 615:
+        zen_chan[3].dir *= -1
 def enter():
     global Renderlist
     global character
@@ -57,13 +64,15 @@ def enter():
         add_objects(tile.tiles, 1)
 
     #몬스터
-    zen_chan = [Monster() for i in range(2)]
-    for i in range(2):
+    zen_chan = [Monster() for i in range(4)]
+    for i in range(4):
         zen_chan[i].name = 'zen_chan'
         zen_chan[i].name_type()
     #시작위치지정
     zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 140, 260
     zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260
+    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 300, 365
+    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 500, 365
 
 
     add_objects(zen_chan, 2)
@@ -71,6 +80,7 @@ def enter():
 
     #충돌체크
     add_collision_group(character, stage1.tiles, 'character:tile')
+    add_collision_group(character, zen_chan, 'character:monster')
 
     pass
 
@@ -107,6 +117,11 @@ def update():
 
     for a, b, group in all_collision_pairs():
         if map_collide(a, b):
+            a.map_handle_collision(b, group)
+            b.handle_collision(a, group)
+
+    for a, b, group in all_collision_pairs():
+        if collide(a, b):
             a.handle_collision(b, group)
             b.handle_collision(a, group)
 
