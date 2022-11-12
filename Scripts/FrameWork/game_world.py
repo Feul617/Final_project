@@ -51,7 +51,6 @@ def clear():
 
 def add_collision_group(a, b, group):
     if group not in collision_group:
-        print('New Group Made')
         collision_group[group] = [[], []]
 
     if a:

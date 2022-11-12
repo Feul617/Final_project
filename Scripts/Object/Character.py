@@ -176,11 +176,15 @@ class Character(Object):
         return self.transform.position.x - 30, self.transform.position.y - 20, \
                self.transform.position.x + 30, self.transform.position.y - 19
 
-    def handle_collision(self, other, group):
+    def map_handle_collision(self, other, group):
         if group == 'character:tile':
             self.transform.position.y += self.gravity
             self.jump_on = False
             self.jump_count = 0
+
+    def handle_collision(self, other, group):
+        if group == 'character:monster':
+            remove_object(self)
 
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
