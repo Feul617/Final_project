@@ -16,7 +16,16 @@ class MainStage:
         tile = MakeTile_X(6)
         tile.MakeTile(62, 28)
         self.tiles.append(tile)
-        #1층 왼쪾 타일
+
+        tile = MakeTile_X(6)
+        tile.MakeTile(330, 28)
+        self.tiles.append(tile)
+
+        tile = MakeTile_X(6)
+        tile.MakeTile(580, 28)
+        self.tiles.append(tile)
+
+        #1층 왼쪽 타일
         tile = MakeTile_X(7)
         tile.MakeTile(165, 133)
         self.tiles.append(tile)
@@ -33,7 +42,7 @@ class MainStage:
 
         #2층 오른쪽 타일
         tile = MakeTile_X(7)
-        tile.MakeTile(500, 240)
+        tile.MakeTile(490, 240)
         self.tiles.append(tile)
 
         #3층 왼쪽 타일
