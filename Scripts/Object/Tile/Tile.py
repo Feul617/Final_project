@@ -52,7 +52,7 @@ class MakeTile_X(Object):
 
     def get_bb(self):
         return self.tiles[0].transform.position.x + 9, self.tiles[0].transform.position.y + 11, \
-        self.tiles[0].transform.position.x + ((self.lenth - 2) * 36) + 27, self.tiles[0].transform.position.y + 11
+        self.tiles[0].transform.position.x + ((self.lenth - 2) * 36), self.tiles[0].transform.position.y + 11
         pass
 
     def Draw(self):
