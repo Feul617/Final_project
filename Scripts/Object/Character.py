@@ -21,6 +21,10 @@ class IDLE:
     @staticmethod
     def enter(self,event):
         self.dir = 0
+        if event == SPACE and self.jump_on == False:
+            self.jump_on = True
+            if self.jump_count <= 7:
+                self.transform.position.y += 10
 
     @staticmethod
     def exit(self, event):
@@ -41,18 +45,17 @@ class IDLE:
 class RUN:
     def enter(self, event):
         if event == RD:
-            print('RD')
             self.dir += 1
         elif event == LD:
-            print('LD')
             self.dir -= 1
         elif event == RU:
-            print('RU')
             self.dir -= 1
         elif event == LU:
             self.dir += 1
-        elif event == SPACE and self.gravity == 0:
-            self.transform.position.y += 70
+        elif event == SPACE and self.jump_on == False:
+            self.jump_on = True
+            if self.jump_count <= 7:
+                self.transform.position.y += 10
 
     def exit(self, event):
         self.face_dir = self.dir
@@ -84,12 +87,7 @@ class HURRY_UP:
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
     def draw(self):
-        if self.face_dir == -1:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, ' ', self.x, self.y, 60, 40)
-
-        else:
-            self.image.clip_composite_draw(int(self.frame) * 100, 300, 60, 40, 0, 'v', self.x, self.y, 60, 40)
-
+        pass
 
 #3. 상태 변환 구현
 
@@ -112,6 +110,8 @@ class Character(Object):
         self.gravity = 1
         self.frame = 0
         self.dir, self.face_dir = 0, 1
+        self.jump_on = False
+        self.jump_count = 0
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
 
@@ -126,7 +126,11 @@ class Character(Object):
         if self.transform.position.y <= -10:
             self.transform.position.y = 570
 
-        self.gravity = 1
+        if self.jump_on:
+            self.jump_count += 1
+            self.gravity = 0
+        else:
+            self.gravity = 1
 
         self.cur_state.do(self)
 
@@ -167,5 +171,7 @@ class Character(Object):
     def handle_collision(self, other, group):
         if group == 'character:tile':
             self.gravity = 0
+            self.jump_on = False
+            self.jump_count = 0
         pass
 
