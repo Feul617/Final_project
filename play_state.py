@@ -27,24 +27,49 @@ def map_collide(a, b):
 
     return True
 
+def Monster_move():
+    global zen_chan
+    zen_chan[0].transform.position.x = clamp(130, zen_chan[0].transform.position.x, 305)
+    if zen_chan[0].transform.position.x == 130 or zen_chan[0].transform.position.x == 305:
+        zen_chan[0].dir *= -1
 
+    zen_chan[1].transform.position.x = clamp(500, zen_chan[1].transform.position.x, 675)
+    if zen_chan[1].transform.position.x == 500 or zen_chan[1].transform.position.x == 675:
+        zen_chan[1].dir *= -1
 
 def enter():
     global Renderlist
     global character
     global stage1
-    global monster1
+    global zen_chan
 
+    #캐릭터
+    character = Character()
+    add_object(character, 2)
+
+    #맵 & 타일
     stage1 = MainStage()
     stage1.Tile_init()
 
-    character = Character()
     add_object(stage1.background, 0)
 
-    add_object(character, 2)
     for tile in stage1.tiles:
         add_objects(tile.tiles, 1)
 
+    #몬스터
+    zen_chan = [Monster() for i in range(2)]
+    for i in range(2):
+        zen_chan[i].name = 'zen_chan'
+        zen_chan[i].name_type()
+    #시작위치지정
+    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 140, 260
+    zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260
+
+
+    add_objects(zen_chan, 2)
+
+
+    #충돌체크
     add_collision_group(character, stage1.tiles, 'character:tile')
 
     pass
@@ -82,9 +107,11 @@ def update():
 
     for a, b, group in all_collision_pairs():
         if map_collide(a, b):
-            print('COLLISION by ', group)
             a.handle_collision(b, group)
             b.handle_collision(a, group)
+
+    Monster_move()
+
     pass
 
 def pause():
