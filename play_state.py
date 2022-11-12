@@ -44,8 +44,8 @@ def Monster_move():
     zen_chan[3].transform.position.x = clamp(460, zen_chan[3].transform.position.x, 615)
     if zen_chan[3].transform.position.x == 460 or zen_chan[3].transform.position.x == 615:
         zen_chan[3].dir *= -1
+
 def enter():
-    global Renderlist
     global character
     global stage1
     global zen_chan
@@ -67,13 +67,11 @@ def enter():
     zen_chan = [Monster() for i in range(4)]
     for i in range(4):
         zen_chan[i].name = 'zen_chan'
-        zen_chan[i].name_type()
     #시작위치지정
-    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 140, 260
+    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 190, 260
     zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260
     zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 300, 365
     zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 500, 365
-
 
     add_objects(zen_chan, 2)
 
@@ -88,7 +86,7 @@ def exit():
     pass
 
 def handle_events():
-    global stage1, character
+    global character
 
     events = pico2d.get_events()
     for event in events:
@@ -101,7 +99,6 @@ def handle_events():
 
 def draw():
     pico2d.clear_canvas()
-    global Renderlist
     global character
     global monster1
 

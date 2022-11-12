@@ -16,8 +16,9 @@ class Monster(Object):
         self.frame = 0
         self.dir = 1
         self.flip = ' '
-        self.name = None
+        self.name = ' '
         self.image = load_image('./character/monster2.png')
+        self.image_Type = [0, 0, 0, 0]
 
     def update(self):
         self.face_dir = self.dir
@@ -25,20 +26,20 @@ class Monster(Object):
             self.flip = ' '
         else:
             self.flip = 'h'
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7.0
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 4.0
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        if self.name == 'zen_chan':
+            self.image_Type = [int(self.frame) * 55, 800, 40, 60]
 
     def get_bb(self):
         return self.transform.position.x - 20, self.transform.position.y - 30, \
                self.transform.position.x + 20, self.transform.position.y + 30
 
-    def name_type(self):
-        if self.name == 'zen_chan':
-            self.image_Type = [0, 800, 40, 60]
 
     def handle_collision(self, other, group):
         if group == 'character:monster':
             print('캐릭터충돌')
+            remove_object(self)
 
 def Monster_Type(index):
     monster = Monster()
