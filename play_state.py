@@ -47,7 +47,7 @@ def Monster_move():
 
 def enter():
     global character
-    global stage1
+    global step, stage1
     global zen_chan
 
     #캐릭터
@@ -55,8 +55,10 @@ def enter():
     add_object(character, 2)
 
     #맵 & 타일
+    step = 1
+
     stage1 = MainStage()
-    stage1.Tile_init()
+    stage1.Tile_init(step)
 
     add_object(stage1.background, 0)
 
@@ -87,6 +89,7 @@ def exit():
 
 def handle_events():
     global character
+    global step, stage1
 
     events = pico2d.get_events()
     for event in events:
@@ -96,6 +99,7 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_events(event)
+            stage1.handle_events(event)
 
 def draw():
     pico2d.clear_canvas()

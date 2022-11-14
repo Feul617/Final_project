@@ -15,13 +15,14 @@ class Bubble(Object):
     def __init__(self, x = 400, y = 300, velocity = 1):
         super(Bubble, self).__init__()
         self.image = load_image('./character/attack.png')
+        self.image2 = None
         self.transform.position.x,\
         self.transform.position.y, \
         self.velocity = x, y, velocity
 
         self.frame = 0
 
-        self.start_x = None
+        self.start_x = x
 
         self.transform.scale.x = 2
 
@@ -30,6 +31,9 @@ class Bubble(Object):
     def update(self):
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
+
+        if abs(self.transform.position.x - self.start_x) >= 80:
+            pass
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6.0
 

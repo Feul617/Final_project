@@ -22,22 +22,28 @@ def TileType(index):
         tile.image = load_image('map/Tile/stage1-1 right_tile.png')
         tile.image_Type = [0, 0, 18, 32]
     elif index == 3:
-        tile.image = load_image('map/Tile/stage1-1 wall.png')
-        tile.image_Type = [0, 0, 29, 30]
+        tile.image = load_image('map/Tile/stage1-2 left_tile.png')
+        tile.image_Type = [0, 0, 18, 32]
+    elif index == 4:
+        tile.image = load_image('map/Tile/stage1-2 middle_tile.png')
+        tile.image_Type = [0, 0, 36, 32]
+    elif index == 5:
+        tile.image = load_image('map/Tile/stage1-2 right_tile.png')
+        tile.image_Type = [0, 0, 18, 32]
 
     return tile
 
 
 class MakeTile_X(Object):
-    def __init__(self, lenth):
+    def __init__(self, lenth, stage):
         super(MakeTile_X, self).__init__()
         # 객체 초기화
         self.lenth = lenth
         self.tiles = []
-        self.tiles.append(TileType(0))
+        self.tiles.append(TileType(3 * stage - 3))
         for i in range(1, lenth - 1):
-            self.tiles.append(TileType(1))
-        self.tiles.append(TileType(2))
+            self.tiles.append(TileType(3 * stage - 2))
+        self.tiles.append(TileType(3 * stage - 1))
 
     def MakeTile(self, x, y):
         Pos = Vector2(x, y)

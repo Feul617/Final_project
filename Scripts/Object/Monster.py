@@ -20,6 +20,8 @@ class Monster(Object):
         self.image = load_image('./character/monster2.png')
         self.image_Type = [0, 0, 0, 0]
 
+        self.state = None
+
     def update(self):
         self.face_dir = self.dir
         if self.face_dir == -1:
