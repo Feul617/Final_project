@@ -69,6 +69,8 @@ def enter():
     zen_chan = [Monster() for i in range(4)]
     for i in range(4):
         zen_chan[i].name = 'zen_chan'
+        zen_chan[i].count += 1
+
     #시작위치지정
     zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 190, 260
     zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260

@@ -21,6 +21,7 @@ class Monster(Object):
         self.image_Type = [0, 0, 0, 0]
 
         self.state = None
+        self.count = 0
 
     def update(self):
         self.face_dir = self.dir
@@ -41,6 +42,7 @@ class Monster(Object):
     def handle_collision(self, other, group):
         if group == 'character:monster':
             print('캐릭터충돌')
+            self.count -= 1
             remove_object(self)
 
 def Monster_Type(index):
