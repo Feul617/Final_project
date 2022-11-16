@@ -11,6 +11,7 @@ UP_SPEED_PPS = 10.0 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAME_PER_ACTION = 4
+PONG_PER_ACTION = 0.01
 
 class Bubble(Object):
     def __init__(self, x = 400, y = 300, velocity = 1):
@@ -21,6 +22,11 @@ class Bubble(Object):
         self.velocity = x, y, velocity
 
         self.frame = 0
+        self.delay = 0
+        self.holding_time = 0
+        self.is_up = 1
+
+        self.state = 1 # 1: 공격 / 2: 상승하는 방울 / 3: 퐁
 
         self.start_x = x
 
@@ -34,9 +40,10 @@ class Bubble(Object):
         if self.transform.position.x - self.start_x > 150:
             if self.velocity != 0:
                 self.image = load_image('./character/bubble.png')
+                self.state = 2
             self.velocity = 0
 
-            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time
+            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * self.is_up
             self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3.0
 
             pass
@@ -47,8 +54,22 @@ class Bubble(Object):
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6.0
 
         self.transform.position.x = clamp(80, self.transform.position.x, 720)
-        if self.transform.position.x == 80 or self.transform.position.x == 720 or self.transform.position.y > 820:
-            remove_object(self)
+        if self.transform.position.x == 80 or self.transform.position.x == 720:
+            self.state = 3
+            self.image = load_image('./character/pong.png')
+            self.frame = (self.frame + FRAME_PER_ACTION * PONG_PER_ACTION * game_framework.frame_time) % 2.0
+
+            if self.delay == 40:
+                remove_object(self)
+            self.delay += 1
+
+        if self.transform.position.y >= 530:
+            self.is_up = 0
+            self.holding_time += 1
+            if self.holding_time == 3000:
+                remove_object(self)
+
 
     def get_bb(self):
+        return self.transform.position.x - 9, self.transform.position.y - 10, self.transform.position.x + 9, self.transform.position.y + 10
         pass
