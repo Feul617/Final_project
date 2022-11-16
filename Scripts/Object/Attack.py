@@ -48,28 +48,32 @@ class Bubble(Object):
 
             pass
 
-        if abs(self.transform.position.x - self.start_x) >= 80:
+        if abs(self.start_x - self.transform.position.x) >= 80:
             pass
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6.0
 
         self.transform.position.x = clamp(80, self.transform.position.x, 720)
         if self.transform.position.x == 80 or self.transform.position.x == 720:
-            self.state = 3
-            self.image = load_image('./character/pong.png')
-            self.frame = (self.frame + FRAME_PER_ACTION * PONG_PER_ACTION * game_framework.frame_time) % 2.0
-
-            if self.delay == 40:
-                remove_object(self)
-            self.delay += 1
+            self.pong()
 
         if self.transform.position.y >= 530:
             self.is_up = 0
             self.holding_time += 1
-            if self.holding_time == 3000:
-                remove_object(self)
+            if self.holding_time == 1500:
+                self.holding_time = 0
+                self.pong()
 
 
     def get_bb(self):
         return self.transform.position.x - 9, self.transform.position.y - 10, self.transform.position.x + 9, self.transform.position.y + 10
         pass
+
+    def pong(self):
+        self.state = 3
+        self.image = load_image('./character/pong.png')
+        self.frame = (self.frame + FRAME_PER_ACTION * PONG_PER_ACTION * game_framework.frame_time) % 2.0
+
+        if self.delay >= 40:
+            remove_object(self)
+        self.delay += 1
