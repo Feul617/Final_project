@@ -69,6 +69,10 @@ class Bubble(Object):
         return self.transform.position.x - 9, self.transform.position.y - 10, self.transform.position.x + 9, self.transform.position.y + 10
         pass
 
+    def tile_get_bb(self):
+        return self.transform.position.x - 9, self.transform.position.y - 10, self.transform.position.x + 9, self.transform.position.y + 10
+
+
     def pong(self):
         self.state = 3
         self.image = load_image('./character/pong.png')

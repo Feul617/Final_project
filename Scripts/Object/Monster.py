@@ -26,6 +26,7 @@ class Monster(Object):
         self.type = 0
         self.count = 0
         self.in_bubble = 0
+        self.is_up = 10
 
     def update(self):
         self.face_dir = self.dir
