@@ -71,6 +71,8 @@ def enter():
         zen_chan[i].name = 'zen_chan'
         zen_chan[i].count += 1
 
+    character.monster = zen_chan
+
     #시작위치지정
     zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 190, 260
     zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260
@@ -83,7 +85,7 @@ def enter():
     #충돌체크
     add_collision_group(character, stage1.tiles, 'character:tile')
     add_collision_group(character, zen_chan, 'character:monster')
-    add_collision_group(character, zen_chan, 'attack:monster')
+    #add_collision_group(character.attack(), zen_chan, 'attack:monster')
 
     pass
 
