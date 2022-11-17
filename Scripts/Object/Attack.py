@@ -60,8 +60,8 @@ class Bubble(Object):
         if self.transform.position.y >= 530:
             self.is_up = 0
             self.holding_time += 1
-            if self.holding_time == 1500:
-                self.holding_time = 0
+
+            if self.holding_time >= 1500:
                 self.pong()
 
 
@@ -73,7 +73,11 @@ class Bubble(Object):
         self.state = 3
         self.image = load_image('./character/pong.png')
         self.frame = (self.frame + FRAME_PER_ACTION * PONG_PER_ACTION * game_framework.frame_time) % 2.0
+        self.delay += 1
 
         if self.delay >= 40:
             remove_object(self)
-        self.delay += 1
+
+    def handle_collision(self, other, group):
+        if group == 'attack:monster':
+            remove_object(self)
