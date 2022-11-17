@@ -30,6 +30,7 @@ class IDLE:
     @staticmethod
     def exit(self, event):
         if event == SPACE:
+            print('IDLE attack')
             self.attack()
 
     @staticmethod
@@ -63,6 +64,7 @@ class RUN:
     def exit(self, event):
         self.face_dir = self.dir
         if event == SPACE:
+            print('RUN attack')
             self.attack()
 
     def do(self):
@@ -116,6 +118,7 @@ RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
 
 class Character(Object):
+
     def __init__(self):
         super(Character, self).__init__()
         self.transform.position.x, self.transform.position.y = 100, 300
@@ -133,6 +136,8 @@ class Character(Object):
         self.event_que = []
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
+
+        self.monster = None
 
     def update(self):
         self.transform.position.y -= self.gravity
@@ -186,4 +191,5 @@ class Character(Object):
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
         add_object(bubble, 2)
+        add_collision_group(bubble, self.monster, 'attack:monster')
         return bubble

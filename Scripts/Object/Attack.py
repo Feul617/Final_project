@@ -17,9 +17,7 @@ class Bubble(Object):
     def __init__(self, x = 400, y = 300, velocity = 1):
         super(Bubble, self).__init__()
         self.image = load_image('./character/attack.png')
-        self.transform.position.x,\
-        self.transform.position.y, \
-        self.velocity = x, y, velocity
+        self.transform.position.x, self.transform.position.y, self.velocity = x, y, velocity
 
         self.frame = 0
         self.delay = 0
@@ -37,7 +35,7 @@ class Bubble(Object):
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
 
-        if self.transform.position.x - self.start_x > 150:
+        if abs(self.transform.position.x - self.start_x) > 150:
             if self.velocity != 0:
                 self.image = load_image('./character/bubble.png')
                 self.state = 2
@@ -46,9 +44,6 @@ class Bubble(Object):
             self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * self.is_up
             self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 3.0
 
-            pass
-
-        if abs(self.start_x - self.transform.position.x) >= 80:
             pass
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6.0
@@ -84,7 +79,9 @@ class Bubble(Object):
 
     def handle_collision(self, other, group):
         if group == 'attack:monster':
-            remove_object(self)
+            if self.state == 1:
+                #print(group)
+                remove_object(self)
 
     def map_handle_collision(self, other, group):
         pass

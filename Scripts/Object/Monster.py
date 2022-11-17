@@ -26,7 +26,9 @@ class Monster(Object):
         self.type = 0
         self.count = 0
         self.in_bubble = 0
-        self.is_up = 10
+        self.is_up = False
+        self.time = 0
+
 
     def update(self):
         self.face_dir = self.dir
@@ -37,7 +39,10 @@ class Monster(Object):
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
         self.Monster_type()
-        self.image_Type = [(int(self.frame) + self.in_bubble) * 55, self.type, 40, 60]
+        self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
+
+        self.floating()
+        self.start_timer()
 
     def get_bb(self):
         return self.transform.position.x - 20, self.transform.position.y - 30, \
@@ -46,23 +51,40 @@ class Monster(Object):
 
     def handle_collision(self, other, group):
         if group == 'character:monster':
-            print('캐릭터충돌')
-            self.count -= 1
-            remove_object(self)
+            #print('캐릭터충돌')
+            # self.count -= 1
+            # remove_object(self)
+            pass
+
         elif group == 'attack:monster':
-            self.dir = 0
-            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * self.is_up
-            if self.name == 'zen_chan':
-                self.in_bubble = 16
-                self.frame_set = 3.0
+            if self.state == 0 and other.state == 1:
+                self.state = 1
+                self.dir = 0
+                self.is_up = True
+                if self.name == 'zen_chan':
+                    self.in_bubble = 16
+                    self.frame_set = 3.0
 
     def Monster_type(self):
         match self.name:
             case 'zen_chan':
-                self.type = 800
+                self.type = 810
 
             case 'mighta':
                 self.type = 700
+
+    def floating(self):
+        if self.transform.position.y < 540 and self.is_up:
+            #print('float')
+            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * 2
+        elif self.transform.position.y >= 540:
+            self.is_up = False
+
+    def start_timer(self):
+        if self.transform.position.y >= 540:
+            self.time += 1
+        if self.time >= 1000:
+            remove_object(self)
 
 
 class Make_Monster(Object):
