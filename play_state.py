@@ -83,6 +83,7 @@ def enter():
     #충돌체크
     add_collision_group(character, stage1.tiles, 'character:tile')
     add_collision_group(character, zen_chan, 'character:monster')
+    add_collision_group(character.attack(), zen_chan, 'attack:monster')
 
     pass
 

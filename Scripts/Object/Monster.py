@@ -5,6 +5,7 @@ RUN_SPEED_KMPH = 30.0 # km/h 마라토너의 평속
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
+UP_SPEED_PPS = 10.0 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 
 TIME_PER_ACTION = 0.5
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -48,6 +49,8 @@ class Monster(Object):
             self.count -= 1
             remove_object(self)
         elif group == 'attack:monster':
+            self.dir = 0
+            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * self.is_up
             if self.name == 'zen_chan':
                 self.in_bubble = 16
                 self.frame_set = 3.0
