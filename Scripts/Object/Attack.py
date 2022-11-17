@@ -81,3 +81,6 @@ class Bubble(Object):
     def handle_collision(self, other, group):
         if group == 'attack:monster':
             remove_object(self)
+
+    def map_handle_collision(self, other, group):
+        pass

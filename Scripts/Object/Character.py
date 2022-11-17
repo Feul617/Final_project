@@ -37,7 +37,7 @@ class IDLE:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 2 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
 
     @staticmethod
@@ -80,7 +80,7 @@ class RUN:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 2 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
     def draw(self):
         pass
@@ -164,11 +164,6 @@ class Character(Object):
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
-    def attack(self):
-        # bubble = Bubble(self.x, self.y, self.dir * 2)
-        # add_object(bubble, 1)
-        pass
-
     def get_bb(self):
         return self.transform.position.x - 30, self.transform.position.y - 20, \
                self.transform.position.x + 30, self.transform.position.y + 20
@@ -191,3 +186,4 @@ class Character(Object):
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
         add_object(bubble, 2)
+        return bubble
