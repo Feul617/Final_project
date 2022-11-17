@@ -67,3 +67,8 @@ class MakeTile_X(Object):
     def handle_collision(self, other, group):
         pass
     pass
+
+class Make_Wall(Object):
+    def __init__(self):
+        super(Make_Wall, self).__init__()
+

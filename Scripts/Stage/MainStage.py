@@ -64,6 +64,11 @@ class MainStage(Object):
             tile.MakeTile(450, 345)
             self.tiles.append(tile)
 
+            #4층 왼쪽 타일
+            tile = MakeTile_X(6, stage)
+            tile.MakeTile(200, 450)
+            self.tiles.append(tile)
+
         if stage == 2:
             tile = MakeTile_X(7, stage)
             tile.MakeTile(120, 120)
