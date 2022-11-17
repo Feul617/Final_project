@@ -16,7 +16,7 @@ class MainStage(Object):
 
     def handle_events(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            self.frame -= 10
+            self.frame -= 600
 
 
     def Tile_init(self, stage):
