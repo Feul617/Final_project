@@ -38,7 +38,7 @@ class IDLE:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 3 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
 
     @staticmethod
@@ -82,7 +82,7 @@ class RUN:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 3 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
     def draw(self):
         pass

@@ -22,12 +22,14 @@ class Monster(Object):
         self.image = load_image('./character/monster2.png')
         self.image_Type = [0, 0, 0, 0]
 
-        self.state = 0 # 0:init / 1:in bubble
+        self.state = 0 # 0:init / 1:in bubble / 2:death
         self.type = 0
         self.count = 0
         self.in_bubble = 0
         self.is_up = False
         self.time = 0
+
+        self.gravity = 3
 
 
     def update(self):
@@ -38,6 +40,7 @@ class Monster(Object):
             self.flip = 'h'
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        self.transform.position.y -= UP_SPEED_PPS * game_framework.frame_time * self.gravity
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
 
@@ -45,16 +48,21 @@ class Monster(Object):
         self.start_timer()
 
     def get_bb(self):
-        return self.transform.position.x - 20, self.transform.position.y - 30, \
-               self.transform.position.x + 20, self.transform.position.y + 30
+        return self.transform.position.x - 20, self.transform.position.y - 27, \
+               self.transform.position.x + 20, self.transform.position.y + 27
 
+    def tile_get_bb(self):
+        return self.transform.position.x - 20, self.transform.position.y - 20, \
+               self.transform.position.x + 20, self.transform.position.y
 
     def handle_collision(self, other, group):
         if group == 'character:monster':
-            #print('캐릭터충돌')
-            # self.count -= 1
-            # remove_object(self)
-            pass
+            if self.state == 1:
+                self.state = 2
+                match self.name:
+                    case 'zen_chan':
+                        self.in_bubble = 28
+                        self.frame_set = 4.0
 
         elif group == 'attack:monster':
             if self.state == 0 and other.state == 1:
@@ -64,6 +72,10 @@ class Monster(Object):
                 if self.name == 'zen_chan':
                     self.in_bubble = 16
                     self.frame_set = 3.0
+
+    def map_handle_collision(self, other, group):
+        if group == 'monster:tile':
+            self.gravity = 0
 
     def Monster_type(self):
         match self.name:
@@ -79,6 +91,7 @@ class Monster(Object):
             self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * 2
         elif self.transform.position.y >= 540:
             self.is_up = False
+
 
     def start_timer(self):
         if self.transform.position.y >= 540:
