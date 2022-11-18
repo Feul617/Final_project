@@ -74,10 +74,10 @@ def enter():
     character.monster = zen_chan
 
     #시작위치지정
-    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 190, 260
-    zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 260
-    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 300, 365
-    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 500, 365
+    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 180, 270
+    zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 270
+    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 270, 390
+    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 400
 
     add_objects(zen_chan, 2)
 
@@ -85,7 +85,7 @@ def enter():
     #충돌체크
     add_collision_group(character, stage1.tiles, 'character:tile')
     add_collision_group(character, zen_chan, 'character:monster')
-    #add_collision_group(character.attack(), zen_chan, 'attack:monster')
+    add_collision_group(zen_chan, stage1.tiles, 'monster:tile')
 
     pass
 
