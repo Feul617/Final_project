@@ -16,6 +16,7 @@ PONG_PER_ACTION = 0.01
 class Bubble(Object):
     def __init__(self, x = 400, y = 300, velocity = 1):
         super(Bubble, self).__init__()
+        self.name = "Bubble"
         self.image = load_image('./character/attack.png')
         self.transform.position.x, self.transform.position.y, self.velocity = x, y, velocity
 
@@ -27,6 +28,7 @@ class Bubble(Object):
         self.state = 1 # 1: 공격 / 2: 상승하는 방울 / 3: 퐁
 
         self.start_x = x
+        self.image_Type = [0, 0, 15, 50]    # 이유 초기화를 안해줘서 Update보다 Draw를 먼저 호출하면 imageType이 없다
 
         self.transform.scale.x = 2
 
@@ -35,7 +37,7 @@ class Bubble(Object):
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
 
-        if abs(self.transform.position.x - self.start_x) > 150:
+        if abs(self.transform.position.x - self.start_x) > 200:
             if self.velocity != 0:
                 self.image = load_image('./character/bubble.png')
                 self.state = 2
@@ -56,7 +58,7 @@ class Bubble(Object):
             self.is_up = 0
             self.holding_time += 1
 
-            if self.holding_time >= 1500:
+            if self.holding_time >= 1100:
                 self.pong()
 
 
@@ -79,8 +81,7 @@ class Bubble(Object):
 
     def handle_collision(self, other, group):
         if group == 'attack:monster':
-            if self.state == 1:
-                #print(group)
+            if self.state == 1 and other.state == 1:
                 remove_object(self)
 
     def map_handle_collision(self, other, group):
