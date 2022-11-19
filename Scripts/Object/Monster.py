@@ -71,6 +71,9 @@ class Monster(Object):
                         self.is_up = False
                         self.gravity = 2
 
+                    case 'might':
+                        pass
+
         elif group == 'attack:monster':
             if self.state == 0 and other.state == 1:
                 self.state = 1
@@ -79,6 +82,8 @@ class Monster(Object):
                 if self.name == 'zen_chan':
                     self.in_bubble = 16
                     self.frame_set = 3.0
+                elif self.name == 'might':
+                    pass
 
     def map_handle_collision(self, other, group):
         if group == 'monster:tile':
