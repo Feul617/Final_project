@@ -26,6 +26,7 @@ class Bubble(Object):
         self.is_up = 1
 
         self.state = 1 # 1: 공격 / 2: 상승하는 방울 / 3: 퐁
+        self.character_collide = False
 
         self.start_x = x
         self.image_Type = [0, 0, 15, 50]    # 이유 초기화를 안해줘서 Update보다 Draw를 먼저 호출하면 imageType이 없다
@@ -60,6 +61,8 @@ class Bubble(Object):
 
             if self.holding_time >= 1100:
                 self.pong()
+        if self.character_collide:
+            self.pong()
 
 
     def get_bb(self):
@@ -83,6 +86,10 @@ class Bubble(Object):
         if group == 'attack:monster':
             if self.state == 1 and other.state == 1:
                 remove_object(self)
+        elif group == 'attack:character':
+            if self.state == 2:
+                self.character_collide = True
+
 
     def map_handle_collision(self, other, group):
         pass

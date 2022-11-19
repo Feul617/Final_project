@@ -30,7 +30,6 @@ class IDLE:
     @staticmethod
     def exit(self, event):
         if event == SPACE:
-            print('IDLE attack')
             self.attack()
 
     @staticmethod
@@ -38,7 +37,7 @@ class IDLE:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 3 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
 
     @staticmethod
@@ -59,12 +58,12 @@ class RUN:
             self.dir += 1
         elif event == UP and self.jump_on == False:
             self.jump_on = True
+            self.now_y = self.transform.position.y
             self.transform.position.y += 5
 
     def exit(self, event):
         self.face_dir = self.dir
         if event == SPACE:
-            print('RUN attack')
             self.attack()
 
     def do(self):
@@ -82,7 +81,7 @@ class RUN:
         if self.jump_on:
             self.jump_count += 1
             if self.jump_count < self.jump_high:
-                self.transform.position.y += 3 * JUMP_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
         pass
     def draw(self):
         pass
@@ -138,6 +137,7 @@ class Character(Object):
         self.cur_state.enter(self, None)
 
         self.monster = None
+        self.charac = None
 
     def update(self):
         self.transform.position.y -= self.gravity
@@ -192,4 +192,5 @@ class Character(Object):
         bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
         add_object(bubble, 2)
         add_collision_group(bubble, self.monster, 'attack:monster')
+        add_collision_group(bubble, self.charac, 'attack:character')
         return bubble
