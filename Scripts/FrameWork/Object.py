@@ -19,10 +19,6 @@ class Object:
         pass
 
     def Draw(self):
-        if self.name == 'Bubble':
-            print(self.ID, " : " ,self.name)
-            print(self.image_Type)
-            print(self)
 
         pos = self.transform.position
         scale = self.transform.scale
