@@ -32,6 +32,7 @@ class Monster(Object):
         self.time = 0
 
         self.gravity = 3
+        self.start_delay = 0
 
 
     def update(self):
@@ -42,7 +43,10 @@ class Monster(Object):
             self.flip = 'h'
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        self.transform.position.y -= UP_SPEED_PPS * game_framework.frame_time * self.gravity * 2
+        if self.start_delay < 200:
+            self.start_delay += 1
+        if self.start_delay >= 200:
+            self.transform.position.y -= UP_SPEED_PPS * game_framework.frame_time * self.gravity * 2
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
 
@@ -96,7 +100,6 @@ class Monster(Object):
 
     def floating(self):
         if self.transform.position.y < 540 and self.is_up:
-            #print('float')
             self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * 2
         elif self.transform.position.y >= 540:
             self.is_up = False

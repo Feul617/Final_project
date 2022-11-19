@@ -72,12 +72,13 @@ def enter():
         zen_chan[i].count += 1
 
     character.monster = zen_chan
+    character.charac = character
 
     #시작위치지정
     zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 180, 270
     zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 270
-    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 270, 390
-    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 400
+    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 220, 380
+    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 380
 
     add_objects(zen_chan, 2)
 

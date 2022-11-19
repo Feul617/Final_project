@@ -27,7 +27,6 @@ def add_objects(ol, depth):
 def remove_object(o):
     for layer in objects:
         if o in layer:
-            print("del")
             layer.remove(o)
             # 충돌 그룹(리스트)에서도 객체를 삭제
             remove_collision_object(o)
