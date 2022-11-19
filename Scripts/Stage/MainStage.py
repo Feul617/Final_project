@@ -73,6 +73,9 @@ class MainStage(Object):
             tile = MakeTile_X(7, stage)
             tile.MakeTile(120, 120)
             self.tiles.append(tile)
-            pass
+
+            tile = MakeTile_X(7, stage)
+            tile.MakeTile(360, 120)
+            self.tiles.append(tile)
 
     pass
