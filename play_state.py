@@ -2,8 +2,9 @@ import Scripts.FrameWork.game_world
 import game_framework
 import title_state
 from Scripts.Object.Object_AFX import *
+from Scripts.Stage.StageContain import *
 
-Renderlist = []
+gameWorld = None
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -27,66 +28,50 @@ def map_collide(a, b):
 
     return True
 
-def Monster_move():
-    global zen_chan
-    zen_chan[0].transform.position.x = clamp(130, zen_chan[0].transform.position.x, 305)
-    if zen_chan[0].transform.position.x == 130 or zen_chan[0].transform.position.x == 305:
-        zen_chan[0].dir *= -1
-
-    zen_chan[1].transform.position.x = clamp(500, zen_chan[1].transform.position.x, 675)
-    if zen_chan[1].transform.position.x == 500 or zen_chan[1].transform.position.x == 675:
-        zen_chan[1].dir *= -1
-
-    zen_chan[2].transform.position.x = clamp(215, zen_chan[2].transform.position.x, 370)
-    if zen_chan[2].transform.position.x == 215 or zen_chan[2].transform.position.x == 370:
-        zen_chan[2].dir *= -1
-
-    zen_chan[3].transform.position.x = clamp(460, zen_chan[3].transform.position.x, 615)
-    if zen_chan[3].transform.position.x == 460 or zen_chan[3].transform.position.x == 615:
-        zen_chan[3].dir *= -1
-
 def enter():
     global character
     global step, stage1
     global zen_chan
+    global gameWorld
 
+    gameWorld = GameWorld()
+
+    Object.gameWorld = gameWorld
     #캐릭터
     character = Character()
-    add_object(character, 2)
+    gameWorld.add_object(character, 2)
 
     #맵 & 타일
     step = 1
 
-    stage1 = MainStage()
-    stage1.Tile_init(step)
+    stage1 = Stage1_1()
+    stage1.init()
 
-    add_object(stage1.background, 0)
+    gameWorld.add_object(stage1.background, 0)
 
     for tile in stage1.tiles:
-        add_objects(tile.tiles, 1)
+        gameWorld.add_objects(tile.tiles, 1)
 
     #몬스터
-    zen_chan = [Monster() for i in range(4)]
-    for i in range(4):
-        zen_chan[i].name = 'zen_chan'
-        zen_chan[i].count += 1
-
-    character.monster = zen_chan
+    # zen_chan = [Monster() for i in range(4)]
+    # for i in range(4):
+    #     zen_chan[i].name = 'zen_chan'
+    #     zen_chan[i].count += 1
     character.charac = character
 
     #시작위치지정
-    zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 180, 270
-    zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 270
-    zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 220, 380
-    zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 380
+    # zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 180, 270
+    # zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 270
+    # zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 220, 380
+    # zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 380
 
-    add_objects(zen_chan, 2)
+    # add_objects(zen_chan, 2)
 
 
     #충돌체크
-    add_collision_group(character, stage1.tiles, 'character:tile')
-    add_collision_group(character, zen_chan, 'character:monster')
-    add_collision_group(zen_chan, stage1.tiles, 'monster:tile')
+    gameWorld.add_collision_group(character, stage1.tiles, 'character:tile')
+    # add_collision_group(character, zen_chan, 'character:monster')
+    # add_collision_group(zen_chan, stage1.tiles, 'monster:tile')
 
     pass
 
@@ -112,27 +97,25 @@ def draw():
     global character
     global monster1
 
-    for game_object in all_objects():
+    for game_object in gameWorld.all_objects():
         game_object.Draw()
 
     pico2d.update_canvas()
     pass
 
 def update():
-    for game_object in all_objects():
+    for game_object in gameWorld.all_objects():
         game_object.update()
 
-    for a, b, group in all_collision_pairs():
+    for a, b, group in gameWorld.all_collision_pairs():
         if map_collide(a, b):
             a.map_handle_collision(b, group)
             b.handle_collision(a, group)
 
-    for a, b, group in all_collision_pairs():
+    for a, b, group in gameWorld.all_collision_pairs():
         if collide(a, b):
             a.handle_collision(b, group)
             b.handle_collision(a, group)
-
-    Monster_move()
 
     pass
 
