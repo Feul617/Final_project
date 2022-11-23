@@ -4,6 +4,7 @@ from Scripts.FrameWork.Transform import *
 
 class Object:
     count = -1
+    gameWorld = None
     def __init__(self):
         self.image = None
         self.image_Type = None # frame
