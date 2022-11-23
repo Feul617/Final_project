@@ -14,8 +14,9 @@ ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
 FRAME_PER_ACTION = 8
 
 class Monster(Object):
-    def __init__(self):
+    def __init__(self , depth = 2):
         super(Monster, self).__init__()
+        # 이미지 초기화
         self.frame = 0
         self.frame_set = 4.0
         self.dir = 1
@@ -24,6 +25,7 @@ class Monster(Object):
         self.image = load_image('./character/monster2.png')
         self.image_Type = [0, 0, 0, 0]
 
+        # 상태
         self.state = 0 # 0:init / 1:in bubble / 2:death
         self.type = 0
         self.count = 0
@@ -33,6 +35,11 @@ class Monster(Object):
 
         self.gravity = 3
         self.start_delay = 0
+
+        # 인공지능
+        self.patrolPos = Vector2()
+
+        Object.gameWorld.add_object(self, depth)
 
 
     def update(self):
@@ -49,7 +56,7 @@ class Monster(Object):
             self.transform.position.y -= UP_SPEED_PPS * game_framework.frame_time * self.gravity * 2
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
-
+        self.Move()
         self.floating()
 
     def get_bb(self):
@@ -115,7 +122,15 @@ class Monster(Object):
         if self.time >= 1000:
             remove_object(self)
 
+    def Move(self):
+        self.transform.position.x = clamp(self.patrolPos.x, self.transform.position.x, self.patrolPos.y)
+        if self.transform.position.x == self.patrolPos.x or self.transform.position.x == self.patrolPos.y:
+            self.dir *= -1
+        pass
+
 
 class Make_Monster(Object):
     def __init__(self):
         super(Make_Monster, self).__init__()
+
+
