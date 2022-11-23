@@ -1,15 +1,21 @@
 from Scripts.Object.Object_AFX import *
-
+from Scripts.Object.Monster import Monster
 
 class MainStage(Object):
     def __init__(self):
-        self.background = Object()
-        self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
-        self.background.transform.position = Vector2(800//2, 600//2)
-        self.frame = 610
-        self.stage = 5
-        self.background.image_Type = [0, self.stage * self.frame, 800, 600]
-        self.tiles = []
+        # self.background = Object()
+        # self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
+        # self.background.transform.position = Vector2(800//2, 600//2)
+        # self.frame = 610
+        # self.stage = 5
+        # self.background.image_Type = [0, self.stage * self.frame, 800, 600]
+        # self.tiles = []
+
+        #몬스터
+        self.zen_chan = [Monster() for i in range(4)]
+        for i in range(4):
+            self.zen_chan[i].name = 'zen_chan'
+            self.zen_chan[i].count += 1
 
     def update(self):
         self.background.image_Type = [0, self.stage * self.frame, 800, 600]
@@ -17,65 +23,3 @@ class MainStage(Object):
     def handle_events(self, event):
         if event.type == SDL_KEYDOWN and event.key == SDLK_a:
             self.frame -= 600
-
-
-    def Tile_init(self, stage):
-        if stage == 1:
-            #공용 타일
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(62, 28)
-            self.tiles.append(tile)
-
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(330, 28)
-            self.tiles.append(tile)
-
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(580, 28)
-            self.tiles.append(tile)
-
-            #1층 왼쪽 타일
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(165, 133)
-            self.tiles.append(tile)
-
-            #1층 오른쪽 타일
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(450, 133)
-            self.tiles.append(tile)
-
-            #2층 왼쪽 타일
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(120, 240)
-            self.tiles.append(tile)
-
-            #2층 오른쪽 타일
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(490, 240)
-            self.tiles.append(tile)
-
-            #3층 왼쪽 타일
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(200, 345)
-            self.tiles.append(tile)
-
-            #3층 오른쪽 타일
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(450, 345)
-            self.tiles.append(tile)
-
-            #4층 왼쪽 타일
-            tile = MakeTile_X(6, stage)
-            tile.MakeTile(200, 450)
-            self.tiles.append(tile)
-
-        if stage == 2:
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(120, 120)
-            self.tiles.append(tile)
-
-            tile = MakeTile_X(7, stage)
-            tile.MakeTile(360, 120)
-            self.tiles.append(tile)
-
-    pass
