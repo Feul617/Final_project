@@ -21,6 +21,7 @@ def TileType(index):
     elif index == 2:
         tile.image = load_image('map/Tile/stage1-1 right_tile.png')
         tile.image_Type = [0, 0, 18, 32]
+
     elif index == 3:
         tile.image = load_image('map/Tile/stage1-2 left_tile.png')
         tile.image_Type = [0, 0, 18, 32]
