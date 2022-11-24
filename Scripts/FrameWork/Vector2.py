@@ -27,5 +27,11 @@ class Vector2:
             return False
         return True
 
-    
+    def __ge__(self, other):
+        if self.x < other.x:
+            return False
+        if self.y < other.y:
+            return False
+        return True
+
     pass
