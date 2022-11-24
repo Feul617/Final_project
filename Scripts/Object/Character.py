@@ -1,5 +1,6 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Attack import *
+from Scripts.FrameWork.game_world import GameWorld
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -139,6 +140,10 @@ class Character(Object):
         self.monster = None
         self.charac = None
 
+        #충돌체크
+        Object.gameWorld.add_collision_group(self, None, 'character:tile')
+        Object.gameWorld.add_collision_group(self, None, 'character:monster')
+
     def update(self):
         self.transform.position.y -= self.gravity
         if self.transform.position.y <= -10:
@@ -190,7 +195,7 @@ class Character(Object):
 
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
-        add_object(bubble, 2)
-        add_collision_group(bubble, self.monster, 'attack:monster')
-        add_collision_group(bubble, self.charac, 'attack:character')
+        Object.gameWorld.add_object(bubble, 2)
+        Object.gameWorld.add_collision_group(bubble, self.monster, 'attack:monster')
+        Object.gameWorld.add_collision_group(bubble, self.charac, 'attack:character')
         return bubble
