@@ -1,6 +1,7 @@
 import pico2d
 
 from Scripts.FrameWork.Transform import *
+from Scripts.FrameWork.Camera import Camera
 
 class Object:
     count = -1
@@ -13,17 +14,21 @@ class Object:
         self.transform = Transform()
         self.ID = Object.count
         self.name = "None"
+        self.isActive = True
         Object.count += 1
         pass
 
     def __del__(self):
         pass
 
-    def Draw(self):
+    def Init(self):
+        pass
 
-        pos = self.transform.position
+    def Draw(self):
+        pos = self.transform.position - Camera.mainCamera.transform.position
         scale = self.transform.scale
-        self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip, pos.x, pos.y,
+        self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip,\
+                                       pos.x, pos.y,
                              scale.x * self.image_Type[2], scale.y * self.image_Type[3])
         pass
 
