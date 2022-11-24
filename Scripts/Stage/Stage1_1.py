@@ -3,36 +3,11 @@ from Scripts.Stage.MainStage import *
 class Stage1_1(MainStage):
     def __init__(self):
         super(Stage1_1, self).__init__()
-        self.background = Object()
         self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
         self.background.transform.position = Vector2(800 // 2, 600 // 2)
-        self.frame = 610
         self.stage = 2
         self.background.image_Type = [0, self.stage * self.frame, 800, 600]
-        self.tiles = []
-        self.frame_move_time = 0
-        self.is_Next = False
 
-
-        Object.gameWorld.add_object(self.background, 0)
-        Object.gameWorld.add_object(self, 0)
-
-    def update(self):
-        self.background.image_Type = [0, self.stage * self.frame, 800, 600]
-        if MainStage.monster_count == 0 and self.frame_move_time >= 100:
-            self.frame += 10
-
-        self.frame_move_time += 1
-        if self.frame_move_time >= 100:
-            self.frame_move_time = 0
-
-        if Monster.monster_count == 0:
-            self.is_Next = True
-            Monster.monster_count = 4
-            self.nextStage.isActive = True
-
-        if self.is_Next:
-            Camera.mainCamera.transform.position.y += game_framework.frame_time
 
     def handle_events(self, event):
         pass
