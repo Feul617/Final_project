@@ -14,4 +14,10 @@ class Vector2:
         result.y = self.y + other.y
         return result
 
+    def __sub__(self, other):
+        result = Vector2()
+        result.x = self.x - other.x
+        result.y = self.y - other.y
+        return result
+
     pass
