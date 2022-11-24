@@ -33,6 +33,8 @@ class Bubble(Object):
 
         self.transform.scale.x = 2
 
+        Object.gameWorld.add_collision_group(self, None, 'attack:monster')
+
 
     def update(self):
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
@@ -80,12 +82,12 @@ class Bubble(Object):
         self.delay += 1
 
         if self.delay >= 40:
-            remove_object(self)
+            Object.gameWorld.remove_object(self)
 
     def handle_collision(self, other, group):
         if group == 'attack:monster':
             if self.state == 1 and other.state == 1:
-                remove_object(self)
+                Object.gameWorld.remove_object(self)
         elif group == 'attack:character':
             if self.state == 2:
                 self.character_collide = True
