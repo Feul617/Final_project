@@ -4,6 +4,7 @@ from Scripts.FrameWork.FrameWork_AFX import *
 class Tile(Object):
     def __init__(self):
         super(Tile, self).__init__()
+        Object.gameWorld.add_object(self, 2)
         pass
 
     def __del__(self):
@@ -45,6 +46,10 @@ class MakeTile_X(Object):
         for i in range(1, lenth - 1):
             self.tiles.append(TileType(3 * stage - 2))
         self.tiles.append(TileType(3 * stage - 1))
+
+        Object.gameWorld.add_object(self, 0)
+        Object.gameWorld.add_collision_group(None, self, 'character:tile')
+        Object.gameWorld.add_collision_group(None, self, 'monster:tile')
 
     def MakeTile(self, x, y):
         Pos = Vector2(x, y)
