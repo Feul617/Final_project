@@ -3,8 +3,10 @@ import game_framework
 import title_state
 from Scripts.Object.Object_AFX import *
 from Scripts.Stage.StageContain import *
+from Scripts.FrameWork.Camera import Camera
 
 gameWorld = None
+camera = None
 
 def collide(a, b):
     left_a, bottom_a, right_a, top_a = a.get_bb()
@@ -30,9 +32,13 @@ def map_collide(a, b):
 
 def enter():
     global character
-    global step, stage1
+    global step, stages
     global zen_chan
     global gameWorld
+    global camera
+
+    camera = Camera()
+    Camera.mainCamera = camera
 
     gameWorld = GameWorld()
 
@@ -44,13 +50,11 @@ def enter():
     #맵 & 타일
     step = 1
 
-    stage1 = Stage1_1()
-    stage1.init()
+    stages = [Stage1_1(), Stage1_2()]
 
-    gameWorld.add_object(stage1.background, 0)
-
-    for tile in stage1.tiles:
-        gameWorld.add_objects(tile.tiles, 1)
+    for i in range(len(stages) - 1):
+        stages[i].nextStage = stages[i+1]
+        stages[i + 1].isActive = False
 
     #몬스터
     # zen_chan = [Monster() for i in range(4)]
@@ -59,19 +63,15 @@ def enter():
     #     zen_chan[i].count += 1
     character.charac = character
 
-    #시작위치지정
-    # zen_chan[0].transform.position.x, zen_chan[0].transform.position.y = 180, 270
-    # zen_chan[1].transform.position.x, zen_chan[1].transform.position.y = 650, 270
-    # zen_chan[2].transform.position.x, zen_chan[2].transform.position.y = 220, 380
-    # zen_chan[3].transform.position.x, zen_chan[3].transform.position.y = 520, 380
-
-    # add_objects(zen_chan, 2)
-
 
     #충돌체크
-    gameWorld.add_collision_group(character, stage1.tiles, 'character:tile')
+    for i in range(len(stages)):
+        gameWorld.add_collision_group(character, stages[i].tiles, 'character:tile')
     # add_collision_group(character, zen_chan, 'character:monster')
     # add_collision_group(zen_chan, stage1.tiles, 'monster:tile')
+
+    for game_object in gameWorld.all_objects():
+        game_object.Init()
 
     pass
 
@@ -80,7 +80,7 @@ def exit():
 
 def handle_events():
     global character
-    global step, stage1
+    global step, stages
 
     events = pico2d.get_events()
     for event in events:
@@ -90,7 +90,8 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_events(event)
-            stage1.handle_events(event)
+            for i in range(len(stages)):
+                stages[i].handle_events(event)
 
 def draw():
     pico2d.clear_canvas()
@@ -98,6 +99,8 @@ def draw():
     global monster1
 
     for game_object in gameWorld.all_objects():
+        if not game_object.isActive:
+            continue
         game_object.Draw()
 
     pico2d.update_canvas()
@@ -105,6 +108,8 @@ def draw():
 
 def update():
     for game_object in gameWorld.all_objects():
+        if not game_object.isActive:
+            continue
         game_object.update()
 
     for a, b, group in gameWorld.all_collision_pairs():
