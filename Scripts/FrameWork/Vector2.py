@@ -20,4 +20,12 @@ class Vector2:
         result.y = self.y - other.y
         return result
 
+    def __eq__(self, other):
+        if self.x is not other.x:
+            return False
+        if self.y is not other.y:
+            return False
+        return True
+
+    
     pass
