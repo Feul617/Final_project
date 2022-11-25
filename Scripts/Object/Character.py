@@ -1,6 +1,7 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Attack import *
 from Scripts.FrameWork.game_world import GameWorld
+from Scripts.FrameWork.Camera import Camera
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -145,6 +146,7 @@ class Character(Object):
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
 
     def update(self):
+
         self.transform.position.y -= self.gravity
         if self.transform.position.y <= -10:
             self.transform.position.y = 570

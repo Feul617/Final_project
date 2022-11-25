@@ -108,7 +108,7 @@ class MakeTile_X(Object):
         pass
 
     def Draw(self):
-        draw_rectangle(*self.get_bb())
+        pass
 
     def handle_collision(self, other, group):
         pass
