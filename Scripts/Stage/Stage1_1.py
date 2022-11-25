@@ -3,10 +3,10 @@ from Scripts.Stage.MainStage import *
 class Stage1_1(MainStage):
     def __init__(self):
         super(Stage1_1, self).__init__()
-        self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
+        self.background.image = load_image('./map/stage1 Fairy_land map.png')
         self.background.transform.position = Vector2(800 // 2, 600 // 2)
-        self.stage = 2
-        self.background.image_Type = [0, self.stage * self.frame, 800, 600]
+        self.stage = 1
+        self.background.image_Type = [0, (7 - self.stage) * self.frame, 800, 610]
 
 
     def handle_events(self, event):
@@ -68,4 +68,9 @@ class Stage1_1(MainStage):
         # 4층 왼쪽 타일
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(200, 450)
+        self.tiles.append(tile)
+
+        # 4층 왼쪽 타일
+        tile = MakeTile_X(6, self.stage)
+        tile.MakeTile(500, 450)
         self.tiles.append(tile)

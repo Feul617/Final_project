@@ -134,7 +134,7 @@ def resume():
 def test_self():
     import sys
     this_module = sys.modules['__main__']
-    pico2d.open_canvas()
+    pico2d.open_canvas(800, 610)
     game_framework.run(this_module)
     pico2d.close_canvas()
 
