@@ -7,14 +7,14 @@ class Stage1_2(MainStage):
     def __init__(self):
         super(Stage1_2, self).__init__()
         self.stage = 2
-        self.isActive = False
-
-        # 객채 초기화
+        self.isActive = True
 
         # background 초기화
-        self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
-        self.background.transform.position = Vector2(800 // 2, 600 // 2 - 600)
-        self.background.image_Type = [0, (6-self.stage) * self.frame, 800, 600]
+        self.background.image = load_image('./map/Background/stage1-2 bg.png')
+        self.background.transform.position = Vector2(800 // 2, 600 // 2 - (self.height * (self.stage - 1)))
+        self.background.image_Type = [0, 0, 800, 600]
+
+        Camera.mainCamera.transform.position.y -= 600
 
     def handle_events(self, event):
         pass
@@ -23,15 +23,15 @@ class Stage1_2(MainStage):
         if self.isActive:
             # 공용 타일
             tile = MakeTile_X(6, self.stage)
-            tile.MakeTile(62, 28)
+            tile.MakeTile(62, 33 - self.height)
             self.tiles.append(tile)
 
             tile = MakeTile_X(6, self.stage)
-            tile.MakeTile(330, 28)
+            tile.MakeTile(330, 33)
             self.tiles.append(tile)
 
             tile = MakeTile_X(6, self.stage)
-            tile.MakeTile(580, 28)
+            tile.MakeTile(580, 33)
             self.tiles.append(tile)
 
             # 1층 왼쪽 타일
