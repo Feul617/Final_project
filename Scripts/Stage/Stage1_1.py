@@ -11,6 +11,8 @@ class Stage1_1(MainStage):
         self.background.transform.position = Vector2(800 // 2, 600 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
 
+        Camera.mainCamera.transform.position.y = 0
+
 
     def handle_events(self, event):
         pass
