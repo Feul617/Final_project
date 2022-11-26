@@ -14,7 +14,7 @@ class MainStage(Object):
         self.is_Next = False
         self.nextStage = None
 
-        self.character = None
+        self.in_Main_character = None
 
         #몬스터
         self.zen_chan = [Monster() for i in range(4)]
@@ -28,14 +28,14 @@ class MainStage(Object):
     def update(self):
         if Monster.monster_count == 0:
             self.is_Next = True
-            Monster.monster_count = 4
-            self.nextStage.isActive = True
 
         if self.is_Next:
-            Camera.mainCamera.transform.position.y += game_framework.frame_time
-            self.character.transform.position.y += Camera.mainCamera.transform.position.y
-            if self.nextStage.transform.position >= Camera.mainCamera.transform.position:
+            Camera.mainCamera.transform.position.y -= game_framework.frame_time * 100
+            if self.nextStage.transform.position.y >= Camera.mainCamera.transform.position.y:
                 self.is_Next = False
+                Monster.monster_count = 4
+                self.nextStage.isActive = True
+                self.isActive = False
 
     def Draw(self):
         pass
