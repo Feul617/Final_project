@@ -128,11 +128,12 @@ class Character(Object):
         self.dir, self.face_dir = 0, 1
         self.jump_on = False
         self.jump_count = 0
-        self.jump_high = 68
+        self.jump_high = 68 # 수정필요
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
 
         self.now_x, self.now_y = 0, 0
+        self.char_camera = Camera.mainCamera.transform.position.y
 
         self.event_que = []
         self.cur_state = IDLE
@@ -146,10 +147,13 @@ class Character(Object):
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
 
     def update(self):
+        if self.char_camera != Camera.mainCamera.transform.position.y:
+            self.gravity = 0
+            self.transform.position.y -= game_framework.frame_time
 
         self.transform.position.y -= self.gravity
-        if self.transform.position.y <= -10:
-            self.transform.position.y = 570
+        if self.transform.position.y <= -10 - Camera.mainCamera.transform.position.y:
+            self.transform.position.y = 570 - Camera.mainCamera.transform.position.y
 
         self.gravity = FALLING_SPEED * game_framework.frame_time
 
