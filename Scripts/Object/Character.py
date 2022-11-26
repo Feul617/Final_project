@@ -58,10 +58,11 @@ class RUN:
             self.dir -= 1
         elif event == LU:
             self.dir += 1
-        elif event == UP and self.jump_on == False:
+        elif event == UP and self.velocity == 'stand':
             self.jump_on = True
             self.now_y = self.transform.position.y
-            self.transform.position.y += 5
+            self.transform.position.y += game_framework.frame_time * 2
+            self.velocity = 'up'
 
     def exit(self, event):
         self.face_dir = self.dir
@@ -80,11 +81,12 @@ class RUN:
         else:
             self.flip = ' '
 
-        if self.jump_on:
-            self.jump_count += 1
-            if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+        if self.transform.position.y - self.now_y <= 100 and self.velocity == 'up':
+            self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+            if self.transform.position.y - self.now_y > 100 and self.velocity == 'up':
+                self.velocity = 'down'
         pass
+
     def draw(self):
         pass
 
@@ -129,6 +131,7 @@ class Character(Object):
         self.jump_on = False
         self.jump_count = 0
         self.jump_high = 68 # 수정필요
+        self.velocity = 'stand'
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
 

@@ -122,7 +122,7 @@ class Monster(Object):
 
     def start_timer(self):
         self.time += 1
-        if self.time >= 1000:
+        if self.time >= 1:
             Monster.monster_count -= 1
             Object.gameWorld.remove_object(self)
 
