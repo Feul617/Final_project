@@ -41,5 +41,4 @@ class MainStage(Object):
         pass
 
     def handle_events(self, event):
-        if event.type == SDL_KEYDOWN and event.key == SDLK_a:
-            self.frame -= 600
+        pass
