@@ -7,7 +7,7 @@ class Stage1_3(MainStage):
     def __init__(self):
         super(Stage1_3, self).__init__()
         self.stage = 3
-        self.isActive = True
+        self.isActive = False
 
         # 객채 초기화
 
