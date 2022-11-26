@@ -7,7 +7,7 @@ class Stage1_4(MainStage):
     def __init__(self):
         super(Stage1_4, self).__init__()
         self.stage = 4
-        self.isActive = True
+        self.isActive = False
 
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-4 bg.png')
