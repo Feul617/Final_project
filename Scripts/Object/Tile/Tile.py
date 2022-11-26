@@ -97,7 +97,10 @@ class MakeTile_X(Object):
         self.tiles[1].transform.position.x = Pos.x + 27
         for i in range(2, self.lenth - 1):
             self.tiles[i].transform.position.x += self.tiles[i-1].transform.position.x + 36
-        self.tiles[self.lenth - 1].transform.position.x = self.tiles[self.lenth - 2].transform.position.x + 27
+        if self.lenth <= 2:
+            self.tiles[self.lenth - 1].transform.position.x = self.tiles[self.lenth - 2].transform.position.x + 18
+        else:
+            self.tiles[self.lenth - 1].transform.position.x = self.tiles[self.lenth - 2].transform.position.x + 27
 
         for i in range(self.lenth):
             self.tiles[i].transform.position.y = Pos.y
