@@ -31,7 +31,8 @@ class MainStage(Object):
 
         if self.is_Next:
             Camera.mainCamera.transform.position.y -= game_framework.frame_time * 100
-            if self.nextStage.transform.position.y > Camera.mainCamera.transform.position.y:
+            if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y:
+                Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y
                 self.is_Next = False
                 Monster.monster_count = 4
                 self.nextStage.isActive = True

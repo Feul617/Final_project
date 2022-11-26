@@ -32,7 +32,7 @@ def map_collide(a, b):
 
 def enter():
     global character
-    global step, stages
+    global stages
     global zen_chan
     global gameWorld
     global camera
@@ -48,9 +48,7 @@ def enter():
     gameWorld.add_object(character, 2)
 
     #맵 & 타일
-    step = 1
-
-    stages = [Stage1_1(), Stage1_2()]
+    stages = [Stage1_1(), Stage1_2(), Stage1_3(), Stage1_4(), Stage1_5(), Stage1_6()]
 
     for i in range(len(stages) - 1):
         stages[i].nextStage = stages[i+1]
@@ -62,6 +60,7 @@ def enter():
     #     zen_chan[i].name = 'zen_chan'
     #     zen_chan[i].count += 1
     character.charac = character
+    #MainStage.in_Main_character = character
 
 
     #충돌체크
@@ -80,7 +79,7 @@ def exit():
 
 def handle_events():
     global character
-    global step, stages
+    global stages
 
     events = pico2d.get_events()
     for event in events:
@@ -95,8 +94,6 @@ def handle_events():
 
 def draw():
     pico2d.clear_canvas()
-    global character
-    global monster1
 
     for game_object in gameWorld.all_objects():
         if not game_object.isActive:
