@@ -12,8 +12,9 @@ class Stage1_2(MainStage):
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-2 bg.png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
-        self.background.image_Type = [0, 610 * 4, 800, 610]
+        self.background.image_Type = [0, 0, 800, 610]
 
+        self.transform.position.y = self.background.transform.position.y
         #Camera.mainCamera.transform.position.y -= 610
 
     def handle_events(self, event):

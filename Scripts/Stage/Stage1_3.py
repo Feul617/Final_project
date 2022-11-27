@@ -12,7 +12,7 @@ class Stage1_3(MainStage):
         # 객채 초기화
 
         # background 초기화
-        self.background.image = load_image('./map/stage1 Fairy_land map_temp.png')
+        self.background.image = load_image('./map/Background/stage1-3 bg.png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 610 * 3, 800, 610]
 
