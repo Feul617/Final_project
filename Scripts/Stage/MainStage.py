@@ -4,7 +4,7 @@ from Scripts.FrameWork.Camera import Camera
 
 class MainStage(Object):
     monster_count = 0
-    def __init__(self,):
+    def __init__(self, monsterCount = 4):
         super(MainStage, self).__init__()
         self.background = Object()
         self.tiles = []
@@ -17,26 +17,29 @@ class MainStage(Object):
         self.in_Main_character = None
 
         #몬스터
-        self.zen_chan = [Monster() for i in range(4)]
-        for i in range(4):
-            self.zen_chan[i].name = 'zen_chan'
-            self.zen_chan[i].count += 1
+        self.zen_chan = [Monster() for i in range(monsterCount)]
+        for zen_chan in self.zen_chan:
+            zen_chan.name = 'zen_chan'
+            zen_chan.count += 1
+            zen_chan.isActive = False
 
         Object.gameWorld.add_object(self.background, 0)
         Object.gameWorld.add_object(self, 0)
+
+        Camera.mainCamera.transform.position.y = 0
 
     def update(self):
         if Monster.monster_count == 0:
             self.is_Next = True
 
         if self.is_Next:
-            Camera.mainCamera.transform.position.y -= game_framework.frame_time * 100
-            if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y:
-                Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y
+            Camera.mainCamera.transform.position.y -= game_framework.frame_time * 300
+            if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y - self.height / 2:
+                Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y - self.height / 2
                 self.is_Next = False
                 Monster.monster_count = 4
                 self.nextStage.isActive = True
-                self.isActive = False
+                #self.isActive = False
 
     def Draw(self):
         pass

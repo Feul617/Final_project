@@ -1,5 +1,5 @@
 from Scripts.FrameWork.FrameWork_AFX import *
-
+from Scripts.FrameWork.Camera import Camera
 
 class Tile(Object):
     def __init__(self):
@@ -113,6 +113,10 @@ class MakeTile_X(Object):
         #     self.tiles.append(TileType(3 * stage - 2))
         # self.tiles.append(TileType(3 * stage - 1))
 
+        # collision Box 크기
+        self.collisionBox = [30, 20]
+        self.tile_collisionBox = [30, 23, 30, 15]
+
         Object.gameWorld.add_object(self, 0)
         Object.gameWorld.add_collision_group(None, self, 'character:tile')
         Object.gameWorld.add_collision_group(None, self, 'monster:tile')
@@ -134,8 +138,8 @@ class MakeTile_X(Object):
             self.tiles[i].transform.position.y = Pos.y
 
     def get_bb(self):
-        return self.tiles[0].transform.position.x + 4, self.tiles[0].transform.position.y, \
-        self.tiles[0].transform.position.x + ((self.lenth - 1) * 36), self.tiles[0].transform.position.y + 8
+        return self.tiles[0].transform.position.x + 4, self.tiles[0].transform.position.y - Camera.mainCamera.transform.position.y, \
+        self.tiles[0].transform.position.x + ((self.lenth - 1) * 36), self.tiles[0].transform.position.y + 8 - Camera.mainCamera.transform.position.y
         pass
 
     def Draw(self):
