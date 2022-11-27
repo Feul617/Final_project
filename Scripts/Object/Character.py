@@ -25,10 +25,15 @@ class IDLE:
     @staticmethod
     def enter(self,event):
         self.dir = 0
+        if self.face_dir == 1:
+            self.flip = 'h'
+        else:
+            self.flip = ' '
         if event == UP and self.velocity == 'stand':
             self.velocity = 'up'
             self.now_y = self.transform.position.y
             self.transform.position.y += self.gravity * 3
+
 
     @staticmethod
     def exit(self, event):
@@ -43,12 +48,6 @@ class IDLE:
                 self.velocity = 'down'
         pass
 
-    @staticmethod
-    def draw(self):
-        if self.face_dir == 1:
-            self.flip = ' '
-        else:
-            self.flip = 'h'
 class RUN:
     def enter(self, event):
         if event == RD:
@@ -86,8 +85,6 @@ class RUN:
             if self.transform.position.y - self.now_y > self.jump_high:
                 self.velocity = 'down'
         pass
-    def draw(self):
-        pass
 
 
 class HURRY_UP:
@@ -99,9 +96,6 @@ class HURRY_UP:
 
     def do(self):
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
-
-    def draw(self):
-        pass
 
 #3. 상태 변환 구현
 
@@ -123,7 +117,7 @@ class Character(Object):
 
     def __init__(self):
         super(Character, self).__init__()
-        self.transform.position.x, self.transform.position.y = 100, 300
+        self.transform.position = Vector2(100, 300)
         self.gravity = 0
         self.frame = 0
         self.dir, self.face_dir = 0, 1
@@ -142,6 +136,10 @@ class Character(Object):
         self.monster = None
         self.charac = None
 
+        #collision Box 크기
+        self.collisionBox = [30, 20]
+        self.tile_collisionBox = [30, 23, 30, 15]
+
         #충돌체크
         Object.gameWorld.add_collision_group(self, None, 'character:tile')
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
@@ -150,12 +148,14 @@ class Character(Object):
         self.gravity = FALLING_SPEED * game_framework.frame_time
         self.transform.position.y -= self.gravity
 
-        if self.char_camera != Camera.mainCamera.transform.position.y:
-            self.gravity = 0
+        if self.char_camera is not Camera.mainCamera.transform.position.y:
+            # self.gravity = 0
             self.transform.position.y -= game_framework.frame_time
+            pass
 
-        if self.transform.position.y <= -10 - Camera.mainCamera.transform.position.y:
-            self.transform.position.y = 570 - Camera.mainCamera.transform.position.y
+        if self.transform.position.y <= -10 + Camera.mainCamera.transform.position.y:
+            self.gravity = 0
+            self.transform.position.y = 570 + Camera.mainCamera.transform.position.y
 
         self.cur_state.do(self)
 
@@ -168,10 +168,6 @@ class Character(Object):
                 print(f'ERROR: State {self.cur_state.__name__}    Event {event_name[event]}')
             self.cur_state.enter(self, event)
 
-    def draw(self):
-        self.cur_state.draw(self)
-        draw_rectangle(*self.get_bb())
-
     def add_event(self, event):
         self.event_que.insert(0, event)
 
@@ -181,12 +177,16 @@ class Character(Object):
             self.add_event(key_event)
 
     def get_bb(self):
-        return self.transform.position.x - 30, self.transform.position.y - 20, \
-               self.transform.position.x + 30, self.transform.position.y + 20
+        pos = Vector2(30, 20)
+        # print(self.transform.position.x - pos.x, self.transform.position.y - pos.y)
+        return self.transform.position.x - pos.x, self.transform.position.y - pos.y, \
+               self.transform.position.x + pos.x, self.transform.position.y + pos.y
 
     def tile_get_bb(self):
-        return self.transform.position.x - 30, self.transform.position.y - 23, \
-               self.transform.position.x + 30, self.transform.position.y - 15
+        pos1 = Vector2(30, 23)
+        pos2 = Vector2(30, 15)
+        return self.transform.position.x - pos1.x, self.transform.position.y - pos1.y, \
+               self.transform.position.x + pos2.x, self.transform.position.y - pos2.y
 
     def map_handle_collision(self, other, group):
         if group == 'character:tile':
@@ -204,3 +204,12 @@ class Character(Object):
         Object.gameWorld.add_collision_group(bubble, self.monster, 'attack:monster')
         Object.gameWorld.add_collision_group(bubble, self.charac, 'attack:character')
         return bubble
+
+    def Draw(self):
+        pos = self.transform.position
+        print(pos.y)
+        scale = self.transform.scale
+        self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip,\
+                                       pos.x, pos.y,
+                             scale.x * self.image_Type[2], scale.y * self.image_Type[3])
+        pass
