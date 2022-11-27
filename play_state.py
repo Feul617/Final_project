@@ -100,6 +100,12 @@ def draw():
             continue
         game_object.Draw()
 
+    for game_object in gameWorld.all_objects():
+        if not game_object.isActive:
+            continue
+        draw_rectangle(*game_object.get_bb())
+        draw_rectangle(*game_object.tile_get_bb())
+
     pico2d.update_canvas()
     pass
 

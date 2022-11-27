@@ -15,6 +15,11 @@ class Object:
         self.ID = Object.count
         self.name = "None"
         self.isActive = True
+
+        # collide 박스
+        self.collisionBox = [0,0]
+        self.tile_collisionBox = [0, 0, 0, 0]
+
         Object.count += 1
         pass
 
@@ -36,5 +41,22 @@ class Object:
         pass
 
     def get_bb(self):
-        pass
+        return 0, 0, 0, 0
+
+    def tile_get_bb(self):
+        return 0, 0, 0, 0
+    # def get_bb(self):
+    #     pos =  [self.collisionBox[0] - Camera.mainCamera.transform.position.x, self.collisionBox[1] - Camera.mainCamera.transform.position.y]
+    #     return self.transform.position.x - pos[0], self.transform.position.y - pos[1], \
+    #            self.transform.position.x + pos[0], self.transform.position.y + pos[1]
+    #
+    # def tile_get_bb(self):
+    #     tile_pos = [self.tile_collisionBox[0] - Camera.mainCamera.transform.position.x,\
+    #            self.tile_collisionBox[1] - Camera.mainCamera.transform.position.y,\
+    #                 self.tile_collisionBox[2] - Camera.mainCamera.transform.position.x,\
+    #                 self.tile_collisionBox[3] - Camera.mainCamera.transform.position.y]
+    #
+    #     return self.transform.position.x - tile_pos[0], self.transform.position.y - tile_pos[1], \
+    #            self.transform.position.x + tile_pos[2], self.transform.position.y - tile_pos[3]
+
     pass

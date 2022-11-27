@@ -16,6 +16,7 @@ class Vector2:
 
     def __sub__(self, other):
         result = Vector2()
+
         result.x = self.x - other.x
         result.y = self.y - other.y
         return result
