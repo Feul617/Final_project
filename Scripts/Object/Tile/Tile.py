@@ -134,8 +134,8 @@ class MakeTile_X(Object):
             self.tiles[i].transform.position.y = Pos.y
 
     def get_bb(self):
-        return self.tiles[0].transform.position.x + 9, self.tiles[0].transform.position.y + 11, \
-        self.tiles[0].transform.position.x + ((self.lenth - 2) * 36), self.tiles[0].transform.position.y + 11
+        return self.tiles[0].transform.position.x + 4, self.tiles[0].transform.position.y, \
+        self.tiles[0].transform.position.x + ((self.lenth - 1) * 36), self.tiles[0].transform.position.y + 8
         pass
 
     def Draw(self):

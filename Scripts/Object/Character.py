@@ -25,9 +25,10 @@ class IDLE:
     @staticmethod
     def enter(self,event):
         self.dir = 0
-        if event == UP and self.jump_on == False:
-            self.jump_on = True
-            self.transform.position.y += 5
+        if event == UP and self.velocity == 'stand':
+            self.velocity = 'up'
+            self.now_y = self.transform.position.y
+            self.transform.position.y += self.gravity * 3
 
     @staticmethod
     def exit(self, event):
@@ -36,10 +37,10 @@ class IDLE:
 
     @staticmethod
     def do(self):
-        if self.jump_on:
-            self.jump_count += 1
-            if self.jump_count < self.jump_high:
-                self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
+        if self.transform.position.y - self.now_y <= self.jump_high and self.velocity == 'up':
+            self.transform.position.y += self.gravity * 3
+            if self.transform.position.y - self.now_y > self.jump_high:
+                self.velocity = 'down'
         pass
 
     @staticmethod
@@ -59,10 +60,9 @@ class RUN:
         elif event == LU:
             self.dir += 1
         elif event == UP and self.velocity == 'stand':
-            self.jump_on = True
-            self.now_y = self.transform.position.y
-            self.transform.position.y += game_framework.frame_time * 2
             self.velocity = 'up'
+            self.now_y = self.transform.position.y
+            self.transform.position.y += self.gravity * 3
 
     def exit(self, event):
         self.face_dir = self.dir
@@ -81,12 +81,11 @@ class RUN:
         else:
             self.flip = ' '
 
-        if self.transform.position.y - self.now_y <= 100 and self.velocity == 'up':
-            self.transform.position.y += 4 * JUMP_SPEED_PPS * game_framework.frame_time
-            if self.transform.position.y - self.now_y > 100 and self.velocity == 'up':
+        if self.transform.position.y - self.now_y <= self.jump_high and self.velocity == 'up':
+            self.transform.position.y += self.gravity * 3
+            if self.transform.position.y - self.now_y > self.jump_high:
                 self.velocity = 'down'
         pass
-
     def draw(self):
         pass
 
@@ -128,10 +127,8 @@ class Character(Object):
         self.gravity = 0
         self.frame = 0
         self.dir, self.face_dir = 0, 1
-        self.jump_on = False
-        self.jump_count = 0
-        self.jump_high = 68 # 수정필요
         self.velocity = 'stand'
+        self.jump_high = 120 # 수정필요
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
 
@@ -150,15 +147,15 @@ class Character(Object):
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
 
     def update(self):
+        self.gravity = FALLING_SPEED * game_framework.frame_time
+        self.transform.position.y -= self.gravity
+
         if self.char_camera != Camera.mainCamera.transform.position.y:
             self.gravity = 0
             self.transform.position.y -= game_framework.frame_time
 
-        self.transform.position.y -= self.gravity
         if self.transform.position.y <= -10 - Camera.mainCamera.transform.position.y:
             self.transform.position.y = 570 - Camera.mainCamera.transform.position.y
-
-        self.gravity = FALLING_SPEED * game_framework.frame_time
 
         self.cur_state.do(self)
 
@@ -188,14 +185,13 @@ class Character(Object):
                self.transform.position.x + 30, self.transform.position.y + 20
 
     def tile_get_bb(self):
-        return self.transform.position.x - 30, self.transform.position.y - 20, \
-               self.transform.position.x + 30, self.transform.position.y - 19
+        return self.transform.position.x - 30, self.transform.position.y - 23, \
+               self.transform.position.x + 30, self.transform.position.y - 15
 
     def map_handle_collision(self, other, group):
         if group == 'character:tile':
             self.transform.position.y += self.gravity
-            self.jump_on = False
-            self.jump_count = 0
+            self.velocity = 'stand'
 
     def handle_collision(self, other, group):
         if group == 'character:monster':
