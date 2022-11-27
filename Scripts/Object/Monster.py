@@ -33,11 +33,11 @@ class Monster(Object):
         self.is_up = False
         self.time = 0
 
-        self.gravity = 3
-        self.start_delay = 0
+        self.gravity = 0
+        self.start_delay = 50
 
         # 인공지능
-        self.patrolPos = Vector2()
+        self.patrolDistance = [0, 0]
 
         #충돌 처리
         Object.gameWorld.add_object(self, depth)
@@ -51,12 +51,16 @@ class Monster(Object):
             self.flip = ' '
         else:
             self.flip = 'h'
+
+        self.gravity = game_framework.frame_time * 60
+        if self.start_delay > 0:
+            self.start_delay -= 1
+        if self.start_delay <= 0:
+            self.transform.position.y -= self.gravity
+
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        if self.start_delay < 200:
-            self.start_delay += 1
-        if self.start_delay >= 200:
-            self.transform.position.y -= UP_SPEED_PPS * game_framework.frame_time * self.gravity * 2
+
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
         self.Move()
@@ -79,7 +83,7 @@ class Monster(Object):
                         self.in_bubble = 12
                         self.frame_set = 4.0
                         self.is_up = False
-                        self.gravity = 2
+                        self.transform.position.y -= self.gravity * 5
 
                     case 'might':
                         pass
@@ -98,7 +102,8 @@ class Monster(Object):
     def map_handle_collision(self, other, group):
         if group == 'monster:tile':
             if self.state == 0:
-                self.gravity = 0
+                self.transform.position.y += self.gravity
+                #self.gravity = 0
             elif self.state == 2:
                 self.start_timer()
                 self.gravity = 0
@@ -115,20 +120,21 @@ class Monster(Object):
 
     def floating(self):
         if self.transform.position.y < 540 and self.is_up:
-            self.transform.position.y += UP_SPEED_PPS * game_framework.frame_time * 2
+            self.transform.position.y += self.gravity * 3
         elif self.transform.position.y >= 540:
+            self.transform.position.y += self.gravity
             self.is_up = False
 
 
     def start_timer(self):
         self.time += 1
-        if self.time >= 1000:
+        if self.time >= 10:
             Monster.monster_count -= 1
             Object.gameWorld.remove_object(self)
 
     def Move(self):
-        self.transform.position.x = clamp(self.patrolPos.x, self.transform.position.x, self.patrolPos.y)
-        if self.transform.position.x == self.patrolPos.x or self.transform.position.x == self.patrolPos.y:
+        self.transform.position.x = clamp(self.patrolDistance[0], self.transform.position.x, self.patrolDistance[1])
+        if self.transform.position.x == self.patrolDistance[0] or self.transform.position.x == self.patrolDistance[1]:
             self.dir *= -1
         pass
 
