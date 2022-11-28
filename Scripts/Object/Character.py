@@ -1,7 +1,9 @@
+import game_framework
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Attack import *
 from Scripts.FrameWork.game_world import GameWorld
 from Scripts.FrameWork.Camera import Camera
+from Scripts.Stage.MainStage import MainStage
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -120,6 +122,7 @@ class Character(Object):
         self.transform.position = Vector2(100, 300)
         self.gravity = 0
         self.frame = 0
+        self.frame_set = 7
         self.dir, self.face_dir = 0, 1
         self.velocity = 'stand'
         self.jump_high = 120 # 수정필요
@@ -127,7 +130,12 @@ class Character(Object):
         self.image_Type = [self.frame * 60, 410, 60, 40]
 
         self.now_x, self.now_y = 0, 0
+        self.is_collide_set = True
         self.char_camera = Camera.mainCamera.transform.position.y
+
+        self.life = 3
+        self.invincibility_time = 100
+        self.start_timer = False
 
         self.event_que = []
         self.cur_state = IDLE
@@ -147,17 +155,32 @@ class Character(Object):
     def update(self):
         self.gravity = FALLING_SPEED * game_framework.frame_time
         self.transform.position.y -= self.gravity
+        #self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 
-        if self.char_camera is not Camera.mainCamera.transform.position.y:
+        #if self.char_camera is not Camera.mainCamera.transform.position.y:
+        if MainStage.is_Next:
+            self.image_Type = [self.frame * 5, 0 ,80 ,80]
+            self.is_collide_set = False
+            if self.transform.position.x is not 50:
+                if self.transform.position.x >= 50:
+                    self.transform.position.x -= game_framework.frame_time
+                elif self.transform.position.x < 50:
+                    self.transform.position.x += game_framework.frame_time
             # self.gravity = 0
-            self.transform.position.y -= game_framework.frame_time
-            pass
+            self.transform.position.y -= game_framework.frame_time * 300
+        else:
+            self.is_collide_set = True
 
         if self.transform.position.y <= -10 + Camera.mainCamera.transform.position.y:
             self.gravity = 0
             self.transform.position.y = 570 + Camera.mainCamera.transform.position.y
 
+        self.invincibility_timer()
+
         self.cur_state.do(self)
+
+        if self.life == 0:
+            game_framework.quit()
 
         if self.event_que:
             event = self.event_que.pop()
@@ -189,13 +212,16 @@ class Character(Object):
                self.transform.position.x + pos2.x, self.transform.position.y - pos2.y
 
     def map_handle_collision(self, other, group):
-        if group == 'character:tile':
+        if group == 'character:tile' and self.is_collide_set:
             self.transform.position.y += self.gravity
             self.velocity = 'stand'
 
     def handle_collision(self, other, group):
-        if group == 'character:monster':
-            #remove_object(self)
+        if group == 'character:monster' and self.is_collide_set \
+                and self.invincibility_time == 100 and other.state == 0:
+            #self.image_Type = [(self.frame + 10) * 60, 200, 50, 50]
+            self.life -= 1
+            self.start_timer = True
             pass
 
     def attack(self):
@@ -212,4 +238,10 @@ class Character(Object):
         self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip,\
                                        pos.x, pos.y,
                              scale.x * self.image_Type[2], scale.y * self.image_Type[3])
-        pass
+
+    def invincibility_timer(self):
+        if self.start_timer:
+            self.invincibility_time -= 1
+        if self.invincibility_time == 0:
+            self.start_timer = False
+            self.invincibility_time = 100
