@@ -53,6 +53,8 @@ class Stage1_2(MainStage):
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(140, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.zen_chan[0].transform.position = Vector2(140, 280 - (self.height * (self.stage - 1)))
+        self.zen_chan[0].patrolDistance = [150, 340]
 
         # 2층 오른쪽 타일
         tile = MakeTile_X(8, self.stage)
