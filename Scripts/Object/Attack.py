@@ -1,5 +1,6 @@
 from Scripts.FrameWork.FrameWork_AFX import *
-
+from Scripts.FrameWork.Camera import Camera
+from Scripts.Stage.MainStage import MainStage
 
 PIXEL_PER_METER = (10.0 / 0.3)
 SHOOT_SPEED_KMPH = 300.0 # km/h 마라토너의 평속
@@ -37,6 +38,9 @@ class Bubble(Object):
 
 
     def update(self):
+        if MainStage.is_Next:
+            self.transform.position.x = 0
+
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
 
@@ -54,7 +58,7 @@ class Bubble(Object):
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 6.0
 
         self.transform.position.x = clamp(80, self.transform.position.x, 720)
-        if self.transform.position.x == 80 or self.transform.position.x == 720:
+        if self.transform.position.x <= 80 or self.transform.position.x >= 720:
             self.pong()
 
         if self.transform.position.y >= 530:
@@ -68,7 +72,8 @@ class Bubble(Object):
 
 
     def get_bb(self):
-        return self.transform.position.x - 9, self.transform.position.y - 10, self.transform.position.x + 9, self.transform.position.y + 10
+        return self.transform.position.x - 9, self.transform.position.y - 10 - Camera.mainCamera.transform.position.y,\
+               self.transform.position.x + 9, self.transform.position.y + 10 - Camera.mainCamera.transform.position.y
         pass
 
     def tile_get_bb(self):
