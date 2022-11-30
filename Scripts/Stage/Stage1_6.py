@@ -6,6 +6,7 @@ class Stage1_6(MainStage):
     def __init__(self):
         super(Stage1_6, self).__init__()
         self.stage = 6
+        self.name = 'Stage6'
         self.isActive = False
 
         # background 초기화
@@ -14,6 +15,7 @@ class Stage1_6(MainStage):
         self.background.image_Type = [0, 0, 800, 610]
 
         #Camera.mainCamera.transform.position.y -= 610
+        self.transform.position.y = int(self.background.transform.position.y)
 
     def handle_events(self, event):
         pass

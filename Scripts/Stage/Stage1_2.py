@@ -7,14 +7,18 @@ class Stage1_2(MainStage):
     def __init__(self):
         super(Stage1_2, self).__init__()
         self.stage = 2
+        self.name = 'Stage2'
+
         self.isActive = False
+        for zen_chan in self.zen_chan:
+            zen_chan.isActive = True
 
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-2 bg.png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
 
-        self.transform.position.y = self.background.transform.position.y
+        self.transform.position.y = int(self.background.transform.position.y)
         #Camera.mainCamera.transform.position.y -= 610
 
     def handle_events(self, event):
@@ -53,7 +57,7 @@ class Stage1_2(MainStage):
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(140, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
-        self.zen_chan[4].transform.position = Vector2(140, 280 - (self.height * (self.stage - 1)))
+        self.zen_chan[4].transform.position = Vector2(140, 280  - (self.height * (self.stage - 1)))
         self.zen_chan[4].patrolDistance = [150, 340]
 
         # 2층 오른쪽 타일

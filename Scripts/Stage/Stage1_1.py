@@ -4,6 +4,7 @@ class Stage1_1(MainStage):
     def __init__(self):
         super(Stage1_1, self).__init__()
         self.stage = 1
+        self.name = 'Stage1'
         self.isActive = True
         for zen_chan in self.zen_chan:
             zen_chan.isActive = True
@@ -11,9 +12,10 @@ class Stage1_1(MainStage):
 
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-1 bg.png')
-        self.background.transform.position = Vector2(800 // 2, 600 // 2 - (self.height * (self.stage - 1)))
+        self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
 
+        self.transform.position.y = int(self.background.transform.position.y)
 
     def handle_events(self, event):
         pass

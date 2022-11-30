@@ -3,10 +3,10 @@ from Scripts.Stage.MainStage import *
 
 
 class Stage1_3(MainStage):
-
     def __init__(self):
         super(Stage1_3, self).__init__()
         self.stage = 3
+        self.name = 'Stage3'
         self.isActive = False
 
         # 객채 초기화
@@ -14,9 +14,10 @@ class Stage1_3(MainStage):
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-3 bg.png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
-        self.background.image_Type = [0, 610 * 3, 800, 610]
+        self.background.image_Type = [0, 0, 800, 610]
 
         #Camera.mainCamera.transform.position.y -= 610
+        self.transform.position.y = int(self.background.transform.position.y)
 
     def handle_events(self, event):
         pass
