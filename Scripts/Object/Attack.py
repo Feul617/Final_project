@@ -39,7 +39,7 @@ class Bubble(Object):
 
     def update(self):
         if MainStage.is_Next:
-            self.transform.position.x = 0
+            self.transform.position.x = -100
 
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
@@ -91,8 +91,9 @@ class Bubble(Object):
 
     def handle_collision(self, other, group):
         if group == 'attack:monster':
-            if self.state == 1 and other.state == 1:
+            if self.state == 1 and other.state == 'bubble':
                 Object.gameWorld.remove_object(self)
+
         elif group == 'attack:character':
             if self.state == 2:
                 self.character_collide = True

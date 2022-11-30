@@ -116,14 +116,16 @@ def update():
         game_object.update()
 
     for a, b, group in gameWorld.all_collision_pairs():
-        if map_collide(a, b):
-            a.map_handle_collision(b, group)
-            b.handle_collision(a, group)
+        if a.isActive and b.isActive:
+            if map_collide(a, b):
+                a.map_handle_collision(b, group)
+                b.handle_collision(a, group)
 
     for a, b, group in gameWorld.all_collision_pairs():
-        if collide(a, b):
-            a.handle_collision(b, group)
-            b.handle_collision(a, group)
+        if a.isActive and b.isActive:
+            if collide(a, b):
+                a.handle_collision(b, group)
+                b.handle_collision(a, group)
 
     pass
 
