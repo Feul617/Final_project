@@ -120,7 +120,6 @@ class Character(Object):
     def __init__(self):
         super(Character, self).__init__()
         self.transform.position = Vector2(100, 300)
-        self.gravity = 0
         self.frame = 0
         self.frame_set = 7
         self.dir, self.face_dir = 0, 1
@@ -129,6 +128,8 @@ class Character(Object):
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
 
+        self.isHandle = True
+        self.gravity = 0
         self.now_x, self.now_y = 0, 0
         self.is_collide_set = True
         self.char_camera = Camera.mainCamera.transform.position.y
@@ -154,22 +155,33 @@ class Character(Object):
 
     def update(self):
         self.gravity = FALLING_SPEED * game_framework.frame_time
-        self.transform.position.y -= self.gravity
-        #self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 
         #if self.char_camera is not Camera.mainCamera.transform.position.y:
         if MainStage.is_Next:
-            self.image_Type = [self.frame * 5, 0 ,80 ,80]
+            self.isHandle = False
+            self.gravity = 0
+            self.frame_set = 1.0
+            self.image_Type = [300, 0 ,80 ,80]
             self.is_collide_set = False
-            if self.transform.position.x is not 50:
+            if self.transform.position.x != 50:
                 if self.transform.position.x >= 50:
-                    self.transform.position.x -= game_framework.frame_time
+                    self.transform.position.x -= game_framework.frame_time * 10
                 elif self.transform.position.x < 50:
-                    self.transform.position.x += game_framework.frame_time
-            # self.gravity = 0
-            self.transform.position.y -= game_framework.frame_time * 300
+                    self.transform.position.x += game_framework.frame_time * 10
+
+            if self.transform.position.y != 100:
+                pass
         else:
+            self.frame_set = 7
+            self.image_Type = [int(self.frame) * 60, 410, 60, 40]
             self.is_collide_set = True
+            self.isHandle = True
+
+            #self.transform.position.y -= game_framework.frame_time * 3
+
+
+        self.transform.position.y -= self.gravity
 
         if self.transform.position.y <= -10 + Camera.mainCamera.transform.position.y:
             self.gravity = 0
@@ -180,7 +192,7 @@ class Character(Object):
         self.cur_state.do(self)
 
         if self.life == 0:
-            game_framework.quit()
+            pass
 
         if self.event_que:
             event = self.event_que.pop()
@@ -195,7 +207,7 @@ class Character(Object):
         self.event_que.insert(0, event)
 
     def handle_events(self, event):
-        if (event.type, event.key) in key_event_table:
+        if (event.type, event.key) in key_event_table and self.isHandle:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
@@ -225,7 +237,7 @@ class Character(Object):
             pass
 
     def attack(self):
-        bubble = Bubble(self.transform.position.x, self.transform.position.y, self.face_dir * 2)
+        bubble = Bubble(self.transform.position.x, self.transform.position.y + Camera.mainCamera.transform.position.y, self.face_dir * 2)
         Object.gameWorld.add_object(bubble, 2)
         Object.gameWorld.add_collision_group(bubble, self.monster, 'attack:monster')
         Object.gameWorld.add_collision_group(bubble, self.charac, 'attack:character')
@@ -233,7 +245,6 @@ class Character(Object):
 
     def Draw(self):
         pos = self.transform.position
-        print(pos.y)
         scale = self.transform.scale
         self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip,\
                                        pos.x, pos.y,
