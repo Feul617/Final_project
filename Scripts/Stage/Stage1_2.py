@@ -53,13 +53,15 @@ class Stage1_2(MainStage):
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(140, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
-        self.zen_chan[0].transform.position = Vector2(140, 280 - (self.height * (self.stage - 1)))
-        self.zen_chan[0].patrolDistance = [150, 340]
+        self.zen_chan[4].transform.position = Vector2(140, 280 - (self.height * (self.stage - 1)))
+        self.zen_chan[4].patrolDistance = [150, 340]
 
         # 2층 오른쪽 타일
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(450, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.zen_chan[5].transform.position = Vector2(470, 280 - (self.height * (self.stage - 1)))
+        self.zen_chan[5].patrolDistance = [450, 610]
 
         # 3층 왼쪽 타일
         tile = MakeTile_X(8, self.stage)
@@ -75,8 +77,12 @@ class Stage1_2(MainStage):
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(140, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.zen_chan[6].transform.position = Vector2(140, 450 - (self.height * (self.stage - 1)))
+        self.zen_chan[6].patrolDistance = [150, 340]
 
         # 4층 오른쪽 타일
         tile = MakeTile_X(8, self.stage)
         tile.MakeTile(450, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.zen_chan[7].transform.position = Vector2(140, 450 - (self.height * (self.stage - 1)))
+        self.zen_chan[7].patrolDistance = [460, 570]

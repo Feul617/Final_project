@@ -21,6 +21,7 @@ class Monster(Object):
         self.frame = 0
         self.frame_set = 4.0
         self.dir = 1
+        self.dir_y = 1
         self.flip = ' '
         self.name = ' '
         self.image = load_image('./character/monster2.png')
@@ -58,8 +59,19 @@ class Monster(Object):
         if self.start_delay <= 0:
             self.transform.position.y -= self.gravity
 
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-        self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        match self.name:
+            case 'zen_chan':
+                self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
+                self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+
+            case 'mighti':
+                self.gravity = 0
+                self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
+                self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+                self.transform.position.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
+
+            case 'monsta':
+                pass
 
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
@@ -85,7 +97,8 @@ class Monster(Object):
                         self.is_up = False
                         self.transform.position.y -= self.gravity * 5
 
-                    case 'might':
+                    case 'mighta':
+
                         pass
 
         elif group == 'attack:monster':
@@ -101,14 +114,29 @@ class Monster(Object):
 
     def map_handle_collision(self, other, group):
         if group == 'monster:tile':
-            if self.state == 0:
-                self.transform.position.y += self.gravity
-                #self.gravity = 0
-            elif self.state == 2:
-                self.start_timer()
-                self.gravity = 0
-                self.frame_set = 1.0
-                self.in_bubble = 12
+            match self.name:
+                case 'zen_chan':
+                    if self.state == 0:
+                        self.transform.position.y += self.gravity
+                        #self.gravity = 0
+                    elif self.state == 2:
+                        self.start_timer()
+                        self.gravity = 0
+                        self.frame_set = 1.0
+                        self.in_bubble = 12
+                case 'mighta':
+                    if self.state == 2:
+                        self.start_timer()
+                        self.gravity = 0
+                        self.frame_set = 1.0
+                        self.in_bubble = 29
+                case 'monsta':
+                    if self.state == 0:
+                        self.transform.position.y += self.gravity
+                    elif self.state == 2:
+                        self.start_timer()
+                        self.gravity = 0
+                        self.frame_set = 1.0
 
     def Monster_type(self):
         match self.name:

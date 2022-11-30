@@ -18,11 +18,17 @@ class MainStage(Object):
         self.in_Main_character = None
 
         #몬스터
-        self.zen_chan = [Monster() for i in range(monsterCount)]
+        self.zen_chan = [Monster() for i in range(8)]
         for zen_chan in self.zen_chan:
             zen_chan.name = 'zen_chan'
             zen_chan.count += 1
             zen_chan.isActive = False
+
+        self.mighta = [Monster() for _ in range(8)]
+        for mighta in self.mighta:
+            mighta.name = 'mighta'
+            mighta.count += 1
+            mighta.isActive = False
 
         Object.gameWorld.add_object(self.background, 0)
         Object.gameWorld.add_object(self, 0)
