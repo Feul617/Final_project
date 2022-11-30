@@ -1,6 +1,6 @@
 import random
-
 from Scripts.FrameWork.FrameWork_AFX import *
+from Scripts.FrameWork.Camera import Camera
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 30.0 # km/h 마라토너의 평속
@@ -28,7 +28,7 @@ class Monster(Object):
         self.image_Type = [0, 0, 0, 0]
 
         # 상태
-        self.state = 0 # 0:init / 1:in bubble / 2:death
+        self.state = 'init' # 0:init / 1:in bubble / 2:death
         self.type = 0
         self.in_bubble = 0
         self.is_up = False
@@ -64,14 +64,14 @@ class Monster(Object):
                 self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
                 self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
-            case 'mighti':
-                self.gravity = 0
-                self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-                self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-                self.transform.position.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
-
-            case 'monsta':
-                pass
+            # case 'mighti':
+            #     self.gravity = 0
+            #     self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
+            #     self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+            #     self.transform.position.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
+            #
+            # case 'monsta':
+            #     pass
 
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
@@ -79,17 +79,17 @@ class Monster(Object):
         self.floating()
 
     def get_bb(self):
-        return self.transform.position.x - 20, self.transform.position.y - 27, \
-               self.transform.position.x + 20, self.transform.position.y + 27
+        return self.transform.position.x - 20, self.transform.position.y - 27 - Camera.mainCamera.transform.position.y, \
+               self.transform.position.x + 20, self.transform.position.y + 27 - Camera.mainCamera.transform.position.y
 
     def tile_get_bb(self):
-        return self.transform.position.x - 20, self.transform.position.y - 20, \
-               self.transform.position.x + 20, self.transform.position.y - 15
+        return self.transform.position.x - 20, self.transform.position.y - 20 - Camera.mainCamera.transform.position.y, \
+               self.transform.position.x + 20, self.transform.position.y - 15 - Camera.mainCamera.transform.position.y
 
     def handle_collision(self, other, group):
         if group == 'character:monster':
-            if self.state == 1:
-                self.state = 2
+            if self.state == 'bubble':
+                self.state = 'death'
                 match self.name:
                     case 'zen_chan':
                         self.in_bubble = 12
@@ -102,11 +102,13 @@ class Monster(Object):
                         pass
 
         elif group == 'attack:monster':
-            if self.state == 0 and other.state == 1:
-                self.state = 1
+            if self.state == 'init' and other.state == 1:
+                self.state = 'bubble'
                 self.dir = 0
                 self.is_up = True
                 if self.name == 'zen_chan':
+                    print('attack')
+                    print(other.transform.position.x)
                     self.in_bubble = 16
                     self.frame_set = 3.0
                 elif self.name == 'might':
@@ -116,24 +118,27 @@ class Monster(Object):
         if group == 'monster:tile':
             match self.name:
                 case 'zen_chan':
-                    if self.state == 0:
+                    if self.state == 'init':
                         self.transform.position.y += self.gravity
                         #self.gravity = 0
-                    elif self.state == 2:
+
+                    elif self.state == 'death':
                         self.start_timer()
                         self.gravity = 0
                         self.frame_set = 1.0
                         self.in_bubble = 12
+
                 case 'mighta':
-                    if self.state == 2:
+                    if self.state == 'death':
                         self.start_timer()
                         self.gravity = 0
                         self.frame_set = 1.0
                         self.in_bubble = 29
+
                 case 'monsta':
-                    if self.state == 0:
+                    if self.state == 'init':
                         self.transform.position.y += self.gravity
-                    elif self.state == 2:
+                    elif self.state == 'death':
                         self.start_timer()
                         self.gravity = 0
                         self.frame_set = 1.0
@@ -147,9 +152,9 @@ class Monster(Object):
                 self.type = 700
 
     def floating(self):
-        if self.transform.position.y < 540 and self.is_up:
+        if self.transform.position.y < 540 + Camera.mainCamera.transform.position.y and self.is_up:
             self.transform.position.y += self.gravity * 3
-        elif self.transform.position.y >= 540:
+        elif self.transform.position.y >= 540 + Camera.mainCamera.transform.position.y:
             self.transform.position.y += self.gravity
             self.is_up = False
 

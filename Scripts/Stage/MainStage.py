@@ -22,10 +22,15 @@ class MainStage(Object):
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = False
 
-        self.mighta = [Monster() for _ in range(1)]
+        self.mighta = [Monster() for _ in range(8)]
         for mighta in self.mighta:
             mighta.name = 'mighta'
             mighta.isActive = False
+
+        self.monsta = [Monster() for _ in range(8)]
+        for monsta in self.monsta:
+            monsta.name = 'monsta'
+            monsta.isActive = False
 
         Object.gameWorld.add_object(self.background, 0)
         Object.gameWorld.add_object(self, 0)
@@ -37,8 +42,6 @@ class MainStage(Object):
             MainStage.is_Next = True
 
         if MainStage.is_Next:
-            print(self.nextStage.name)
-            print(self.nextStage.transform.position.y)
             Camera.mainCamera.transform.position.y -= game_framework.frame_time * 300
             if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y - self.height / 2:
                 Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y - self.height / 2
