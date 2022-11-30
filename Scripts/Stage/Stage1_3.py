@@ -9,6 +9,8 @@ class Stage1_3(MainStage):
         self.name = 'Stage3'
         self.isActive = False
 
+        for monsta in self.monsta:
+            monsta.isActive = True
         # 객채 초기화
 
         # background 초기화
@@ -56,7 +58,16 @@ class Stage1_3(MainStage):
         tile.MakeTile(60, 345 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
 
-        # 4층 오른쪽 타일
+        # 4층 타일
         tile = MakeTile_X(18, self.stage)
         tile.MakeTile(160, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsta[0].transform.position = Vector2(600, 460 - (self.height * (self.stage - 1)))
+        self.monsta[1].transform.position = Vector2(620, 460 - (self.height * (self.stage - 1)))
+        self.monsta[2].transform.position = Vector2(640, 460 - (self.height * (self.stage - 1)))
+        self.monsta[3].transform.position = Vector2(680, 460 - (self.height * (self.stage - 1)))
+        for i in range(4):
+            self.monsta[i].patrolDistance = [80, 720]
+            if self.monsta[i].transform.position.y <= -10 - (self.height * (self.stage - 1)):
+                self.monsta[i].transform.position.y = 570 - (self.height * (self.stage - 1))
+

@@ -54,24 +54,27 @@ class Monster(Object):
             self.flip = 'h'
 
         self.gravity = game_framework.frame_time * 60
+
+        match self.name:
+            case 'zen_chan':
+                self.frame_set = 4
+
+            case 'mighta':
+                pass
+
+            case 'monsta':
+                self.frame_set = 2
+                self.gravity = game_framework.frame_time * 400
+
+
         if self.start_delay > 0:
             self.start_delay -= 1
         if self.start_delay <= 0:
             self.transform.position.y -= self.gravity
 
-        match self.name:
-            case 'zen_chan':
-                self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-                self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
+        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
+        self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
-            # case 'mighti':
-            #     self.gravity = 0
-            #     self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-            #     self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-            #     self.transform.position.y += self.dir_y * RUN_SPEED_PPS * game_framework.frame_time
-            #
-            # case 'monsta':
-            #     pass
 
         self.Monster_type()
         self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
@@ -150,6 +153,9 @@ class Monster(Object):
 
             case 'mighta':
                 self.type = 700
+
+            case 'monsta':
+                self.type = 570
 
     def floating(self):
         if self.transform.position.y < 540 + Camera.mainCamera.transform.position.y and self.is_up:

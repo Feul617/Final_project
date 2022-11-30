@@ -17,12 +17,12 @@ class MainStage(Object):
         self.in_Main_character = None
 
         #몬스터
-        self.zen_chan = [Monster() for i in range(8)]
+        self.zen_chan = [Monster() for _ in range(8)]
         for zen_chan in self.zen_chan:
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = False
 
-        self.mighta = [Monster() for _ in range(8)]
+        self.mighta = [Monster() for _ in range(4)]
         for mighta in self.mighta:
             mighta.name = 'mighta'
             mighta.isActive = False
@@ -51,7 +51,6 @@ class MainStage(Object):
                 self.nextStage.isActive = True
                 #print(self.nextStage.transform.position.y)
                 #print(Camera.mainCamera.transform.position.y)
-
     def Draw(self):
         pass
 

@@ -8,7 +8,6 @@ class Stage1_2(MainStage):
         super(Stage1_2, self).__init__()
         self.stage = 2
         self.name = 'Stage2'
-
         self.isActive = False
         for zen_chan in self.zen_chan:
             zen_chan.isActive = True

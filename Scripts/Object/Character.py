@@ -71,6 +71,7 @@ class RUN:
             self.attack()
 
     def do(self):
+
         self.face_dir = self.dir
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 7.0
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
@@ -139,6 +140,7 @@ class Character(Object):
         self.start_timer = False
 
         self.event_que = []
+        self.is_event_init = False
         self.cur_state = IDLE
         self.cur_state.enter(self, None)
 
@@ -159,19 +161,23 @@ class Character(Object):
 
         #if self.char_camera is not Camera.mainCamera.transform.position.y:
         if MainStage.is_Next:
+            print(self.dir)
+            # if self.isHandle:
+            #     self.event_que.clear()
+            self.dir = 0
             self.isHandle = False
             self.gravity = 0
             self.frame_set = 1.0
             self.image_Type = [300, 0 ,80 ,80]
             self.is_collide_set = False
-            if self.transform.position.x != 50:
-                if self.transform.position.x >= 50:
-                    self.transform.position.x -= game_framework.frame_time * 10
-                elif self.transform.position.x < 50:
+            if self.transform.position.x != 80:
+                if self.transform.position.x >= 80:
+                    self.transform.position.x -= (self.transform.position.x - 80) / 100
+                elif self.transform.position.x < 80:
                     self.transform.position.x += game_framework.frame_time * 10
 
-            if self.transform.position.y != 100:
-                pass
+            if self.transform.position.y >= 50:
+                self.transform.position.y -= (self.transform.position.y - 50) / 100
         else:
             self.frame_set = 7
             self.image_Type = [int(self.frame) * 60, 410, 60, 40]
@@ -183,9 +189,9 @@ class Character(Object):
 
         self.transform.position.y -= self.gravity
 
-        if self.transform.position.y <= -10 + Camera.mainCamera.transform.position.y:
+        if self.transform.position.y <= -10:
             self.gravity = 0
-            self.transform.position.y = 570 + Camera.mainCamera.transform.position.y
+            self.transform.position.y = 570
 
         self.invincibility_timer()
 
@@ -194,7 +200,7 @@ class Character(Object):
         if self.life == 0:
             pass
 
-        if self.event_que:
+        if self.event_que and MainStage.is_Next == False:
             event = self.event_que.pop()
             self.cur_state.exit(self, event)
             try:
@@ -207,7 +213,7 @@ class Character(Object):
         self.event_que.insert(0, event)
 
     def handle_events(self, event):
-        if (event.type, event.key) in key_event_table and self.isHandle:
+        if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
 
