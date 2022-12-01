@@ -26,6 +26,20 @@ class Object:
     def __del__(self):
         pass
 
+    def Enable(self):
+        pass
+
+    def Disable(self):
+        pass
+
+    def SetActive(self, value):
+        if self.isActive is True and value is False:
+            self.Enable()
+        elif self.isActive is False and value is True:
+            self.Disable()
+        self.isActive = value
+        pass
+
     def Init(self):
         pass
 
