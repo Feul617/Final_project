@@ -1,4 +1,4 @@
-
+from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import *
 
 
@@ -17,6 +17,12 @@ class Stage1_4(MainStage):
 
         #Camera.mainCamera.transform.position.y -= 610
         self.transform.position.y = int(self.background.transform.position.y)
+
+        # monster 초기화
+        self.monsters = [Monsta() for _ in range(4)]
+        for zen_chan in self.monsters:
+            zen_chan.name = 'monsta'
+            zen_chan.isActive = False
 
     def handle_events(self, event):
         pass

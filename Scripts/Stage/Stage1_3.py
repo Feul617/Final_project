@@ -1,4 +1,4 @@
-
+from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import *
 
 
@@ -9,8 +9,6 @@ class Stage1_3(MainStage):
         self.name = 'Stage3'
         self.isActive = False
 
-        for monsta in self.monsta:
-            monsta.isActive = True
         # 객채 초기화
 
         # background 초기화
@@ -20,6 +18,11 @@ class Stage1_3(MainStage):
 
         #Camera.mainCamera.transform.position.y -= 610
         self.transform.position.y = int(self.background.transform.position.y)
+
+        # monster 초기화
+        self.monsters = [Monsta() for _ in range(4)]
+        for zen_chan in self.monsters:
+            zen_chan.name = 'monsta'
 
     def handle_events(self, event):
         pass
@@ -39,19 +42,21 @@ class Stage1_3(MainStage):
         self.tiles.append(tile)
 
         # 1층 왼쪽 타일
-        tile = MakeTile_X(8, self.stage)
+        tile = MakeTile_X(7, self.stage)
         tile.MakeTile(120, 133 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
 
         # 1층 오른쪽 타일
-        tile = MakeTile_X(8, self.stage)
+        tile = MakeTile_X(7, self.stage)
         tile.MakeTile(450, 133 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[0].transform.position = Vector2(460, 163 - (self.height * (self.stage - 1)))
 
         # 2층 타일
         tile = MakeTile_X(18, self.stage)
         tile.MakeTile(160, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[1].transform.position = Vector2(160, 270 - (self.height * (self.stage - 1)))
 
         # 3층 타일
         tile = MakeTile_X(18, self.stage)
@@ -62,12 +67,6 @@ class Stage1_3(MainStage):
         tile = MakeTile_X(18, self.stage)
         tile.MakeTile(160, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
-        self.monsta[0].transform.position = Vector2(600, 460 - (self.height * (self.stage - 1)))
-        self.monsta[1].transform.position = Vector2(620, 460 - (self.height * (self.stage - 1)))
-        self.monsta[2].transform.position = Vector2(640, 460 - (self.height * (self.stage - 1)))
-        self.monsta[3].transform.position = Vector2(680, 460 - (self.height * (self.stage - 1)))
-        for i in range(4):
-            self.monsta[i].patrolDistance = [80, 720]
-            if self.monsta[i].transform.position.y <= -10 - (self.height * (self.stage - 1)):
-                self.monsta[i].transform.position.y = 570 - (self.height * (self.stage - 1))
+        self.monsters[2].transform.position = Vector2(500, 480 - (self.height * (self.stage - 1)))
+        self.monsters[3].transform.position = Vector2(580, 480 - (self.height * (self.stage - 1)))
 

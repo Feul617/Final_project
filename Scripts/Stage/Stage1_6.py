@@ -1,4 +1,5 @@
 from Scripts.Stage.MainStage import *
+from Scripts.Object.Tile.Tile import MakeTile_X
 
 
 class Stage1_6(MainStage):
@@ -16,6 +17,11 @@ class Stage1_6(MainStage):
 
         #Camera.mainCamera.transform.position.y -= 610
         self.transform.position.y = int(self.background.transform.position.y)
+
+        # monster 초기화
+        self.monsters = [Boss()]
+        for boss in self.monsters:
+            boss.name = 'boss'
 
     def handle_events(self, event):
         pass
@@ -80,3 +86,5 @@ class Stage1_6(MainStage):
         tile = MakeTile_X(2, self.stage)
         tile.MakeTile(560, 455 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+
+        self.monsters[0].transform.position = Vector2(400, 300 - (self.height * (self.stage - 1)))
