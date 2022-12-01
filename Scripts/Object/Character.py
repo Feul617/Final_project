@@ -32,6 +32,7 @@ class IDLE:
         else:
             self.flip = ' '
         if event == UP and self.velocity == 'stand':
+            self.jump_sound.play(1)
             self.velocity = 'up'
             self.now_y = self.transform.position.y
             self.transform.position.y += self.gravity * 3
@@ -40,7 +41,9 @@ class IDLE:
     @staticmethod
     def exit(self, event):
         if event == SPACE:
+            print('on')
             self.attack()
+            self.attack_sound.play(1)
 
     @staticmethod
     def do(self):
@@ -61,6 +64,7 @@ class RUN:
         elif event == LU:
             self.dir += 1
         elif event == UP and self.velocity == 'stand':
+            self.jump_sound.play(1)
             self.velocity = 'up'
             self.now_y = self.transform.position.y
             self.transform.position.y += self.gravity * 3
@@ -69,6 +73,8 @@ class RUN:
         self.face_dir = self.dir
         if event == SPACE:
             self.attack()
+            self.attack_sound.play(1)
+
 
     def do(self):
 
@@ -128,6 +134,11 @@ class Character(Object):
         self.jump_high = 120 # 수정필요
         self.image = load_image('./character/character3.png')
         self.image_Type = [self.frame * 60, 410, 60, 40]
+        self.jump_sound = load_wav('./sound/jump_sound.mp3')
+        self.jump_sound.set_volume(10)
+
+        self.attack_sound = load_wav('./sound/attack_sound.mp3')
+        self.attack_sound.set_volume(10)
 
         self.isHandle = True
         self.gravity = 0
@@ -154,6 +165,7 @@ class Character(Object):
         #충돌체크
         Object.gameWorld.add_collision_group(self, None, 'character:tile')
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
+        Object.gameWorld.add_collision_group(None, self, 'attack:character')
 
     def update(self):
         self.gravity = FALLING_SPEED * game_framework.frame_time
@@ -161,7 +173,6 @@ class Character(Object):
 
         #if self.char_camera is not Camera.mainCamera.transform.position.y:
         if MainStage.is_Next:
-            print(self.dir)
             # if self.isHandle:
             #     self.event_que.clear()
             self.dir = 0
@@ -244,9 +255,7 @@ class Character(Object):
 
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y + Camera.mainCamera.transform.position.y, self.face_dir * 2)
-        Object.gameWorld.add_object(bubble, 2)
-        Object.gameWorld.add_collision_group(bubble, self.monster, 'attack:monster')
-        Object.gameWorld.add_collision_group(bubble, self.charac, 'attack:character')
+
         return bubble
 
     def Draw(self):

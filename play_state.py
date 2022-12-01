@@ -4,6 +4,7 @@ import title_state
 from Scripts.Object.Object_AFX import *
 from Scripts.Stage.StageContain import *
 from Scripts.FrameWork.Camera import Camera
+import pico2d
 
 gameWorld = None
 camera = None
@@ -130,6 +131,7 @@ def update():
     pass
 
 def pause():
+    # self.image.opacify() 투명도 조절
     pass
 
 def resume():
@@ -145,3 +147,5 @@ def test_self():
 
 if __name__ == '__main__': #만약 단독 실행 상태이면
     test_self()
+
+
