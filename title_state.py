@@ -3,11 +3,14 @@ import game_framework
 import play_state
 
 def enter():
-    global image, banner, banner_on, banner_time, count
+    global image, banner, banner_on, banner_time, count, bgm, bgm_on
     image = load_image('./map/title.png')
     banner = load_image('./map/insert_coin.png')
+    bgm = load_music('./sound/Invincible(start screen) .mp3')
+    bgm.set_volume(10)
+    bgm_on = True
     banner_on = True
-    banner_time = 0.8
+    banner_time = 0.5
     count = 0
     pass
 
@@ -36,16 +39,19 @@ def handle_events():
 def draw():
     global banner_on
     clear_canvas()
-    image.draw(400, 300)
+    image.draw(400, 305, 800, 610)
     if banner_on:
         banner.draw(400, 30)
     update_canvas()
 
 def update():
-    global banner_on, count
+    global banner_on, count, bgm, bgm_on
 
     delay(banner_time)
     banner_on = not banner_on
+    if bgm_on:
+        bgm.play(1)
+        bgm_on = False
     count += 1
     if count >= 20:
         game_framework.change_state(play_state)
