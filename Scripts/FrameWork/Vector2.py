@@ -35,4 +35,10 @@ class Vector2:
             return False
         return True
 
+    def __mul__(self, other):
+        result = Vector2()
+        result.x = self.x * other.x
+        result.y = self.y * other.y
+        return result
+
     pass
