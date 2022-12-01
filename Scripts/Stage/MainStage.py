@@ -1,5 +1,7 @@
 from Scripts.Object.Object_AFX import *
-from Scripts.Object.Monster import Monster
+from Scripts.FrameWork.FrameWork_AFX import *
+from Scripts.Object.Monster.Monster import Monster
+from Scripts.Object.Monster.MonsterContain import *
 from Scripts.FrameWork.Camera import Camera
 
 class MainStage(Object):
@@ -7,35 +9,34 @@ class MainStage(Object):
     def __init__(self):
         super(MainStage, self).__init__()
         self.background = Object()
+        self.bgm = load_music('./sound/Introduction _ Main Theme.mp3')
+        self.bgm.set_volume(10)
+        self.bgm.repeat_play()
         self.tiles = []
 
         self.height = 610
 
-        #self.is_Next = False
         self.nextStage = None
 
         self.in_Main_character = None
 
         #몬스터
-        self.zen_chan = [Monster() for _ in range(8)]
-        for zen_chan in self.zen_chan:
-            zen_chan.name = 'zen_chan'
-            zen_chan.isActive = False
-
-        self.mighta = [Monster() for _ in range(4)]
-        for mighta in self.mighta:
-            mighta.name = 'mighta'
-            mighta.isActive = False
-
-        self.monsta = [Monster() for _ in range(8)]
-        for monsta in self.monsta:
-            monsta.name = 'monsta'
-            monsta.isActive = False
+        self.monsters = []
 
         Object.gameWorld.add_object(self.background, 0)
         Object.gameWorld.add_object(self, 0)
 
         Camera.mainCamera.transform.position.y = 0
+
+    def Disable(self):
+        for monster in self.monsters:
+            monster.SetActive(True)
+        pass
+
+    def Enable(self):
+        for monster in self.monsters:
+            monster.SetActive(False)
+        pass
 
     def update(self):
         if Monster.monster_count <= 0:
@@ -46,9 +47,10 @@ class MainStage(Object):
             if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y - self.height / 2:
                 Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y - self.height / 2
                 MainStage.is_Next = False
-                Monster.monster_count = 4
-                self.isActive = False
-                self.nextStage.isActive = True
+                Monster.monster_count = 8
+                self.SetActive(False)
+                self.nextStage.SetActive(True)
+
                 #print(self.nextStage.transform.position.y)
                 #print(Camera.mainCamera.transform.position.y)
     def Draw(self):
@@ -56,3 +58,4 @@ class MainStage(Object):
 
     def handle_events(self, event):
         pass
+
