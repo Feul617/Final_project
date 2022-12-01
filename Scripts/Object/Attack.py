@@ -34,12 +34,16 @@ class Bubble(Object):
 
         self.transform.scale.x = 2
 
+        Object.gameWorld.add_object(self, 2)
         Object.gameWorld.add_collision_group(self, None, 'attack:monster')
+        Object.gameWorld.add_collision_group(self, None, 'attack:character')
+        Object.gameWorld.add_collision_group(self, None, 'attack:boss')
+
 
 
     def update(self):
         if MainStage.is_Next:
-            self.transform.position.x = -100
+            Object.gameWorld.remove_object(self)
 
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
@@ -61,12 +65,13 @@ class Bubble(Object):
         if self.transform.position.x <= 80 or self.transform.position.x >= 720:
             self.pong()
 
-        if self.transform.position.y >= 530:
+        if self.transform.position.y >= 540 + Camera.mainCamera.transform.position.y:
             self.is_up = 0
             self.holding_time += 1
 
             if self.holding_time >= 1100:
                 self.pong()
+
         if self.character_collide:
             self.pong()
 
@@ -84,6 +89,7 @@ class Bubble(Object):
         self.state = 3
         self.image = load_image('./character/pong.png')
         self.frame = (self.frame + FRAME_PER_ACTION * PONG_PER_ACTION * game_framework.frame_time) % 2.0
+        self.is_up = 0
         self.delay += 1
 
         if self.delay >= 40:
