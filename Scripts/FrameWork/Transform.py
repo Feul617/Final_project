@@ -14,4 +14,9 @@ class Transform:
         print(self.position)
         print(self.scale)
         pass
+
+    def Look_At_Target(self, position, speed):
+        dir = Vector2.Normalize(position - self.position)
+        self.position += dir * speed
+        return dir
     pass

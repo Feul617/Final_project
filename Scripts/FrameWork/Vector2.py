@@ -37,8 +37,18 @@ class Vector2:
 
     def __mul__(self, other):
         result = Vector2()
-        result.x = self.x * other.x
-        result.y = self.y * other.y
+        if type(other) is Vector2:
+            result.x = self.x * other.x
+            result.y = self.y * other.y
+        else:
+            result.x = self.x * other
+            result.y = self.y * other
         return result
+
+    @staticmethod
+    def Normalize(this):
+        dis = ((this.x ** 2) + (this.y ** 2)) ** 0.5
+        norm = Vector2(this.x / dis, this.y / dis)
+        return norm
 
     pass
