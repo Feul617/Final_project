@@ -1,8 +1,8 @@
 from Scripts.Object.Object_AFX import *
 from Scripts.FrameWork.FrameWork_AFX import *
-from Scripts.Object.Monster.Monster import Monster
-from Scripts.Object.Monster.MonsterContain import *
 from Scripts.FrameWork.Camera import Camera
+from Scripts.Object.Character import Character
+from Scripts.Object.Monster.Monster import Monster
 
 class MainStage(Object):
     is_Next = False
@@ -43,10 +43,12 @@ class MainStage(Object):
             MainStage.is_Next = True
 
         if MainStage.is_Next:
+            Character.Instance.is_Next = True
             Camera.mainCamera.transform.position.y -= game_framework.frame_time * 300
             if Camera.mainCamera.transform.position.y < self.nextStage.transform.position.y - self.height / 2:
                 Camera.mainCamera.transform.position.y = self.nextStage.transform.position.y - self.height / 2
                 MainStage.is_Next = False
+                Character.Instance.is_Next = False
                 Monster.monster_count = 8
                 self.SetActive(False)
                 self.nextStage.SetActive(True)
