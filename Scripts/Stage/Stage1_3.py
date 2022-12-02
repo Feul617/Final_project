@@ -1,5 +1,7 @@
 from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import *
+from Scripts.Object.Monster.MonsterContain import *
+
 
 
 class Stage1_3(MainStage):

@@ -1,5 +1,6 @@
 from Scripts.Stage.MainStage import *
 from Scripts.Object.Tile.Tile import MakeTile_X
+from Scripts.Object.Monster.MonsterContain import *
 
 
 class Stage1_5(MainStage):
@@ -80,3 +81,8 @@ class Stage1_5(MainStage):
         tile = MakeTile_X(16, self.stage)
         tile.MakeTile(145, 455 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[0].transform.position = Vector2(200, 485 - (self.height * (self.stage - 1)))
+        self.monsters[1].transform.position = Vector2(240, 485 - (self.height * (self.stage - 1)))
+        self.monsters[2].transform.position = Vector2(560, 485 - (self.height * (self.stage - 1)))
+        self.monsters[3].transform.position = Vector2(580, 485 - (self.height * (self.stage - 1)))
+

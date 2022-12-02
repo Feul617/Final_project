@@ -1,5 +1,6 @@
 from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import *
+from Scripts.Object.Monster.MonsterContain import *
 
 
 class Stage1_4(MainStage):
@@ -55,11 +56,13 @@ class Stage1_4(MainStage):
         tile = MakeTile_X(7, self.stage)
         tile.MakeTile(60, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[0].transform.position = Vector2(80, 270 - (self.height * (self.stage - 1)))
 
         # 2층 오른쪽 타일
         tile = MakeTile_X(7, self.stage)
         tile.MakeTile(550, 240 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[1].transform.position = Vector2(700, 270 - (self.height * (self.stage - 1)))
 
         # 2.5층 중앙 왼쪽 타일
         tile = MakeTile_X(2, self.stage)
@@ -95,6 +98,7 @@ class Stage1_4(MainStage):
         tile = MakeTile_X(4, self.stage)
         tile.MakeTile(60, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[2].transform.position = Vector2(80, 480 - (self.height * (self.stage - 1)))
 
         # 4층 중앙 왼쪽 타일
         tile = MakeTile_X(4, self.stage)
@@ -110,3 +114,4 @@ class Stage1_4(MainStage):
         tile = MakeTile_X(4, self.stage)
         tile.MakeTile(660, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
+        self.monsters[3].transform.position = Vector2(700, 480 - (self.height * (self.stage - 1)))

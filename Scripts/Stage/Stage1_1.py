@@ -1,5 +1,7 @@
 from Scripts.Object.Tile.Tile import MakeTile_X
 from Scripts.Stage.MainStage import *
+from Scripts.Object.Monster.MonsterContain import *
+
 
 class Stage1_1(MainStage):
     def __init__(self):
@@ -24,6 +26,10 @@ class Stage1_1(MainStage):
         for zen_chan in self.monsters:
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = True
+
+        self.monsters += [Boss()]
+        self.monsters[4].name = 'Boss'
+        self.monsters[4].isActive = True
 
     def handle_events(self, event):
         pass
@@ -91,3 +97,5 @@ class Stage1_1(MainStage):
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(500, 450)
         self.tiles.append(tile)
+        self.monsters[4].transform.position = Vector2(450, 380)
+
