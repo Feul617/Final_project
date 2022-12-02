@@ -1,4 +1,5 @@
 from Scripts.FrameWork.FrameWork_AFX import *
+from Scripts.Object.Character import Character
 
 PIXEL_PER_METER = (10.0 / 0.3)
 SHOOT_SPEED_KMPH = 300.0 # km/h 마라토너의 평속
@@ -14,18 +15,25 @@ PONG_PER_ACTION = 0.01
 
 # 직선운동 공식 (1 - u)p1 + u * p2
 class Boss_attack(Object):
-    def __init__(self):
+    def __init__(self, this):
+        super(Boss_attack, self).__init__()
         self.name = 'Boss_attack'
-        self.transform.position = Vector2(0, 0)
-        self.image = load_image('./character/Boss_attack.png')
-        self.image_Type = [0, 0, 50, 50]
+        self.transform.position = this.transform.position.Copy()
 
+        self.image = load_image('./character/Boss_attack.png')
+        self.image_Type = [0, 0, 17, 17]
+        self.transform.scale *= 3
+
+        self.target_position = Character.Instance.transform.position
         self.frame = 0
         self.frame_set = 4.0
+        norm = Vector2.Normalize(self.target_position -self.transform.position)
+        self.target_position += norm* 100000
 
-        self.parameter = 0
+        self.speed = 2
+        self.this = this
 
-        Object.gameWorld.add_object(self, 2)
+        Object.gameWorld.add_object(self, 3)
         Object.gameWorld.add_collision_group(self, None, 'Boss_attack:character')
 
     def update(self):
@@ -33,11 +41,6 @@ class Boss_attack(Object):
             Object.gameWorld.remove_object(self)
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-
-        self.Set_Target()
-        self.parameter += 0.1
-        pass
-
-    def Set_Target(self, target):
-        self.transform.position = (1 - self.parameter) * self.transform.position + self.parameter * target.transform.position
+        self.image_Type[0] = int(self.frame) * 17
+        self.transform.Look_At_Target(self.target_position, self.speed)
         pass
