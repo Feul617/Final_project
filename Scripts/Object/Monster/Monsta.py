@@ -9,6 +9,7 @@ class Monsta(Monster):
         self.frame_set = 2
         self.image_Type[1] = 570
         self.type = 570
+        self.size = 54
         self.patrolDistance = [80, 720]
 
         Object.gameWorld.add_object(self, 2)
@@ -24,14 +25,14 @@ class Monsta(Monster):
             self.flip = 'h'
 
         if self.state == 'init':
-            self.gravity = game_framework.frame_time * 600
+            self.gravity = game_framework.frame_time * 300
 
         self.transform.position.y -= self.gravity
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
-        self.image_Type = [(int(self.frame) + self.in_bubble) * 54, self.type, 54, 54]
+        self.image_Type = [(int(self.frame) + self.in_bubble) * self.size, self.type, 54, 54]
         self.floating()
         self.Patrol()
 
@@ -45,8 +46,9 @@ class Monsta(Monster):
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.state == 'bubble':
             self.state = 'death'
+            self.size = 56
             self.frame_set = 4
-            self.in_bubble = 26
+            self.in_bubble = 25
             self.is_up = False
             self.transform.position.y -= self.gravity * 5
 

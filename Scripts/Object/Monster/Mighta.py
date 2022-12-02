@@ -1,5 +1,8 @@
+import game_framework
 from Scripts.FrameWork.FrameWork_AFX import *
-from Scripts.Object.Monster.Monster import *
+from Scripts.Object.Monster.Monster import Monster
+from Scripts.Object.Character import Character
+from Scripts.FrameWork.Camera import Camera
 
 
 class Mighta(Monster):
@@ -8,38 +11,49 @@ class Mighta(Monster):
         self.name = 'mighta'
         self.frame_set = 4
         self.image_Type[1] = 700
-        self.type = 700
+        self.type = 710
+        self.gravity = 0
+        self.size = 54
 
-        Object.gameWorld.add_object(self, 2)
+        self.target = None
+        self.speed = 20
+
+        Object.gameWorld.add_object(self, 3)
         Object.gameWorld.add_collision_group(self, None, 'monster:tile')
         Object.gameWorld.add_collision_group(None, self, 'attack:monster')
         Object.gameWorld.add_collision_group(None, self, 'character:monster')
 
     def update(self):
         super(Mighta, self).update()
+        self.transform.position.y -= self.gravity
+        if self.state == 'init':
+            self.dir = self.transform.Look_At_Target(Character.Instance.transform.position + Camera.mainCamera.transform.position, self.speed * game_framework.frame_time)
 
+        if self.dir.x >= 0:
+            self.flip = 'h'
+        else:
+            self.flip = ' '
         pass
-        # self.face_dir = self.dir
-        # if self.face_dir == -1:
-        #     self.flip = ' '
-        # else:
-        #     self.flip = 'h'
-        #
-        # self.gravity = game_framework.frame_time * 60
-        #
-        # self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-        # self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        #
-        # self.image_Type[0] = (int(self.frame) + self.in_bubble) * 54
-        # self.Move()
-        # self.floating()
 
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.state == 'bubble':
             self.state = 'death'
-            self.in_bubble = 12
+            self.image = load_image('./character/mighta_death.png')
+            self.size = 63
+            self.frame_set = 4
+            self.type = 0
+            self.in_bubble = 0
             self.is_up = False
-            self.transform.position.y -= self.gravity * 3
+            self.gravity = game_framework.frame_time * 60
+
+        elif group == 'attack:monster':
+            if self.state == 'init' and other.state == 1:
+                self.state = 'bubble'
+                self.gravity = game_framework.frame_time * 60
+                self.type = 660
+                self.is_up = True
+                self.in_bubble = 7
+                self.frame_set = 3.0
 
     def map_handle_collision(self, other, group):
         if group == 'monster:tile':
@@ -50,4 +64,4 @@ class Mighta(Monster):
                 self.start_timer()
                 self.gravity = 0
                 self.frame_set = 1.0
-                self.in_bubble = 12
+                self.in_bubble = 27

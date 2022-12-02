@@ -8,6 +8,7 @@ class Zen_chan(Monster):
         self.frame_set = 4
         self.image_Type[1] = 810
         self.type = 810
+        self.size = 54
 
 
         Object.gameWorld.add_object(self, 2)
@@ -16,8 +17,14 @@ class Zen_chan(Monster):
         Object.gameWorld.add_collision_group(None, self, 'character:monster')
 
     def update(self):
+        print(self.gravity)
+        super(Zen_chan, self).Gravity()
         super(Zen_chan, self).update()
-        self.Patrol()
+        self.transform.position.y -= self.gravity
+        super(Zen_chan, self).Move()
+        super(Zen_chan, self).Patrol()
+
+
         pass
         # self.face_dir = self.dir
         # if self.face_dir == -1:
