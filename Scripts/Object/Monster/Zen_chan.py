@@ -17,7 +17,6 @@ class Zen_chan(Monster):
         Object.gameWorld.add_collision_group(None, self, 'character:monster')
 
     def update(self):
-        print(self.gravity)
         super(Zen_chan, self).Gravity()
         super(Zen_chan, self).update()
         self.transform.position.y -= self.gravity

@@ -1,9 +1,8 @@
 import Scripts.FrameWork.game_world
-import game_framework
-import title_state
 from Scripts.Object.Object_AFX import *
 from Scripts.Stage.StageContain import *
 from Scripts.FrameWork.Camera import Camera
+from Scripts.Object.Monster.MonsterContain import *
 import pico2d
 
 gameWorld = None
@@ -60,8 +59,10 @@ def enter():
     # for i in range(4):
     #     zen_chan[i].name = 'zen_chan'
     #     zen_chan[i].count += 1
-    character.charac = character
+
     #MainStage.in_Main_character = character
+
+    Mighta.target = character
 
 
     #충돌체크
@@ -136,7 +137,6 @@ def pause():
 
 def resume():
     pass
-
 
 def test_self():
     import sys
