@@ -3,7 +3,6 @@ from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Attack import *
 from Scripts.FrameWork.game_world import GameWorld
 from Scripts.FrameWork.Camera import Camera
-from Scripts.Stage.MainStage import MainStage
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -41,7 +40,6 @@ class IDLE:
     @staticmethod
     def exit(self, event):
         if event == SPACE:
-            print('on')
             self.attack()
             self.attack_sound.play(1)
 
@@ -123,10 +121,10 @@ RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
 
 class Character(Object):
-
+    Instance = None
     def __init__(self):
         super(Character, self).__init__()
-        self.transform.position = Vector2(100, 300)
+        self.transform.position = Vector2(100, 100)
         self.frame = 0
         self.frame_set = 7
         self.dir, self.face_dir = 0, 1
@@ -136,6 +134,7 @@ class Character(Object):
         self.image_Type = [self.frame * 60, 410, 60, 40]
         self.jump_sound = load_wav('./sound/jump_sound.mp3')
         self.jump_sound.set_volume(10)
+        self.is_Next = False
 
         self.attack_sound = load_wav('./sound/attack_sound.mp3')
         self.attack_sound.set_volume(10)
@@ -156,7 +155,9 @@ class Character(Object):
         self.cur_state.enter(self, None)
 
         self.monster = None
-        self.charac = None
+
+        if Character.Instance is None:
+            Character.Instance = self
 
         #collision Box 크기
         self.collisionBox = [30, 20]
@@ -172,7 +173,7 @@ class Character(Object):
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 
         #if self.char_camera is not Camera.mainCamera.transform.position.y:
-        if MainStage.is_Next:
+        if self.is_Next:
             # if self.isHandle:
             #     self.event_que.clear()
             self.dir = 0
@@ -211,7 +212,7 @@ class Character(Object):
         if self.life == 0:
             pass
 
-        if self.event_que and MainStage.is_Next == False:
+        if self.event_que and self.is_Next == False:
             event = self.event_que.pop()
             self.cur_state.exit(self, event)
             try:
@@ -243,7 +244,8 @@ class Character(Object):
     def map_handle_collision(self, other, group):
         if group == 'character:tile' and self.is_collide_set:
             self.transform.position.y += self.gravity
-            self.velocity = 'stand'
+            if self.velocity == 'down':
+                self.velocity = 'stand'
 
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.is_collide_set \
@@ -256,7 +258,7 @@ class Character(Object):
     def attack(self):
         bubble = Bubble(self.transform.position.x, self.transform.position.y + Camera.mainCamera.transform.position.y, self.face_dir * 2)
 
-        return bubble
+        #return bubble
 
     def Draw(self):
         pos = self.transform.position

@@ -1,6 +1,6 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.FrameWork.Camera import Camera
-from Scripts.Stage.MainStage import MainStage
+
 
 PIXEL_PER_METER = (10.0 / 0.3)
 SHOOT_SPEED_KMPH = 300.0 # km/h 마라토너의 평속
@@ -42,8 +42,6 @@ class Bubble(Object):
 
 
     def update(self):
-        if MainStage.is_Next:
-            Object.gameWorld.remove_object(self)
 
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
@@ -103,6 +101,11 @@ class Bubble(Object):
         elif group == 'attack:character':
             if self.state == 2:
                 self.character_collide = True
+
+        elif group == 'attack:boss':
+            if self.state == 1:
+                Object.gameWorld.remove_object(self)
+
 
 
     def map_handle_collision(self, other, group):
