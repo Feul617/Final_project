@@ -16,9 +16,12 @@ class Vector2:
 
     def __sub__(self, other):
         result = Vector2()
-
-        result.x = self.x - other.x
-        result.y = self.y - other.y
+        if type(other) is Vector2:
+            result.x = self.x - other.x
+            result.y = self.y - other.y
+        else:
+            result.x = self.x - other
+            result.y = self.y - other
         return result
 
     def __eq__(self, other):
@@ -44,6 +47,9 @@ class Vector2:
             result.x = self.x * other
             result.y = self.y * other
         return result
+
+    def Copy(self):
+        return Vector2(self.x, self.y)
 
     @staticmethod
     def Normalize(this):
