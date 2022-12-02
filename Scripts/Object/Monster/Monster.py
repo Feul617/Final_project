@@ -2,11 +2,12 @@ from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.FrameWork.Camera import Camera
 
 PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 15.0 # km/h 마라토너의 평속
+RUN_SPEED_KMPH = 4.0 # km/h 마라토너의 평속
+FALLING_SPEED = (RUN_SPEED_KMPH + 5) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+JUMP_SPEED_PPS = (RUN_SPEED_KMPH) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
 RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
-UP_SPEED_PPS = 10.0 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 
 TIME_PER_ACTION = 2.0
 ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
@@ -35,7 +36,7 @@ class Monster(Object):
         self.time = 0
 
         self.gravity = 0
-        self.start_delay = 50
+        self.start_delay = 500
 
         # 인공지능
         self.patrolDistance = [0, 0]
@@ -52,7 +53,7 @@ class Monster(Object):
         # if self.start_delay > 0:
         #     self.start_delay -= 1
         # if self.start_delay <= 0:
-        #     self.transform.position.y -= self.gravity
+        self.transform.position.y -= self.gravity
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 
@@ -75,7 +76,7 @@ class Monster(Object):
 
     def floating(self):
         if self.transform.position.y < 541 + Camera.mainCamera.transform.position.y and self.is_up:
-            self.transform.position.y += self.gravity * 3
+            self.transform.position.y += self.gravity * 2
         elif self.transform.position.y >= 540 + Camera.mainCamera.transform.position.y:
             self.transform.position.y += self.gravity
             self.is_up = False
@@ -102,5 +103,5 @@ class Monster(Object):
         self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
 
     def Gravity(self):
-        self.gravity = game_framework.frame_time * 60
+        self.gravity = FALLING_SPEED * game_framework.frame_time
         pass

@@ -4,6 +4,18 @@ from Scripts.Object.Monster.Monster import Monster
 from Scripts.Object.Character import Character
 from Scripts.FrameWork.Camera import Camera
 
+PIXEL_PER_METER = (10.0 / 0.3)
+RUN_SPEED_KMPH = 4.0 # km/h 마라토너의 평속
+FALLING_SPEED = (RUN_SPEED_KMPH + 5) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+JUMP_SPEED_PPS = (RUN_SPEED_KMPH) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
+RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
+RUN_SPEED_PPS = RUN_SPEED_MPS * PIXEL_PER_METER
+
+TIME_PER_ACTION = 2.0
+ACTION_PER_TIME = 1.0 / TIME_PER_ACTION
+FRAME_PER_ACTION = 8
+
 
 class Mighta(Monster):
     def __init__(self):
@@ -25,7 +37,6 @@ class Mighta(Monster):
 
     def update(self):
         super(Mighta, self).update()
-        self.transform.position.y -= self.gravity
         if self.state == 'init':
             self.dir = self.transform.Look_At_Target(Character.Instance.transform.position + Camera.mainCamera.transform.position, self.speed * game_framework.frame_time)
 
@@ -44,12 +55,12 @@ class Mighta(Monster):
             self.type = 0
             self.in_bubble = 0
             self.is_up = False
-            self.gravity = game_framework.frame_time * 60
+            self.Gravity()
 
         elif group == 'attack:monster':
             if self.state == 'init' and other.state == 1:
                 self.state = 'bubble'
-                self.gravity = game_framework.frame_time * 60
+                self.Gravity()
                 self.type = 660
                 self.is_up = True
                 self.in_bubble = 7

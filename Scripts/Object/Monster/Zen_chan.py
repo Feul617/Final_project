@@ -17,33 +17,11 @@ class Zen_chan(Monster):
         Object.gameWorld.add_collision_group(None, self, 'character:monster')
 
     def update(self):
-        super(Zen_chan, self).Gravity()
+        #super(Zen_chan, self).Gravity()
         super(Zen_chan, self).update()
-        self.transform.position.y -= self.gravity
+        super(Zen_chan, self).Gravity()
         super(Zen_chan, self).Move()
         super(Zen_chan, self).Patrol()
-
-
-        pass
-        # self.face_dir = self.dir
-        # if self.face_dir == -1:
-        #     self.flip = ' '
-        # else:
-        #     self.flip = 'h'
-        #
-        # self.gravity = game_framework.frame_time * 60
-        #
-        # if self.start_delay > 0:
-        #     self.start_delay -= 1
-        # if self.start_delay <= 0:
-        #     self.transform.position.y -= self.gravity
-        #
-        # self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-        # self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time
-        #
-        # self.image_Type[0] = (int(self.frame) + self.in_bubble) * 54
-        # self.Move()
-        # self.floating()
 
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.state == 'bubble':

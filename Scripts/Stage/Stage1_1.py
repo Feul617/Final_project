@@ -27,10 +27,6 @@ class Stage1_1(MainStage):
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = True
 
-        self.monsters += [Boss()]
-        self.monsters[4].name = 'Boss'
-        self.monsters[4].isActive = True
-
     def handle_events(self, event):
         pass
 
@@ -77,7 +73,7 @@ class Stage1_1(MainStage):
         # 3층 왼쪽 타일
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(200, 345)
-        self.monsters[2].transform.position = Vector2(200, 380)
+        self.monsters[2].transform.position = Vector2(200, 400)
         self.monsters[2].patrolDistance = [215, 370]
         self.tiles.append(tile)
 
@@ -97,5 +93,4 @@ class Stage1_1(MainStage):
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(500, 450)
         self.tiles.append(tile)
-        self.monsters[4].transform.position = Vector2(450, 380)
 
