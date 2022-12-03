@@ -4,16 +4,20 @@ import title_state
 
 #변수
 bg_image = None
+bgm = None
 
 def enter():
-    global bg_image
+    global bg_image, bgm
     bg_image = load_image('./map/thank you for playing.png')
+    bgm = load_music('./sound/Clear.mp3')
+    bgm.set_volume(10)
+    bgm.play(1)
     pass
 
 
 def exit():
-    global bg_image
-    del bg_image
+    global bg_image, bgm
+    del bg_image, bgm
     pass
 
 def handle_events():

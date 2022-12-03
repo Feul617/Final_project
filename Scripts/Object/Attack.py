@@ -40,9 +40,7 @@ class Bubble(Object):
         Object.gameWorld.add_collision_group(self, None, 'attack:boss')
 
 
-
     def update(self):
-
         self.image_Type = [int(self.frame) * 17, 0, 15, 50]
         self.transform.position.x += SHOOT_SPEED_KMPH * game_framework.frame_time * self.velocity
 

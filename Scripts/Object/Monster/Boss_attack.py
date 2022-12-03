@@ -1,5 +1,6 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Character import Character
+from Scripts.FrameWork.Camera import Camera
 
 PIXEL_PER_METER = (10.0 / 0.3)
 SHOOT_SPEED_KMPH = 300.0 # km/h 마라토너의 평속
@@ -19,25 +20,30 @@ class Boss_attack(Object):
         super(Boss_attack, self).__init__()
         self.name = 'Boss_attack'
         self.transform.position = this.transform.position.Copy()
+        #self.transform.position.y += Camera.mainCamera.transform.position.y
 
         self.image = load_image('./character/Boss_attack.png')
         self.image_Type = [0, 0, 17, 17]
         self.transform.scale *= 3
 
-        self.target_position = Character.Instance.transform.position
+        self.target_position = Character.Instance.transform.position + Camera.mainCamera.transform.position
         self.frame = 0
         self.frame_set = 4.0
-        norm = Vector2.Normalize(self.target_position -self.transform.position)
-        self.target_position += norm* 100000
+        norm = Vector2.Normalize(self.target_position - self.transform.position)
+        self.target_position += norm * 1000
 
-        self.speed = 6
+        self.speed = 3
         self.this = this
 
-        Object.gameWorld.add_object(self, 3)
+        print(self.transform.position.y)
+        print()
+
+        Object.gameWorld.add_object(self, 6)
         Object.gameWorld.add_collision_group(self, None, 'Boss_attack:character')
 
     def update(self):
-        if self.transform.position.x < 80 or self.transform.position.x > 720 or self.transform.position.y < 0 or self.transform.position.y > 550:
+        print(self.target_position.y)
+        if self.transform.position.x < 80 or self.transform.position.x > 720 or self.transform.position.y - Camera.mainCamera.transform.position.y < 0 or self.transform.position.y - Camera.mainCamera.transform.position.y > 550:
             Object.gameWorld.remove_object(self)
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set

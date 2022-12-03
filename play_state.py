@@ -45,7 +45,6 @@ def enter():
     Object.gameWorld = gameWorld
     #캐릭터
     character = Character()
-    gameWorld.add_object(character, 2)
 
     ui = UI()
     gameWorld.add_object(ui, 4)
@@ -79,6 +78,7 @@ def enter():
 
 def exit():
     Object.gameWorld.clear()
+    Character.Instance = None
     pass
 
 def handle_events():
@@ -93,8 +93,6 @@ def handle_events():
             game_framework.quit()
         else:
             character.handle_events(event)
-            for i in range(len(stages)):
-                stages[i].handle_events(event)
 
 def draw():
     pico2d.clear_canvas()
@@ -104,11 +102,11 @@ def draw():
             continue
         game_object.Draw()
 
-    for game_object in gameWorld.all_objects():
-        if not game_object.isActive:
-            continue
-        draw_rectangle(*game_object.get_bb())
-        draw_rectangle(*game_object.tile_get_bb())
+    # for game_object in gameWorld.all_objects():
+    #     if not game_object.isActive:
+    #         continue
+    #     draw_rectangle(*game_object.get_bb())
+    #     draw_rectangle(*game_object.tile_get_bb())
 
     pico2d.update_canvas()
     pass

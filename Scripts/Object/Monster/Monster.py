@@ -1,9 +1,10 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.FrameWork.Camera import Camera
+from Scripts.Object.Character import Character
 
 PIXEL_PER_METER = (10.0 / 0.3)
 RUN_SPEED_KMPH = 15.0 # km/h 마라토너의 평속
-FALLING_SPEED = 15 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+FALLING_SPEED = 10 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 JUMP_SPEED_PPS = (RUN_SPEED_KMPH) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
@@ -15,7 +16,7 @@ FRAME_PER_ACTION = 8
 
 class Monster(Object):
     monster_count = 8
-    def __init__(self , depth = 2):
+    def __init__(self , depth = 3):
         super(Monster, self).__init__()
         # 이미지 초기화
         self.frame = 0
@@ -36,7 +37,7 @@ class Monster(Object):
         self.time = 0
 
         self.gravity = 0
-        self.start_delay = 500
+        self.start_delay = 70
 
         # 인공지능
         self.patrolDistance = [0, 0]
@@ -84,8 +85,9 @@ class Monster(Object):
 
     def start_timer(self):
         self.time += 1
-        if self.time <= 10:
+        if self.time >= 100:
             Monster.monster_count -= 1
+            Character.Instance.score += 250
             Object.gameWorld.remove_object(self)
 
     def Patrol(self):

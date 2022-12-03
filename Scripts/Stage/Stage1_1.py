@@ -15,9 +15,13 @@ class Stage1_1(MainStage):
         #     self.zen_chan[i].isActive = True
 
         # background 초기화
-        self.background.image = load_image('./map/Background/stage1-1 bg.png')
+        self.background.image = load_image('./map/Background/stage1-1 bg .png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
+
+        self.black_background.image = load_image('./map/Background/background.png')
+        self.black_background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
+        self.black_background.image_Type = [0, 0, 800, 610]
 
         self.transform.position.y = int(self.background.transform.position.y)
 
@@ -27,10 +31,6 @@ class Stage1_1(MainStage):
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = True
 
-        self.monsters += [Boss()]
-        self.monsters[4].name = 'boss'
-        self.monsters[4].isActive = True
-
     def handle_events(self, event):
         pass
 
@@ -38,15 +38,15 @@ class Stage1_1(MainStage):
 
         # 공용 타일
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(62, 33)
+        tile.MakeTile(62, 37)
         self.tiles.append(tile)
 
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(330, 33)
+        tile.MakeTile(330, 37)
         self.tiles.append(tile)
 
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(580, 33)
+        tile.MakeTile(580, 37)
         self.tiles.append(tile)
 
         # 1층 왼쪽 타일
@@ -97,5 +97,4 @@ class Stage1_1(MainStage):
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(500, 450)
         self.tiles.append(tile)
-        self.monsters[4].transform.position = Vector2(450, 380)
 

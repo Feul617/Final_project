@@ -3,6 +3,7 @@ from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Attack import Bubble
 from Scripts.FrameWork.game_world import GameWorld
 from Scripts.FrameWork.Camera import Camera
+import die_state
 
 #1 : 이벤트 정의
 RD, LD, RU, LU, TIMER, UP, SPACE = range(7)
@@ -46,6 +47,7 @@ class IDLE:
 
     @staticmethod
     def do(self):
+        self.frame_set = 1
         if self.transform.position.y - self.now_y <= self.jump_high and self.velocity == 'up':
             self.transform.position.y += self.gravity * 3
             if self.transform.position.y - self.now_y > self.jump_high:
@@ -97,22 +99,12 @@ class RUN:
         pass
 
 
-class HURRY_UP:
-    def enter(self, event):
-        pass
-
-    def exit(self, event):
-        pass
-
-    def do(self):
-        self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % 8
 
 #3. 상태 변환 구현
 
 next_state = {
     IDLE:  {RU: RUN,  LU: RUN,  RD: RUN,  LD: RUN, SPACE: IDLE, UP: IDLE},
-    RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, UP: RUN},
-    HURRY_UP: {RU: RUN, LU: RUN, RD: RUN, LD: RUN, SPACE: IDLE}
+    RUN:   {RU: IDLE, LU: IDLE, RD: IDLE, LD: IDLE, SPACE: RUN, UP: RUN}
 }
 
 PIXEL_PER_METER = (10.0 / 0.3)
@@ -127,7 +119,7 @@ class Character(Object):
     Instance = None
     def __init__(self):
         super(Character, self).__init__()
-        self.transform.position = Vector2(100, 100)
+        self.transform.position = Vector2(100, 70)
         self.frame = 0
         self.frame_height = 410
         self.frame_set = 7
@@ -149,10 +141,12 @@ class Character(Object):
         self.is_collide_set = True
         self.char_camera = Camera.mainCamera.transform.position.y
 
-        self.life = 6
+        self.life = 10
+        self.is_life_on = True
         self.score = 0
         self.invincibility_time = 100
         self.start_timer = False
+        self.start_delay = 50
 
         self.event_que = []
         self.is_event_init = False
@@ -169,13 +163,19 @@ class Character(Object):
         self.tile_collisionBox = [30, 23, 30, 15]
 
         #충돌체크
+        Object.gameWorld.add_object(self, 3)
         Object.gameWorld.add_collision_group(self, None, 'character:tile')
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
         Object.gameWorld.add_collision_group(None, self, 'attack:character')
         Object.gameWorld.add_collision_group(None, self, 'Boss_attack:character')
 
     def update(self):
-        self.gravity = FALLING_SPEED * game_framework.frame_time
+        if self.start_delay > 0:
+            self.start_delay -= 1
+            self.gravity = 0
+        elif self.start_delay <= 0:
+            self.gravity = FALLING_SPEED * game_framework.frame_time
+
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 
         #if self.char_camera is not Camera.mainCamera.transform.position.y:
@@ -222,6 +222,7 @@ class Character(Object):
         self.cur_state.do(self)
 
         if self.life == 0:
+            game_framework.change_state(die_state)
             pass
 
         if self.event_que and self.is_Next == False:
@@ -240,6 +241,9 @@ class Character(Object):
         if (event.type, event.key) in key_event_table:
             key_event = key_event_table[(event.type, event.key)]
             self.add_event(key_event)
+        elif (event.type, event.key) == (SDL_KEYDOWN, SDLK_0):
+            self.is_life_on = not self.is_life_on
+
 
     def get_bb(self):
         pos = Vector2(30, 20)
@@ -263,10 +267,12 @@ class Character(Object):
         if group == 'character:monster' and self.is_collide_set \
                 and self.invincibility_time == 100 and other.state == 'init':
             #self.image_Type = [(self.frame + 10) * 60, 200, 50, 50]
-            self.life -= 1
+            if self.is_life_on:
+                self.life -= 1
             self.start_timer = True
         elif group == 'Boss_attack:character' and self.invincibility_time == 100:
-            self.life -= 1
+            if self.is_life_on:
+                self.life -= 1
             self.start_timer = True
             pass
 

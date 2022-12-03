@@ -1,7 +1,7 @@
 from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.Object.Monster.Monster import *
 
-
+MONSTA_SPEED_PPS = 3 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 class Monsta(Monster):
     def __init__(self):
         super(Monsta, self).__init__()
@@ -30,7 +30,7 @@ class Monsta(Monster):
         self.transform.position.y -= self.gravity
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
-        self.transform.position.x += self.dir * RUN_SPEED_PPS * game_framework.frame_time * 5
+        self.transform.position.x += self.dir * MONSTA_SPEED_PPS * game_framework.frame_time * 5
 
         self.image_Type = [(int(self.frame) + self.in_bubble) * self.size, self.type, 54, 54]
         self.floating()

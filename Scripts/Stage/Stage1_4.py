@@ -16,6 +16,10 @@ class Stage1_4(MainStage):
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
 
+        self.black_background.image = load_image('./map/Background/background.png')
+        self.black_background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
+        self.black_background.image_Type = [0, 0, 800, 610]
+
         #Camera.mainCamera.transform.position.y -= 610
         self.transform.position.y = int(self.background.transform.position.y)
 
@@ -31,15 +35,15 @@ class Stage1_4(MainStage):
     def Init(self):
         # 공용 타일
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(62, 30 - (self.height * (self.stage - 1)))
+        tile.MakeTile(62, 35 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
 
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(330, 30 - (self.height * (self.stage - 1)))
+        tile.MakeTile(330, 35 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
 
         tile = MakeTile_X(6, self.stage)
-        tile.MakeTile(580, 30 - (self.height * (self.stage - 1)))
+        tile.MakeTile(580, 35 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
 
         # 1층 왼쪽 타일

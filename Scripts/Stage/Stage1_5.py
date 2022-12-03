@@ -16,6 +16,10 @@ class Stage1_5(MainStage):
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
 
+        self.black_background.image = load_image('./map/Background/background.png')
+        self.black_background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
+        self.black_background.image_Type = [0, 0, 800, 610]
+
         #Camera.mainCamera.transform.position.y -= 610
         self.transform.position.y = int(self.background.transform.position.y)
 

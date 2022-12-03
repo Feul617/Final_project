@@ -49,6 +49,7 @@ class Object:
         self.image.clip_composite_draw(self.image_Type[0], self.image_Type[1], self.image_Type[2], self.image_Type[3], 0, self.flip,\
                                        pos.x, pos.y,
                              scale.x * self.image_Type[2], scale.y * self.image_Type[3])
+
         pass
 
     def update(self):
@@ -59,18 +60,5 @@ class Object:
 
     def tile_get_bb(self):
         return 0, 0, 0, 0
-    # def get_bb(self):
-    #     pos =  [self.collisionBox[0] - Camera.mainCamera.transform.position.x, self.collisionBox[1] - Camera.mainCamera.transform.position.y]
-    #     return self.transform.position.x - pos[0], self.transform.position.y - pos[1], \
-    #            self.transform.position.x + pos[0], self.transform.position.y + pos[1]
-    #
-    # def tile_get_bb(self):
-    #     tile_pos = [self.tile_collisionBox[0] - Camera.mainCamera.transform.position.x,\
-    #            self.tile_collisionBox[1] - Camera.mainCamera.transform.position.y,\
-    #                 self.tile_collisionBox[2] - Camera.mainCamera.transform.position.x,\
-    #                 self.tile_collisionBox[3] - Camera.mainCamera.transform.position.y]
-    #
-    #     return self.transform.position.x - tile_pos[0], self.transform.position.y - tile_pos[1], \
-    #            self.transform.position.x + tile_pos[2], self.transform.position.y - tile_pos[3]
 
     pass

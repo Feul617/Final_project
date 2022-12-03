@@ -4,10 +4,14 @@ import title_state
 
 #변수
 bg_image = None
+bgm = None
 
 def enter():
-    global bg_image
-    bg_image = load_image('./map/thank you for playing.png')
+    global bg_image, bgm
+    bg_image = load_image('./map/game over.png')
+    bgm = load_music('./sound/Game Over.mp3')
+    bgm.set_volume(10)
+    bgm.play(1)
     pass
 
 
@@ -33,7 +37,7 @@ def handle_events():
 def draw():
     global bg_image
     clear_canvas()
-    bg_image.draw(400,305,800,610)
+    bg_image.draw(400, 305, 800, 610)
     update_canvas()
     pass
 

@@ -10,14 +10,16 @@ class Stage1_2(MainStage):
         self.stage = 2
         self.name = 'Stage2'
         self.isActive = False
-        # for zen_chan in self.zen_chan:
-        #     zen_chan.isActive = True
 
 
         # background 초기화
         self.background.image = load_image('./map/Background/stage1-2 bg.png')
         self.background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
         self.background.image_Type = [0, 0, 800, 610]
+
+        self.black_background.image = load_image('./map/Background/background.png')
+        self.black_background.transform.position = Vector2(800 // 2, 610 // 2 - (self.height * (self.stage - 1)))
+        self.black_background.image_Type = [0, 0, 800, 610]
 
         self.transform.position.y = int(self.background.transform.position.y)
         #Camera.mainCamera.transform.position.y -= 610
@@ -95,4 +97,4 @@ class Stage1_2(MainStage):
         tile.MakeTile(450, 450 - (self.height * (self.stage - 1)))
         self.tiles.append(tile)
         self.monsters[3].transform.position = Vector2(140, 470 - (self.height * (self.stage - 1)))
-        self.monsters[3].patrolDistance = [460, 570]
+        self.monsters[3].patrolDistance = [460, 650]

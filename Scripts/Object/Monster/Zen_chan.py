@@ -45,6 +45,6 @@ class Zen_chan(Monster):
 
             elif self.state == 'death':
                 self.start_timer()
-                self.gravity = 0
+                self.transform.position.y += self.gravity
                 self.frame_set = 1.0
                 self.in_bubble = 12

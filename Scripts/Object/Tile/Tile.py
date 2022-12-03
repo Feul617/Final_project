@@ -4,7 +4,7 @@ from Scripts.FrameWork.Camera import Camera
 class Tile(Object):
     def __init__(self):
         super(Tile, self).__init__()
-        Object.gameWorld.add_object(self, 2)
+        Object.gameWorld.add_object(self, 1)
         pass
 
     def __del__(self):
@@ -36,65 +36,6 @@ def TileType(index):
     elif index == 5:
         tile.image = load_image('map/Tile/stage1-6 middle_tile.png')
         tile.image_Type = [0, 0, 36, 32]
-    # if index == 0:
-    #     tile.image = load_image('./map/Tile/stage1-1 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 1:
-    #     tile.image = load_image('map/Tile/stage1-1 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 2:
-    #     tile.image = load_image('map/Tile/stage1-1 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    #
-    # elif index == 3:
-    #     tile.image = load_image('map/Tile/stage1-2 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 4:
-    #     tile.image = load_image('map/Tile/stage1-2 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 5:
-    #     tile.image = load_image('map/Tile/stage1-2 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    #
-    # elif index == 6:
-    #     tile.image = load_image('map/Tile/stage1-3 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 7:
-    #     tile.image = load_image('map/Tile/stage1-3 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 8:
-    #     tile.image = load_image('map/Tile/stage1-3 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    #
-    # elif index == 9:
-    #     tile.image = load_image('map/Tile/stage1-4 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 10:
-    #     tile.image = load_image('map/Tile/stage1-4 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 11:
-    #     tile.image = load_image('map/Tile/stage1-4 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    #
-    # elif index == 12:
-    #     tile.image = load_image('map/Tile/stage1-5 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 13:
-    #     tile.image = load_image('map/Tile/stage1-5 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 14:
-    #     tile.image = load_image('map/Tile/stage1-5 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    #
-    # elif index == 15:
-    #     tile.image = load_image('map/Tile/stage1-6 left_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
-    # elif index == 16:
-    #     tile.image = load_image('map/Tile/stage1-6 middle_tile.png')
-    #     tile.image_Type = [0, 0, 36, 32]
-    # elif index == 17:
-    #     tile.image = load_image('map/Tile/stage1-6 right_tile.png')
-    #     tile.image_Type = [0, 0, 18, 32]
 
     return tile
 
@@ -117,7 +58,7 @@ class MakeTile_X(Object):
         self.collisionBox = [30, 20]
         self.tile_collisionBox = [30, 23, 30, 15]
 
-        Object.gameWorld.add_object(self, 0)
+        Object.gameWorld.add_object(self, 5)
         Object.gameWorld.add_collision_group(None, self, 'character:tile')
         Object.gameWorld.add_collision_group(None, self, 'monster:tile')
 

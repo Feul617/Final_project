@@ -9,6 +9,7 @@ class MainStage(Object):
     def __init__(self):
         super(MainStage, self).__init__()
         self.background = Object()
+        self.black_background = Object()
         self.bgm = load_music('./sound/Introduction _ Main Theme.mp3')
         self.bgm.set_volume(10)
         self.bgm.repeat_play()
@@ -23,7 +24,8 @@ class MainStage(Object):
         #몬스터
         self.monsters = []
 
-        Object.gameWorld.add_object(self.background, 0)
+        Object.gameWorld.add_object(self.background, 2)
+        Object.gameWorld.add_object(self.black_background, 0)
         Object.gameWorld.add_object(self, 0)
 
         Camera.mainCamera.transform.position.y = 0
@@ -53,8 +55,6 @@ class MainStage(Object):
                 self.SetActive(False)
                 self.nextStage.SetActive(True)
 
-                #print(self.nextStage.transform.position.y)
-                #print(Camera.mainCamera.transform.position.y)
     def Draw(self):
         pass
 

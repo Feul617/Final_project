@@ -44,6 +44,9 @@ class Mighta(Monster):
             self.flip = 'h'
         else:
             self.flip = ' '
+
+        if self.state == 'death':
+            self.transform.position.y -= self.gravity * 0.3
         pass
 
     def handle_collision(self, other, group):
