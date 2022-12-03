@@ -7,4 +7,4 @@ from Scripts.Stage.MainStage import MainStage
 from Scripts.Object.Character import Character
 from Scripts.Object.Attack import Bubble
 from Scripts.Object.Monster import Monster
-
+from Scripts.Object.UI import UI
