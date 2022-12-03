@@ -27,6 +27,10 @@ class Stage1_1(MainStage):
             zen_chan.name = 'zen_chan'
             zen_chan.isActive = True
 
+        self.monsters += [Boss()]
+        self.monsters[4].name = 'boss'
+        self.monsters[4].isActive = True
+
     def handle_events(self, event):
         pass
 
@@ -93,4 +97,5 @@ class Stage1_1(MainStage):
         tile = MakeTile_X(6, self.stage)
         tile.MakeTile(500, 450)
         self.tiles.append(tile)
+        self.monsters[4].transform.position = Vector2(450, 380)
 
