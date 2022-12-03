@@ -30,7 +30,7 @@ class Boss_attack(Object):
         norm = Vector2.Normalize(self.target_position -self.transform.position)
         self.target_position += norm* 100000
 
-        self.speed = 2
+        self.speed = 6
         self.this = this
 
         Object.gameWorld.add_object(self, 3)
@@ -44,3 +44,10 @@ class Boss_attack(Object):
         self.image_Type[0] = int(self.frame) * 17
         self.transform.Look_At_Target(self.target_position, self.speed)
         pass
+
+    def get_bb(self):
+        return self.transform.position.x - 25, self.transform.position.y - 25, self.transform.position.x + 25, self.transform.position.y + 25
+
+    def handle_collision(self, other, group):
+        if group == 'Boss_attack:character':
+            Object.gameWorld.remove_object(self)

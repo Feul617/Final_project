@@ -2,8 +2,8 @@ from Scripts.FrameWork.FrameWork_AFX import *
 from Scripts.FrameWork.Camera import Camera
 
 PIXEL_PER_METER = (10.0 / 0.3)
-RUN_SPEED_KMPH = 4.0 # km/h 마라토너의 평속
-FALLING_SPEED = (RUN_SPEED_KMPH + 5) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
+RUN_SPEED_KMPH = 15.0 # km/h 마라토너의 평속
+FALLING_SPEED = 15 * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 JUMP_SPEED_PPS = (RUN_SPEED_KMPH) * 1000 / 60.0 / 60.0 * PIXEL_PER_METER
 RUN_SPEED_MPM = RUN_SPEED_KMPH * 1000 / 60.0
 RUN_SPEED_MPS = RUN_SPEED_MPM / 60.0
@@ -50,10 +50,10 @@ class Monster(Object):
 
     def update(self):
 
-        # if self.start_delay > 0:
-        #     self.start_delay -= 1
-        # if self.start_delay <= 0:
-        self.transform.position.y -= self.gravity
+        if self.start_delay > 0:
+            self.start_delay -= 1
+        if self.start_delay <= 0:
+            self.transform.position.y -= self.gravity
 
         self.frame = (self.frame + FRAME_PER_ACTION * ACTION_PER_TIME * game_framework.frame_time) % self.frame_set
 

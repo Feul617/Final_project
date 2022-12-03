@@ -3,11 +3,13 @@ from Scripts.Object.Monster.Monster import *
 from Scripts.Object.Monster.Boss_attack import Boss_attack
 from Scripts.Object.Character import Character
 import math
+import end_state
 
 
 class Boss(Monster):
     def __init__(self):
         super(Boss, self).__init__()
+        self.transform.position = Vector2(400, 300)
         self.image = load_image('./character/Boss.png')
         self.name = 'Boss'
         self.size = 72
@@ -17,9 +19,12 @@ class Boss(Monster):
         self.in_bubble = 0
         self.transform.scale *= 2.5
 
-        self.life = 100
+        self.life = 10
         self.attack_delay = 200
+        self.delay_regulate = 1
         self.speed = 1
+
+        self.ending_timer = 500
 
 
         Object.gameWorld.add_object(self, 3)
@@ -33,7 +38,19 @@ class Boss(Monster):
         self.image_Type[1] = self.frame_height * 72
 
         self.floating()
-        self.Boss_attack()
+        if self.state != 'death':
+            self.Boss_attack()
+
+        if self.state == 'death':
+            if self.transform.position.y > 80:
+                self.transform.position.y -= self.gravity * 2
+
+            elif self.transform.position.y <= 85:
+                self.frame_set = 1
+                self.in_bubble = 3
+                self.ending_timer -= 1
+                if self.ending_timer <= 0:
+                    game_framework.change_state(end_state)
         pass
 
     def get_bb(self):
@@ -43,14 +60,16 @@ class Boss(Monster):
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.state == 'bubble':
             self.state = 'death'
+            self.frame_set = 4
+            self.in_bubble = 0
             self.is_up = False
-            self.transform.position.y -= self.gravity * 3
+            self.gravity = game_framework.frame_time * 30
 
         elif group == 'attack:boss' and other.state == 1:
             if self.life > 0:
                 self.life -= 1
 
-            elif self.life <= 50:
+            elif 0 < self.life <= 50:
                 self.state = 'angry'
                 self.frame_set = 2
                 self.in_bubble = 4
@@ -72,11 +91,20 @@ class Boss(Monster):
 
         if self.state == 'angry':
             self.speed = 1.3
+            self.delay_regulate = 2
+
 
         if self.transform.position.x <= 100 or self.transform.position.x >= 700:
                 self.dir *= -1
         if self.transform.position.y <= 60 or self.transform.position.y >= 500:
                 self.dir_y *= -1
+
+        self.face_dir = self.dir
+        if self.face_dir == -1:
+            self.flip = ' '
+        else:
+            self.flip = 'h'
+
 
     def Boss_attack(self):
         self.attack_delay -= 1
@@ -84,8 +112,7 @@ class Boss(Monster):
 
         if self.attack_delay == 0:
             attack = Boss_attack(self)
-            self.attack_delay = 200
-
+            self.attack_delay = 200 / self.delay_regulate
 
 
 
