@@ -1,6 +1,6 @@
 import game_framework
 from Scripts.FrameWork.FrameWork_AFX import *
-from Scripts.Object.Attack import *
+from Scripts.Object.Attack import Bubble
 from Scripts.FrameWork.game_world import GameWorld
 from Scripts.FrameWork.Camera import Camera
 
@@ -42,6 +42,7 @@ class IDLE:
         if event == SPACE:
             self.attack()
             self.attack_sound.play(1)
+            self.score += 10
 
     @staticmethod
     def do(self):
@@ -72,6 +73,8 @@ class RUN:
         if event == SPACE:
             self.attack()
             self.attack_sound.play(1)
+            self.score += 10
+
 
 
     def do(self):
@@ -126,6 +129,7 @@ class Character(Object):
         super(Character, self).__init__()
         self.transform.position = Vector2(100, 100)
         self.frame = 0
+        self.frame_height = 410
         self.frame_set = 7
         self.dir, self.face_dir = 0, 1
         self.velocity = 'stand'
@@ -145,7 +149,8 @@ class Character(Object):
         self.is_collide_set = True
         self.char_camera = Camera.mainCamera.transform.position.y
 
-        self.life = 3
+        self.life = 6
+        self.score = 0
         self.invincibility_time = 100
         self.start_timer = False
 
@@ -167,6 +172,7 @@ class Character(Object):
         Object.gameWorld.add_collision_group(self, None, 'character:tile')
         Object.gameWorld.add_collision_group(self, None, 'character:monster')
         Object.gameWorld.add_collision_group(None, self, 'attack:character')
+        Object.gameWorld.add_collision_group(None, self, 'Boss_attack:character')
 
     def update(self):
         self.gravity = FALLING_SPEED * game_framework.frame_time
@@ -192,7 +198,13 @@ class Character(Object):
                 self.transform.position.y -= (self.transform.position.y - 50) / 100
         else:
             self.frame_set = 7
-            self.image_Type = [int(self.frame) * 60, 410, 60, 40]
+            if self.start_timer:
+                self.frame = 13
+                self.frame_set = 1
+                self.frame_height = 365
+            else:
+                self.frame_height = 410
+            self.image_Type = [int(self.frame) * 60, self.frame_height, 60, 40]
             self.is_collide_set = True
             self.isHandle = True
 
@@ -249,8 +261,11 @@ class Character(Object):
 
     def handle_collision(self, other, group):
         if group == 'character:monster' and self.is_collide_set \
-                and self.invincibility_time == 100 and other.state == 0:
+                and self.invincibility_time == 100 and other.state == 'init':
             #self.image_Type = [(self.frame + 10) * 60, 200, 50, 50]
+            self.life -= 1
+            self.start_timer = True
+        elif group == 'Boss_attack:character' and self.invincibility_time == 100:
             self.life -= 1
             self.start_timer = True
             pass

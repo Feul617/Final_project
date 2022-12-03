@@ -47,6 +47,9 @@ def enter():
     character = Character()
     gameWorld.add_object(character, 2)
 
+    ui = UI()
+    gameWorld.add_object(ui, 4)
+
     #맵 & 타일
     stages = [Stage1_1(), Stage1_2(), Stage1_3(), Stage1_4(), Stage1_5(), Stage1_6()]
 
@@ -62,8 +65,6 @@ def enter():
 
     #MainStage.in_Main_character = character
 
-    Mighta.target = character
-
 
     #충돌체크
     for i in range(len(stages)):
@@ -77,6 +78,7 @@ def enter():
     pass
 
 def exit():
+    Object.gameWorld.clear()
     pass
 
 def handle_events():

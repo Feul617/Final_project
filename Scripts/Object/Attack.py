@@ -67,7 +67,7 @@ class Bubble(Object):
             self.is_up = 0
             self.holding_time += 1
 
-            if self.holding_time >= 1100:
+            if self.holding_time >= 700:
                 self.pong()
 
         if self.character_collide:
