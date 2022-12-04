@@ -19,7 +19,7 @@ class Boss(Monster):
         self.in_bubble = 0
         self.transform.scale *= 2.5
 
-        self.life = 100
+        self.life = 60
         self.attack_delay = 200
         self.delay_regulate = 1
         self.speed = 1
@@ -53,7 +53,7 @@ class Boss(Monster):
                 if self.ending_timer <= 0:
                     game_framework.change_state(end_state)
 
-        if self.life <= 40 and self.state == 'init':
+        if self.life <= 30 and self.state == 'init':
             self.state = 'angry'
             self.frame_set = 2
             self.in_bubble = 4

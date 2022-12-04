@@ -35,14 +35,11 @@ class Boss_attack(Object):
         self.speed = 3
         self.this = this
 
-        print(self.transform.position.y)
-        print()
-
         Object.gameWorld.add_object(self, 6)
         Object.gameWorld.add_collision_group(self, None, 'Boss_attack:character')
 
     def update(self):
-        print(self.target_position.y)
+        print(self.transform.position.y)
         if self.transform.position.x < 80 or self.transform.position.x > 720 or self.transform.position.y - Camera.mainCamera.transform.position.y < 0 or self.transform.position.y - Camera.mainCamera.transform.position.y > 550:
             Object.gameWorld.remove_object(self)
 
@@ -52,7 +49,8 @@ class Boss_attack(Object):
         pass
 
     def get_bb(self):
-        return self.transform.position.x - 25, self.transform.position.y - 25, self.transform.position.x + 25, self.transform.position.y + 25
+        pos = Camera.mainCamera.transform.position.y
+        return self.transform.position.x - 25, self.transform.position.y - pos - 25, self.transform.position.x + 25, self.transform.position.y - pos+ 25
 
     def handle_collision(self, other, group):
         if group == 'Boss_attack:character':

@@ -18,6 +18,7 @@ class Monster(Object):
     monster_count = 8
     def __init__(self , depth = 3):
         super(Monster, self).__init__()
+        Monster.monster_count = 8
         # 이미지 초기화
         self.frame = 0
         self.frame_set = 4.0

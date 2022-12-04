@@ -1,9 +1,11 @@
 import Scripts.FrameWork.game_world
+import game_framework
 from Scripts.Object.Object_AFX import *
 from Scripts.Stage.StageContain import *
 from Scripts.FrameWork.Camera import Camera
 from Scripts.Object.Monster.MonsterContain import *
 import pico2d
+import title_state
 
 gameWorld = None
 camera = None
@@ -91,6 +93,8 @@ def handle_events():
             game_framework.quit()
         elif event.type == pico2d.SDL_KEYDOWN and event.key == SDLK_ESCAPE:
             game_framework.quit()
+        elif event.type == pico2d.SDL_KEYDOWN and event.key == SDLK_r:
+            game_framework.change_state(title_state)
         else:
             character.handle_events(event)
 

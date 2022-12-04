@@ -291,6 +291,6 @@ class Character(Object):
     def invincibility_timer(self):
         if self.start_timer:
             self.invincibility_time -= 1
-        if self.invincibility_time == 0:
+        if self.invincibility_time <= 0:
             self.start_timer = False
             self.invincibility_time = 100
